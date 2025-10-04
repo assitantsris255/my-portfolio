@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Me</title>
+
+  <!-- Google Fonts & FontAwesome -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-pIVqjzQqV6lt2O0J+tpdYfFUlEsRYaysioJUrDQlWlz0KkQmMFJq0wMbO4b3ide2+VqdBu0F3kP+hU5ZzV+W3g=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+  <link rel="stylesheet" href="contact.css"/>
+</head>
+<body>
+  <header>
+    <div class="nav-container">
+      <h1 class="logo">Dipak</h1>
+      <nav>
+    <a href="index.html">HOME</a>
+       <a href="about.html">ABOUT</a>
+       <a href="skills.html">SKILLS</a>
+       <a href="blog.html">BLOGS</a>
+       <a href="contact.html" class="active">CONTACT</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="contact-hero">
+      <h2>Get in Touch</h2>
+      <p>Have a project or just want to say hi? Fill out the form below.</p>
+    </section>
+
+    <section class="contact-content">
+      <div class="contact-form-section">
+        <form id="contactForm" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Name<span>*</span></label>
+              <input type="text" id="name" name="name" placeholder="Your name" required/>
+              <small class="error-msg"></small>
+            </div>
+            <div class="form-group">
+              <label for="email">Email<span>*</span></label>
+              <input type="email" id="email" name="email" placeholder="you@example.com" required/>
+              <small class="error-msg"></small>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" name="subject" placeholder="Project title or reason"/>
+          </div>
+          <div class="form-group">
+            <label for="message">Message<span>*</span></label>
+            <textarea id="message" name="message" rows="6" placeholder="Your message here..." required></textarea>
+            <small class="error-msg"></small>
+          </div>
+          <button type="submit" class="btn-submit">Send Message</button>
+        </form>
+        <div id="successMessage" class="success-overlay">
+          <div class="success-popup">
+            <h3>Thank you!</h3>
+            <p>Your message has been sent.</p>
+            <button id="closeSuccess">Close</button>
+          </div>
+        </div>
+      </div>
+
+      <aside class="contact-details">
+        <div class="contact-info">
+    <p><ion-icon name="mail"></ion-icon> diwashb32@gmail.com</p>
+    <p><ion-icon name="call"></ion-icon> 9826414389</p>
+    <p><ion-icon name="location"></ion-icon> Gulmi, Nepal</p>
+
+
+        </div>
+
+
+        <div class="map-container">
+          <h3>Find Me Here</h3>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2488.5538792809793!2d83.40297368202064!3d28.032318530457815!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39966fe864b7cc77%3A0x98b466e1ed57b7b5!2sKachhaute!5e1!3m2!1sen!2snp!4v1758260857923!5m2!1sen!2snp"
+            width="100%"
+            height="250"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+          ></iframe>
+        </div>
+      </aside>
+    </section>
+  </main>
+<footer>
+  <div class="footer-container">
+    <h2 class="footer-logo">Dipak Bhandari</h2>
+    <p class="footer-text">Connect with me on social media</p>
+    <div class="social-icons">
+      <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" class="icon facebook" title="Facebook">
+   <ion-icon name="logo-facebook"></ion-icon>
+      </a>
+      <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" class="icon instagram" title="Instagram">
+        <ion-icon name="logo-instagram"></ion-icon>
+      </a>
+      <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" class="icon linkedin" title="LinkedIn">
+        <ion-icon name="logo-linkedin"></ion-icon>
+      </a>
+       <a href="https://github.com/assitantsris255" target="_blank" class="icon github" title="GitHub">
+        <ion-icon name="logo-github"></ion-icon>
+      </a>
+    </div>
+    <p class="footer-copy">&copy; 2025 Dipak Bhandari. All rights reserved.</p>
+  </div>
+</footer>
+
+  
+
+
+  <script src="contact.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
