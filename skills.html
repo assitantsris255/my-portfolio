@@ -4,115 +4,172 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>My Skills — Dipak (Responsive)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
   <style>
-    /* ===== Theme & Reset ===== */
     :root{
-      --bg-dark:#0f1724;
-      --card-dark:#0c1220;
-      --accent:#7c5cff;
-      --accent2:#ff6b9a;
-      --muted:#9aa4b2;
+      --bg: #071026;
+      --panel: #0b1220;
+      --muted: #9aa4b2;
+      --text: #e6eef6;
+      --accent: #60A5FA;
+      --accent-2: #6EE7B7;
       --glass: rgba(255,255,255,0.03);
-      --max-width:980px;
+      --radius:12px;
+      --max:1100px;
+      --ff: "Poppins",system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+      --t:.28s;
     }
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%;font-family:Inter, Poppins, system-ui,-apple-system,"Segoe UI",Roboto;background:var(--bg-dark);color:#e6eef8;-webkit-font-smoothing:antialiased;line-height:1.35}
-    a{color:inherit;text-decoration:none}
-
-    /* layout */
-    .wrap{max-width:var(--max-width);margin:20px auto;padding:14px}
-    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
-    header .brand{display:flex;gap:10px;align-items:center}
-    header h1{font-size:20px;color:var(--accent);font-weight:700;margin:0}
-    nav.desktop{display:flex;gap:10px;align-items:center}
-    nav.desktop a{color:var(--muted);padding:8px 10px;border-radius:8px;font-weight:600}
-    nav.desktop a:hover{color:#fff;background:rgba(255,255,255,0.03);transform:translateY(-2px)}
-    .controls{display:flex;gap:8px;align-items:center}
-
-    /* toolbar */
-    .toolbar{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
-    .search{flex:1;min-width:160px}
-    .input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
-    .select,.btn{padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit;cursor:pointer}
-
-    /* grid */
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);position:relative;overflow:hidden}
-    .card h3{font-size:16px;margin-bottom:8px}
-    .meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:13px;color:var(--muted)}
-    .progress-bar{height:12px;background:rgba(255,255,255,0.04);border-radius:999px;overflow:hidden}
-    .progress{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;color:#fff;font-weight:700;font-size:12px;transition:width 1400ms cubic-bezier(.2,.9,.26,1)}
-    .tag{display:inline-block;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.03);font-size:12px;color:var(--muted);margin-left:8px}
-
-    /* actions & tooltip */
-    .actions{position:absolute;right:10px;top:10px;display:flex;gap:8px}
-    .icon-btn{background:transparent;border:0;color:var(--muted);cursor:pointer;padding:6px;border-radius:8px}
-    .icon-btn:hover{background:var(--glass);color:#fff}
-    .tooltip{position:absolute;background:#111;padding:6px 8px;border-radius:6px;font-size:12px;color:#fff;transform:translateY(-8px);pointer-events:none;opacity:0;transition:opacity 160ms,transform 160ms}
-    .tooltip.show{opacity:1;transform:translateY(0)}
-
-    /* modal */
-    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:220}
-    .modal{background:#0e1726;padding:16px;border-radius:12px;max-width:520px;width:92%;box-shadow:0 22px 46px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.03)}
-    .modal h4{margin:0 0 8px;color:#fff}
-    .modal p{color:var(--muted);font-size:14px;line-height:1.45}
-
-    /* footer */
-    footer.site{margin-top:16px;color:var(--muted);font-size:13px;text-align:center;padding:14px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border:1px solid rgba(255,255,255,0.02)}
-    footer.site .social{display:flex;gap:8px;justify-content:center;margin:8px 0}
-    footer.site a{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.03);color:var(--muted);text-decoration:none}
-    footer.site a:hover{background:rgba(255,255,255,0.06);color:#fff;transform:translateY(-4px)}
-
-    /* reveal */
-    .reveal{opacity:0;transform:translateY(12px);transition:all 420ms ease}
-    .reveal.show{opacity:1;transform:none}
-
-    /* ===== Mobile-first responsive rules ===== */
-    @media (max-width: 980px){
-      .grid{grid-template-columns:repeat(2,1fr)}
-      nav.desktop{display:none}
-      header{align-items:flex-start}
+    :root.light{
+      --bg:#f6f8fb;
+      --panel:#ffffff;
+      --muted:#556270;
+      --text:#0b1220;
+      --accent:#0b84ff;
+      --accent-2:#06b6d4;
+      --glass: rgba(0,0,0,0.04);
     }
 
-    @media (max-width: 520px){
-      .toolbar{gap:8px}
-      .grid{grid-template-columns:1fr;gap:10px}
-      .card{padding:12px}
-      .progress-bar{height:14px}
-      .progress{font-size:12px;padding-right:10px}
-      .controls{gap:6px}
-      .select, .btn, .input{padding:10px;border-radius:10px}
-      header h1{font-size:17px}
-      .actions{top:8px;right:8px}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;padding:0}
+    body{
+      font-family:var(--ff);
+      background:
+        radial-gradient(800px 300px at 10% 8%, rgba(96,165,250,0.03), transparent 6%),
+        var(--bg);
+      color:var(--text);
+      padding:18px;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      transition:background var(--t), color var(--t);
     }
 
-    @media (max-width: 360px){
-      .input, .select, .btn{padding:12px 14px;font-size:14px}
-      .icon-btn{padding:8px}
-      .progress{font-size:13px}
+    .wrap{ max-width:var(--max); margin:0 auto; }
+
+    /* INDEX-LIKE HEADER */
+    .site-header{ margin-bottom:18px; position:sticky; top:12px; z-index:1400; }
+    .header-inner{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:12px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      border:1px solid var(--glass); backdrop-filter: blur(6px);
+    }
+    .brand{ display:flex; gap:12px; align-items:center; }
+    .brand svg{ display:block }
+    .brand h1{ font-size:16px; margin:0; font-weight:700; color:var(--accent-2); letter-spacing:.6px; }
+
+    nav.main-nav{ display:flex; gap:12px; align-items:center; }
+    nav.main-nav a{ color:var(--muted); text-decoration:none; padding:8px 10px; border-radius:8px; font-weight:600; }
+    nav.main-nav a:hover, nav.main-nav a.active{ color:var(--text); background: rgba(255,255,255,0.02); transform:translateY(-3px); transition:transform .18s; }
+
+    .header-controls{ display:flex; gap:8px; align-items:center; }
+    .btn{ background:var(--panel); color:var(--text); border:1px solid var(--glass); padding:8px 10px; border-radius:8px; cursor:pointer; font-weight:600; }
+    .btn:active{ transform:translateY(1px) }
+
+    .menu-btn{ display:none; width:44px; height:44px; border-radius:10px; background:var(--panel); border:1px solid var(--glass); align-items:center; justify-content:center; cursor:pointer; }
+    .menu-btn .bar{ width:20px; height:2px; background:var(--muted); margin:3px 0; display:block; transition:transform .28s,opacity .28s; }
+    .menu-btn.open .bar:nth-child(1){ transform: translateY(5px) rotate(45deg); }
+    .menu-btn.open .bar:nth-child(2){ opacity:0; transform:scaleX(.3); }
+    .menu-btn.open .bar:nth-child(3){ transform: translateY(-5px) rotate(-45deg); }
+
+    .mobile-nav{
+      position:fixed; left:12px; right:12px; top:78px; max-height:0; overflow:hidden;
+      background:var(--panel); border-radius:12px; border:1px solid var(--glass);
+      box-shadow:0 18px 40px rgba(2,6,23,0.45); transition:max-height .36s, padding .2s; z-index:1300;
+    }
+    .mobile-nav.open{ max-height:420px; padding:12px; }
+    .mobile-nav a{ display:block; padding:12px; border-radius:10px; color:var(--text); text-decoration:none; margin-bottom:8px; }
+
+    .mobile-controls{ display:flex; gap:8px; margin-top:8px; }
+    .mobile-controls a, .mobile-controls button{ flex:1; padding:8px; border-radius:8px; border:1px solid var(--glass); background:transparent; color:var(--text); text-align:center; }
+
+    /* TOOLBAR */
+    .toolbar{ display:flex; gap:12px; align-items:center; margin-bottom:14px; flex-wrap:wrap; }
+    .input{ padding:10px 12px; border-radius:8px; border:1px solid var(--glass); background:var(--panel); color:var(--text); min-width:220px; }
+    .select{ padding:10px 12px; border-radius:8px; border:1px solid var(--glass); background:var(--panel); color:var(--text); }
+
+    /* GRID & CARDS */
+    main.grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:14px; }
+    .card{ background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent); padding:12px; border-radius:12px; border:1px solid var(--glass); position:relative; overflow:hidden; }
+    .actions{ position:absolute; right:10px; top:10px; display:flex; gap:6px; z-index:2; }
+    .icon-btn{ background:transparent; border:none; color:var(--muted); cursor:pointer; padding:6px; border-radius:8px; }
+    .icon-btn:hover{ color:var(--text); background:rgba(255,255,255,0.02) }
+
+    h3{ margin:6px 0 8px 0; font-size:16px }
+    .tag{ background:rgba(255,255,255,0.02); padding:4px 8px; border-radius:999px; color:var(--muted); font-weight:600; font-size:12px; margin-left:8px; }
+
+    .meta{ display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:13px; margin-bottom:8px }
+    .progress-bar{ width:100%; height:12px; background:rgba(255,255,255,0.02); border-radius:8px; overflow:hidden; border:1px solid var(--glass); }
+    .progress{ height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); width:0%; display:flex; align-items:center; justify-content:flex-end; padding-right:8px; color:#06202b; font-weight:700; transition:width .9s cubic-bezier(.2,.9,.2,1); }
+
+    .tooltip{ position:absolute; left:12px; bottom:12px; background:rgba(0,0,0,0.7); color:#fff; padding:6px 8px; border-radius:6px; font-size:12px; opacity:0; pointer-events:none; transform:translateY(6px); transition:opacity .18s, transform .18s; }
+
+    /* FOOTER */
+    footer.site{ margin-top:18px; padding:12px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid var(--glass); display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+    .social a{ display:inline-grid; place-items:center; width:40px; height:40px; border-radius:8px; background:var(--panel); color:var(--muted); text-decoration:none; border:1px solid var(--glass); }
+
+    /* MODAL */
+    .modal-backdrop{ position:fixed; inset:0; display:none; place-items:center; background:rgba(2,6,23,0.6); z-index:1600; }
+    .modal-backdrop.open{ display:grid; }
+    .modal{ background:var(--panel); color:var(--text); padding:18px; border-radius:12px; width:min(520px, 92%); border:1px solid var(--glass); }
+
+    /* Responsive */
+    @media (max-width:880px){
+      .menu-btn{ display:inline-grid }
+      nav.main-nav{ display:none }
+    }
+
+    @media (max-width:520px){
+      .toolbar{ flex-direction:column; align-items:stretch }
+      .input, .select{ width:100% }
+      .brand h1{ font-size:14px }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <header class="reveal" id="topbar">
-      <div class="brand">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden focusable="false"><circle cx="12" cy="12" r="10" fill="#7c5cff"/><path d="M7 12h10" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
-        <h1>Dipak — Skills</h1>
+    <header class="site-header reveal" id="topbar">
+      <div class="header-inner">
+        <div class="brand">
+          <button id="menuBtn" class="menu-btn" aria-label="Toggle menu" aria-expanded="false">
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+          </button>
+
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden focusable="false">
+            <circle cx="12" cy="12" r="10" fill="#7c5cff"/><path d="M7 12h10" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <h1>Dipak — Skills</h1>
+        </div>
+
+        <nav id="mainNav" class="main-nav" aria-label="primary">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="skills.html" class="active">Skills</a>
+          <a href="blog.html">Blogs</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+
+        <div class="header-controls">
+          <button id="exportCsv" class="btn" title="Export CSV"><i class="fa fa-file-csv" aria-hidden="true"></i>&nbsp;Export CSV</button>
+          <button id="toggleTheme" class="btn" title="Toggle theme"><i id="themeIcon" class="fa fa-moon"></i>&nbsp;<span id="themeLabel">Dark</span></button>
+        </div>
       </div>
 
-      <nav class="desktop" aria-label="primary">
+      <nav id="mobileNav" class="mobile-nav" aria-hidden="true">
         <a href="index.html">Home</a>
         <a href="about.html">About</a>
-        <a href="skills.html" aria-current="page">Skills</a>
+        <a href="skills.html" class="active">Skills</a>
         <a href="blog.html">Blogs</a>
         <a href="contact.html">Contact</a>
-      </nav>
 
-      <div class="controls">
-        <button id="exportCsv" class="btn" title="Export CSV">Export CSV</button>
-        <button id="toggleTheme" class="btn" title="Toggle theme">Theme</button>
-      </div>
+        <div class="mobile-controls">
+          <a href="tel:+9779826414389" title="Call"><i class="fa fa-phone"></i> Call</a>
+          <a href="mailto:diwashb32@gmail.com" title="Email"><i class="fa fa-envelope"></i> Email</a>
+          <button id="mobileThemeBtn" title="Toggle theme"><i class="fa fa-moon"></i> Theme</button>
+        </div>
+      </nav>
     </header>
 
     <div class="toolbar reveal" id="toolbar">
@@ -135,8 +192,8 @@
       </select>
     </div>
 
-    <main id="grid" class="grid reveal" aria-live="polite">
-      <!-- cards -->
+    <main id="grid" class="grid" aria-live="polite">
+      <!-- cards (unchanged markup from user's file) -->
       <article class="card skill" data-name="HTML" data-level="90">
         <div class="actions">
           <button class="icon-btn" data-action="info" title="Details">ℹ</button>
@@ -240,10 +297,10 @@
     <footer class="site reveal" id="foot">
       <div>© 2025 Dipak Bhandari</div>
       <div class="social" aria-label="social links">
-        <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" rel="noopener" aria-label="Facebook">F</a>
-        <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" rel="noopener" aria-label="Instagram">I</a>
-        <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" rel="noopener" aria-label="LinkedIn">L</a>
-        <a href="https://github.com/assitantsris255" target="_blank" rel="noopener" aria-label="GitHub">G</a>
+        <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://github.com/assitantsris255" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
       </div>
       <div style="margin-top:8px;color:var(--muted);font-size:13px">Connect with me on social media</div>
     </footer>
@@ -255,136 +312,214 @@
       <h4 id="modalTitle">Skill details</h4>
       <p id="modalText">Details go here</p>
       <div style="text-align:right;margin-top:12px">
-        <button id="modalClose" class="select" style="padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--muted);cursor:pointer">Close</button>
+        <button id="modalClose" class="btn">Close</button>
       </div>
     </div>
   </div>
 
   <script>
-    // element refs
-    const skills = Array.from(document.querySelectorAll('.skill'));
-    const grid = document.getElementById('grid');
-    const search = document.getElementById('search');
-    const filter = document.getElementById('filter');
-    const sort = document.getElementById('sort');
-    const exportBtn = document.getElementById('exportCsv');
-    const toggleTheme = document.getElementById('toggleTheme');
-    const modal = document.getElementById('modal');
-    const modalText = document.getElementById('modalText');
-    const modalClose = document.getElementById('modalClose');
+    // Theme toggle (persist + sync mobile)
+    (function(){
+      const desktopBtn = document.getElementById('toggleTheme') || document.getElementById('toggleTheme'); // kept for compatibility
+      const themeBtn = document.getElementById('toggleTheme') || document.getElementById('toggleTheme');
+      const mobileBtn = document.getElementById('mobileThemeBtn');
+      const themeIcon = document.getElementById('themeIcon');
+      const themeLabel = document.getElementById('themeLabel');
+      const root = document.documentElement;
 
-    // entrance reveals
-    setTimeout(()=> document.querySelectorAll('.reveal').forEach(el=>el.classList.add('show')), 120);
+      const stored = localStorage.getItem('site-theme');
+      const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+      let current = stored || (prefersLight ? 'light' : 'dark');
 
-    // animate bars when in viewport
-    const io = new IntersectionObserver(entries=>{
-      entries.forEach(entry=>{
-        if(entry.isIntersecting){
-          const prog = entry.target.querySelector('.progress');
-          const val = entry.target.getAttribute('data-level') || prog.getAttribute('aria-valuenow') || 60;
-          prog.style.width = val + '%';
-          prog.setAttribute('aria-valuenow', val);
-          prog.querySelector('span').textContent = val + '%';
-          io.unobserve(entry.target);
+      function apply(mode){
+        if(mode === 'light'){
+          root.classList.add('light');
+          themeIcon.className = 'fa fa-sun';
+          themeLabel.textContent = 'Light';
+          mobileBtn?.setAttribute('aria-pressed','true');
+        } else {
+          root.classList.remove('light');
+          themeIcon.className = 'fa fa-moon';
+          themeLabel.textContent = 'Dark';
+          mobileBtn?.setAttribute('aria-pressed','false');
         }
+      }
+      apply(current);
+
+      function toggle(){
+        current = (current === 'light') ? 'dark' : 'light';
+        localStorage.setItem('site-theme', current);
+        apply(current);
+      }
+
+      document.getElementById('toggleTheme')?.addEventListener('click', toggle);
+      mobileBtn?.addEventListener('click', toggle);
+    })();
+
+    // Mobile menu handling
+    (function(){
+      const menuBtn = document.getElementById('menuBtn');
+      const mobileNav = document.getElementById('mobileNav');
+      const mainNav = document.getElementById('mainNav');
+
+      function update(){
+        if(window.innerWidth <= 880){
+          menuBtn.style.display = 'inline-grid';
+          mainNav.style.display = 'none';
+        } else {
+          menuBtn.style.display = 'none';
+          mainNav.style.display = '';
+          mobileNav.classList.remove('open');
+          mobileNav.setAttribute('aria-hidden','true');
+          document.body.style.overflow = '';
+        }
+      }
+      update();
+      window.addEventListener('resize', update);
+
+      menuBtn.addEventListener('click', () => {
+        const open = menuBtn.classList.toggle('open');
+        mobileNav.classList.toggle('open', open);
+        mobileNav.setAttribute('aria-hidden', String(!open));
+        document.body.style.overflow = open ? 'hidden' : '';
       });
-    }, {threshold:0.24});
-    skills.forEach(s=>io.observe(s));
 
-    // filtering & sorting
-    function applyFilters(){
-      const q = (search.value || '').trim().toLowerCase();
-      const min = filter.value === 'all' ? 0 : parseInt(filter.value,10);
-      let list = skills.slice();
+      document.addEventListener('click', (e) => {
+        if(window.innerWidth > 880) return;
+        if(!menuBtn.classList.contains('open')) return;
+        if(e.target.closest('.header-inner') || e.target.closest('.mobile-nav')) return;
+        menuBtn.classList.remove('open');
+        mobileNav.classList.remove('open');
+        mobileNav.setAttribute('aria-hidden','true');
+        document.body.style.overflow = '';
+      });
+    })();
 
-      if(q) list = list.filter(el => el.dataset.name.toLowerCase().includes(q));
-
-      list = list.filter(el => Number(el.dataset.level) >= min);
-
-      const s = sort.value;
-      if(s === 'level-desc') list.sort((a,b)=>b.dataset.level - a.dataset.level);
-      else if(s === 'level-asc') list.sort((a,b)=>a.dataset.level - b.dataset.level);
-      else if(s === 'name-asc') list.sort((a,b)=> a.dataset.name.localeCompare(b.dataset.name));
-
-      grid.innerHTML = '';
-      list.forEach(el => grid.appendChild(el));
-      list.forEach(el => io.observe(el));
-    }
-    search.addEventListener('input', applyFilters);
-    filter.addEventListener('change', applyFilters);
-    sort.addEventListener('change', applyFilters);
-
-    // card actions (info and copy)
-    grid.addEventListener('click', (e) => {
-      const btn = e.target.closest('[data-action]');
-      if(!btn) return;
-      const card = btn.closest('.skill');
-      const action = btn.dataset.action;
-      if(action === 'info'){
-        const name = card.dataset.name;
-        const lvl = card.dataset.level;
-        modalText.textContent = `${name} — proficiency ${lvl}%. Tag: ${card.querySelector('.tag')?.textContent || 'General'}.`;
-        modal.style.display = 'flex';
-      } else if(action === 'copy'){
-        const text = `${card.dataset.name}: ${card.dataset.level}%`;
-        navigator.clipboard?.writeText(text).then(()=> {
-          const tip = card.querySelector('.tooltip');
-          tip.textContent = 'Copied';
-          tip.classList.add('show');
-          setTimeout(()=> tip.classList.remove('show'), 1200);
-        }).catch(()=> {
-          const tip = card.querySelector('.tooltip');
-          tip.textContent = 'Failed';
-          tip.classList.add('show');
-          setTimeout(()=> tip.classList.remove('show'), 1200);
+    // Utility: animate progress bars based on data-level
+    (function(){
+      const skills = document.querySelectorAll('.card.skill');
+      function animateAll(){
+        skills.forEach(card=>{
+          const level = Number(card.dataset.level || 0);
+          const prog = card.querySelector('.progress');
+          const span = prog.querySelector('span');
+          // animate width
+          requestAnimationFrame(()=> {
+            prog.style.width = level + '%';
+            prog.setAttribute('aria-valuenow', level);
+            span.textContent = level + '%';
+          });
         });
       }
-    });
+      window.addEventListener('load', animateAll);
+    })();
 
-    modalClose.addEventListener('click', ()=> modal.style.display = 'none');
-    modal.addEventListener('click', (e)=> { if(e.target === modal) modal.style.display = 'none' });
+    // Search / filter / sort
+    (function(){
+      const input = document.getElementById('search');
+      const filter = document.getElementById('filter');
+      const sort = document.getElementById('sort');
+      const grid = document.getElementById('grid');
 
-    // export CSV
-    exportBtn.addEventListener('click', ()=> {
-      const rows = [['Skill','Level','Tag']];
-      skills.forEach(s=>{
-        const tag = s.querySelector('.tag')?.textContent || '';
-        rows.push([s.dataset.name, s.dataset.level, tag]);
-      });
-      const csv = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
-      const blob = new Blob([csv], {type:'text/csv'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'skills.csv';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    });
-
-    // simple theme toggle
-    let light = false;
-    toggleTheme.addEventListener('click', ()=>{
-      light = !light;
-      if(light){
-        document.documentElement.style.setProperty('--bg-dark','#f7f8fc');
-        document.documentElement.style.setProperty('--card-dark','#ffffff');
-        document.documentElement.style.setProperty('--muted','#475569');
-        document.body.style.color = '#0b1220';
-      } else {
-        document.documentElement.style.setProperty('--bg-dark','#0f1724');
-        document.documentElement.style.setProperty('--card-dark','#0c1220');
-        document.documentElement.style.setProperty('--muted','#9aa4b2');
-        document.body.style.color = '#e6eef8';
+      function listSkills(){
+        return Array.from(grid.querySelectorAll('.card.skill'));
       }
-    });
 
-    // accessibility: close modal with Escape
-    document.addEventListener('keydown', (e)=> { if(e.key === 'Escape') modal.style.display = 'none'; });
+      function applyFilters(){
+        const q = (input.value || '').toLowerCase().trim();
+        const min = filter.value === 'all' ? 0 : Number(filter.value);
+        listSkills().forEach(card=>{
+          const name = (card.dataset.name||'').toLowerCase();
+          const level = Number(card.dataset.level||0);
+          const matchesQ = !q || name.includes(q);
+          const matchesLevel = level >= min;
+          card.style.display = (matchesQ && matchesLevel) ? '' : 'none';
+        });
+        applySort();
+      }
 
-    // initial apply
-    applyFilters();
+      function applySort(){
+        const mode = sort.value;
+        const items = listSkills().filter(c => c.style.display !== 'none');
+        let sorted = items.slice();
+        if(mode === 'level-desc') sorted.sort((a,b)=> Number(b.dataset.level)-Number(a.dataset.level));
+        else if(mode === 'level-asc') sorted.sort((a,b)=> Number(a.dataset.level)-Number(b.dataset.level));
+        else if(mode === 'name-asc') sorted.sort((a,b)=> a.dataset.name.localeCompare(b.dataset.name));
+        // append in order
+        sorted.forEach(n => grid.appendChild(n));
+      }
+
+      input.addEventListener('input', applyFilters);
+      filter.addEventListener('change', applyFilters);
+      sort.addEventListener('change', applySort);
+    })();
+
+    // Info modal & copy to clipboard & copied tooltip
+    (function(){
+      const modal = document.getElementById('modal');
+      const modalText = document.getElementById('modalText');
+      const modalClose = document.getElementById('modalClose');
+
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-action], button.icon-btn[data-action]');
+        if(!btn) return;
+        const action = btn.dataset.action;
+        const card = btn.closest('.card.skill');
+        if(!card) return;
+        const name = card.dataset.name;
+        const level = card.dataset.level;
+        if(action === 'info'){
+          modalText.textContent = `${name} — proficiency ${level}%. Tags: ${card.querySelector('.tag')?.textContent || '—'}.`;
+          modal.classList.add('open');
+        }
+        if(action === 'copy'){
+          const text = `${name}: ${level}%`;
+          navigator.clipboard?.writeText(text).then(()=> {
+            const tip = card.querySelector('.tooltip');
+            tip.textContent = 'Copied';
+            tip.style.opacity = '1'; tip.style.transform = 'translateY(0)';
+            setTimeout(()=>{ tip.style.opacity = '0'; tip.style.transform = 'translateY(6px)'; }, 900);
+          }).catch(()=> {
+            alert('Copy failed — your browser may not permit clipboard access.');
+          });
+        }
+      });
+
+      modalClose.addEventListener('click', ()=> modal.classList.remove('open'));
+      modal.addEventListener('click', (e)=> { if(e.target === modal) modal.classList.remove('open'); });
+      document.addEventListener('keydown', (e)=> { if(e.key === 'Escape') modal.classList.remove('open'); });
+    })();
+
+    // Export CSV of visible skills
+    (function(){
+      const btn = document.getElementById('exportCsv');
+      btn.addEventListener('click', ()=>{
+        const rows = [['Name','Level','Tag']];
+        document.querySelectorAll('.card.skill').forEach(card=>{
+          if(card.style.display === 'none') return;
+          const name = card.dataset.name || card.querySelector('h3')?.textContent || '';
+          const level = card.dataset.level || '';
+          const tag = card.querySelector('.tag')?.textContent || '';
+          // normalize name (strip the tag from h3 if present)
+          const cleanName = name.trim();
+          rows.push([cleanName, level, tag]);
+        });
+        const csv = rows.map(r=> r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+        const blob = new Blob([csv], {type:'text/csv'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'skills.csv'; document.body.appendChild(a); a.click();
+        a.remove(); URL.revokeObjectURL(url);
+      });
+    })();
+
+    // Export: animate reveal sequence
+    (function(){
+      const reveals = document.querySelectorAll('.reveal');
+      window.addEventListener('load', ()=> {
+        reveals.forEach((el,i)=> setTimeout(()=> el.classList.add('visible'), i*80 + 120));
+      });
+    })();
   </script>
 </body>
 </html>
