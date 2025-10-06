@@ -1,478 +1,281 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dipak Bhandari | About Me</title>
 
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    integrity="sha512-pO1O4OhS3bXROkmN/cmZbVuo2+tbQMXkdrmTfN0fH8WeopC9UknyHYvHCnJ+SQZ3kV0KDZVoT20G1hKkP1hKkg=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
-    :root {
-      --primary: #6c63ff;
-      --light-gray: #f5f5f5;
-      --dark: #333;
-      --card-bg: #ffffff;
-      --muted: #666;
-      --max-width: 960px;
+    /* Mobile-first variables */
+    :root{
+      --bg:#071026;
+      --card: rgba(255,255,255,0.03);
+      --text:#e6eef6;
+      --muted:#9aa4b2;
+      --accent-1:#60A5FA;
+      --accent-2:#6EE7B7;
+      --glass: rgba(255,255,255,0.04);
+      --radius:12px;
+      --container-gap:16px;
+      --touch:48px; /* target min size */
+      --ff-sans: "Poppins", "Roboto", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    :root.light{
+      --bg: linear-gradient(180deg,#f7fbff,#eef6ff);
+      --card: rgba(2,6,23,0.03);
+      --text:#071027;
+      --muted:#4b5563;
+      --accent-1:#0b84ff;
+      --accent-2:#06b6d4;
+      --glass: rgba(2,6,23,0.04);
     }
 
-    html, body {
-      height: 100%;
-      font-family: 'Poppins', 'Segoe UI', 'Roboto', sans-serif;
-      color: var(--dark);
-      background: var(--light-gray);
+    *{box-sizing:border-box}
+    html,body{height:100%; margin:0; padding:0}
+    body{
+      font-family:var(--ff-sans);
+      background:
+        radial-gradient(800px 400px at 10% 10%, rgba(96,165,250,0.06), transparent 6%),
+        radial-gradient(700px 350px at 90% 90%, rgba(110,231,183,0.05), transparent 6%),
+        var(--bg);
+      color:var(--text);
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
-      line-height: 1.6;
+      padding:18px;
+      transition: background .28s ease, color .25s ease;
     }
 
-    /* Header / Nav */
-    header {
-      background: var(--card-bg);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.06);
-      position: sticky;
-      top: 0;
-      z-index: 120;
-    }
+    /* container */
+    .wrap{ max-width:980px; margin:0 auto; }
 
-    nav {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 14px 20px;
-    }
-
-    .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--primary);
-      letter-spacing: 0.4px;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: var(--dark);
-      font-weight: 500;
-      padding: 8px 10px;
-      border-radius: 8px;
-      transition: background 180ms ease, color 180ms ease, transform 180ms ease;
-      font-size: 0.95rem;
-    }
-
-    nav a:hover {
-      color: #fff;
-      background: var(--primary);
-      transform: translateY(-2px);
-    }
-
-    /* Mobile menu button (hidden on desktop) */
-    .menu-btn {
-      display: none;
-      border: 0;
-      background: transparent;
-      font-size: 1.15rem;
-      color: var(--primary);
-      cursor: pointer;
-      padding: 8px;
-      border-radius: 8px;
-    }
-
-    /* Main content wrapper */
-    .container {
-      max-width: var(--max-width);
-      margin: 28px auto;
-      padding: 0 20px;
-    }
-
-    /* Hero/about section */
-    .hero {
-      display: flex;
-      gap: 28px;
-      align-items: center;
-      background: linear-gradient(180deg,#ffffff,#fffafc);
-      border-radius: 12px;
-      padding: 28px;
-      box-shadow: 0 8px 30px rgba(16,24,40,0.04);
-    }
-
-    .hero-text {
-      flex: 1 1 320px;
-    }
-
-    .hero-text h1 {
-      font-size: 1.8rem;
-      margin-bottom: 12px;
-      color: var(--dark);
-    }
-
-    .hero-text p {
-      font-size: 1rem;
-      color: var(--muted);
-      line-height: 1.55;
-    }
-
-    .hero-image {
-      width: 300px;
-      flex-shrink: 0;
-      display: grid;
-      place-items:center;
-    }
-
-    .hero-image img {
-      width: 100%;
-      max-width: 300px;
-      border-radius: 12px;
-      display: block;
-      object-fit: cover;
-      box-shadow: 0 12px 36px rgba(108,99,255,0.08);
-    }
-
-    /* Education / Contact sections */
-    section.education, section.contact {
-      margin-top: 20px;
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 8px 28px rgba(16,24,40,0.04);
-    }
-
-    section.education h2, section.contact h2 {
-      color: var(--primary);
-      margin-bottom: 12px;
-      font-size: 1.05rem;
-    }
-
-    section.education ul {
-      list-style: disc inside;
-      color: var(--muted);
-      font-size: 0.98rem;
-      gap: 6px;
-    }
-
-    section.contact p {
-      margin: 8px 0;
-      color: var(--muted);
+    /* header - compact and touch friendly */
+    header{
       display:flex;
-      gap:10px;
       align-items:center;
-      font-size: 0.98rem;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:12px;
     }
+    .logo{ font-weight:700; color:var(--accent-2); letter-spacing:1px; font-size:18px }
+    .nav-toggle{ width:var(--touch); height:var(--touch); display:inline-grid; place-items:center; background:var(--glass); border-radius:10px; border:1px solid rgba(255,255,255,0.03); color:var(--muted); cursor:pointer }
+    nav{ display:none } /* hidden on small screens; accessible via "menu" */
+    .top-actions{ display:flex; gap:10px; align-items:center }
 
-    /* Footer */
-    footer {
-      margin-top: 28px;
-      background: #1c1c1c;
-      color: #fff;
-      padding: 24px 16px;
-      border-radius: 8px;
+    /* hero stacked (mobile-first) */
+    .hero{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      padding:14px;
+      border-radius:12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      border:1px solid rgba(255,255,255,0.03);
     }
+    .hero-text h1{ margin:0 0 8px 0; font-size:20px }
+    .hero-text p{ margin:0; color:var(--muted); line-height:1.6; font-size:14px; white-space:pre-wrap }
 
-    .footer-container {
-      max-width: 800px;
-      margin: auto;
-      text-align: center;
-    }
-
-    .footer-logo {
-      font-size: 1.15rem;
-      font-weight:700;
-      color: #bfb7ff;
-      margin-bottom: 6px;
-    }
-
-    .footer-text {
-      color: #d0cbe6;
-      margin-bottom: 12px;
-    }
-
-    .social-icons {
+    .hero-image{
       display:flex;
       justify-content:center;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .icon {
-      display:inline-flex;
       align-items:center;
-      justify-content:center;
-      width:44px;
-      height:44px;
-      border-radius:50%;
-      background: #333;
-      color: #fff;
-      font-size: 18px;
-      text-decoration:none;
-      transition: transform 200ms ease, background 200ms ease;
+      position:relative;
+    }
+    .hero-image img{
+      width:180px; height:180px; object-fit:cover; border-radius:12px; border:5px solid rgba(255,255,255,0.03);
+      box-shadow: 0 14px 30px rgba(2,6,23,0.35);
+      transition: transform .28s ease;
+    }
+    .hero-image img:active{ transform: translateY(-4px) scale(1.01) }
+
+    /* chips */
+    .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px }
+    .chip{ display:inline-flex; gap:8px; align-items:center; padding:8px 12px; border-radius:999px; background:var(--glass); color:var(--muted); font-weight:700; text-decoration:none }
+
+    /* grid for education & contact (stacked mobile) */
+    .stack{ margin-top:14px; display:flex; flex-direction:column; gap:12px }
+    .card{ padding:12px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid rgba(255,255,255,0.02); box-shadow: 0 8px 24px rgba(2,6,23,0.14) }
+    .card h2{ margin:0 0 8px 0; font-size:16px }
+    .card ul{ margin:0; padding-left:18px; color:var(--muted); line-height:1.8; font-size:14px }
+    .contact p{ margin:8px 0; color:var(--muted); font-size:14px; display:flex; gap:8px; align-items:center }
+
+    /* footer */
+    footer{ margin-top:18px; padding:12px; border-radius:12px; display:flex; flex-direction:column; gap:10px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid rgba(255,255,255,0.02) }
+    .footer-top{ display:flex; gap:10px; align-items:center; justify-content:space-between }
+    .footer-social{ display:flex; gap:8px; align-items:center }
+    .footer-social a{ width:44px; height:44px; display:inline-grid; place-items:center; background:var(--glass); color:var(--muted); text-decoration:none; border-radius:10px; border:1px solid rgba(255,255,255,0.03) }
+
+    /* small enhancements for touch and readability */
+    a { color:inherit }
+    button, .chip, .nav-toggle { -webkit-tap-highlight-color: transparent }
+    .muted-small{ color:var(--muted); font-size:13px }
+
+    /* simple appear animation */
+    .reveal{ opacity:0; transform: translateY(6px); transition: opacity .45s ease, transform .45s ease }
+    .reveal.show{ opacity:1; transform: translateY(0) }
+
+    /* Larger screens: show nav, two-column layout for hero and grid */
+    @media (min-width:680px){
+      nav{ display:block }
+      .nav-toggle{ display:none }
+      .hero{ flex-direction:row; align-items:center }
+      .hero-text{ flex:1 }
+      .hero-image img{ width:280px; height:280px }
+      .stack{ flex-direction:row; gap:20px }
+      .stack .card{ flex:1 }
+      footer{ flex-direction:row; justify-content:space-between; align-items:center }
     }
 
-    .icon:hover { transform: translateY(-4px); }
-
-    .facebook:hover { background: #3b5998; }
-    .instagram:hover { background: #e4405f; }
-    .linkedin:hover { background: #0077b5; }
-    .github:hover { background: #6cc644; }
-
-    .footer-copy { color: #bdbdbd; font-size: 0.95rem; }
-
-    /* ---------- Responsive: mobile adjustments ---------- */
-    @media (max-width: 780px) {
-      nav ul { display: none; }
-      .menu-btn { display: inline-flex; }
-
-      .hero {
-        flex-direction: column;
-        padding: 18px;
-        gap: 18px;
-      }
-
-      .hero-image {
-        width: 160px;
-      }
-
-      .hero-image img {
-        width: 160px;
-        max-width: 160px;
-        border-radius: 10px;
-      }
-
-      .hero-text h1 {
-        font-size: 1.4rem;
-      }
-
-      .hero-text p {
-        font-size: 0.98rem;
-      }
-
-      .container {
-        padding: 0 14px;
-        margin: 18px auto;
-      }
-
-      section.education, section.contact {
-        padding: 16px;
-      }
-
-      .icon { width:40px; height:40px; font-size: 16px; }
-      .footer-logo { font-size: 1rem; }
+    @media (min-width:980px){
+      body{ padding:28px }
+      .wrap{ max-width:1100px }
+      .hero-image img{ width:320px; height:320px }
     }
-
-    /* Small phones */
-    @media (max-width: 420px) {
-      nav { padding: 10px 14px; }
-      .menu-btn { font-size: 1rem; padding: 6px; }
-
-      .hero {
-        padding: 14px;
-        gap: 12px;
-      }
-
-      .hero-image {
-        width: 140px;
-      }
-
-      .hero-text h1 { font-size: 1.15rem; }
-      .hero-text p { font-size: 0.95rem; }
-
-      .hero-image img { width: 140px; height: auto; }
-
-      section.education ul { font-size: 0.95rem; }
-      footer { padding: 18px 12px; }
-    }
-
-    /* Mobile bottom nav (slides up) */
-    .mobile-nav {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: -100%;
-      background: var(--card-bg);
-      box-shadow: 0 -12px 40px rgba(0,0,0,0.08);
-      border-top-left-radius: 12px;
-      border-top-right-radius: 12px;
-      transition: bottom 320ms cubic-bezier(.2,.9,.25,1);
-      z-index: 160;
-      padding: 12px 16px;
-    }
-
-    .mobile-nav.show { bottom: 0; }
-
-    .mobile-nav .nav-grid {
-      display:flex;
-      gap: 8px;
-      justify-content:space-around;
-      align-items:center;
-      padding: 6px 6px;
-    }
-
-    .mobile-nav a {
-      display:inline-block;
-      padding: 10px 12px;
-      text-decoration:none;
-      color: var(--dark);
-      border-radius: 8px;
-      font-weight:600;
-    }
-
-    /* utility: visually-hidden */
-    .sr-only { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
-
-    /* make images responsive */
-    img { max-width: 100%; height: auto; display:block; }
   </style>
 </head>
 <body>
-  <header>
-    <nav>
+  <div class="wrap">
+    <header>
       <div class="logo">Dipak Bhandari</div>
 
-      <ul class="desktop-nav">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="skills.html">Skills</a></li>
-        <li><a href="blog.html">Blogs</a></li>
-        <li><a href="contact.html">Contact me</a></li>
-      </ul>
+      <nav aria-label="Main navigation">
+        <ul style="display:flex;gap:10px;margin:0;padding:0;list-style:none">
+          <li><a href="index.html" class="muted-small">Home</a></li>
+          <li><a href="about.html" class="muted-small" aria-current="page">About</a></li>
+          <li><a href="skills.html" class="muted-small">Skills</a></li>
+          <li><a href="blog.html" class="muted-small">Blogs</a></li>
+          <li><a href="contact.html" class="muted-small">Contact</a></li>
+        </ul>
+      </nav>
 
-      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileNav" title="Open menu">
-        <i class="fa fa-bars" aria-hidden="true"></i>
-        <span class="sr-only">Menu</span>
-      </button>
-    </nav>
-  </header>
+      <div class="top-actions">
+        <button id="menuBtn" class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <i class="fa fa-bars"></i>
+        </button>
+      </div>
+    </header>
 
-  <main class="container">
-    <section id="about" class="hero" aria-label="About section">
-      <div class="hero-text">
-        <h1>Hey, I'm Dipak Bhandari</h1>
-        <p>
-         Hi, I’m Dipak Bhandari—born on 2065/03/12 BS in the picturesque village of Chhatrakot-1, Kachhaute, Gulmi. At 17 years old, I carry the pride and support of my family—my father Harilal, my mother Lili, three brothers and one sister—who’ve always encouraged me to dream big.
-         My academic journey started at Shree Balkalyan Basic School (grades 1–8), where I built a strong foundation. I then discovered my passion for technology at Shree Saraswati Secondary School, specializing in computer engineering from grades 9–12. Today, I’m thrilled to take the next big step at Lumbini Engineering College, ready to dive deeper into the world of engineering and turn my ideas into reality.
-        </p>
+    <main>
+      <section class="hero reveal" id="aboutSection" aria-labelledby="aboutHeading">
+        <div class="hero-text">
+          <h1 id="aboutHeading">Hey, I'm Dipak Bhandari</h1>
+          <p>
+Hi, I’m Dipak Bhandari—born on 2065/03/12 BS in the picturesque village of Chhatrakot-1, Kachhaute, Gulmi. At 17 years old, I carry the pride and support of my family—my father Harilal, my mother Lili, three brothers and one sister—who’ve always encouraged me to dream big.
+My academic journey started at Shree Balkalyan Basic School (grades 1–8), where I built a strong foundation. I then discovered my passion for technology at Shree Saraswati Secondary School, specializing in computer engineering from grades 9–12. Today, I’m thrilled to take the next big step at Lumbini Engineering College, ready to dive deeper into the world of engineering and turn my ideas into reality.
+          </p>
+
+          <div class="chips" aria-hidden="false">
+            <a class="chip" href="skills.html"><i class="fa fa-code"></i> Skills</a>
+            <a class="chip" href="contact.html"><i class="fa fa-envelope"></i> Contact</a>
+            <span class="chip muted-small"><i class="fa fa-graduation-cap"></i> Student, Lumbini Engineering College</span>
+          </div>
+        </div>
+
+        <div class="hero-image" aria-hidden="false">
+          <img src="photo/mypic.jpg" alt="Portrait of Dipak Bhandari" />
+        </div>
+      </section>
+
+      <div class="stack">
+        <section id="education" class="card reveal" aria-labelledby="educationHeading">
+          <h2 id="educationHeading">Education</h2>
+          <ul>
+            <li>Primary Education, Shree Balkalyan Basic School</li>
+            <li>+2 Science (Computer Engineering), Shree Saraswati Secondary School</li>
+            <li>Bachelor of Computer Engineering, Lumbini Engineering College (Ongoing)</li>
+          </ul>
+        </section>
+
+        <aside id="contact" class="card reveal" aria-labelledby="contactHeading">
+          <h2 id="contactHeading">Contact Me</h2>
+          <p><i class="fa fa-envelope"></i>&nbsp; <strong>diwashb32@gmail.com</strong></p>
+          <p><i class="fa fa-map-marker-alt"></i>&nbsp; Gulmi, Nepal</p>
+
+          <div style="margin-top:12px">
+            <div class="muted-small">Connect</div>
+            <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+              <a class="chip" href="https://web.facebook.com/diwash.bhandari.167" target="_blank" rel="noopener"><i class="fab fa-facebook"></i> Facebook</a>
+              <a class="chip" href="https://www.instagram.com/diwash.bhandari/" target="_blank" rel="noopener"><i class="fab fa-instagram"></i> Instagram</a>
+              <a class="chip" href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-top">
+        <div>
+          <h3 style="margin:0;color:var(--accent-2)">Dipak Bhandari</h3>
+          <div class="muted-small">Connect with me on social media</div>
+        </div>
+
+        <div class="footer-social" aria-label="Footer social links">
+          <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://github.com/assitantsris255" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        </div>
       </div>
 
-      <div class="hero-image" aria-hidden="false">
-        <img src="photo/
-503466886_1861317234724856_7342300296475107961_n.jpg" alt="Dipak Bhandari" onerror="this.style.opacity=.85; this.style.objectFit='cover'">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <div class="muted-small">&copy; 2025 Dipak Bhandari. All rights reserved.</div>
+        <div class="muted-small">Made with care in Nepal</div>
       </div>
-    </section>
-
-    <section id="education" class="education" aria-label="Education">
-      <h2>Education</h2>
-      <ul>
-        <li>Primary Education, Shree Balkalyan Basic School</li>
-        <li>+2 Science (Computer Engineering), Shree Saraswati Secondary School</li>
-        <li>Bachelor of Computer Engineering, Lumbini Engineering College (Ongoing)</li>
-      </ul>
-    </section>
-
-    <section id="contact" class="contact" aria-label="Contact">
-      <h2>Contact Me</h2>
-      <p><ion-icon name="mail-outline"></ion-icon> diwashb32@gmail.com</p>
-      <p><ion-icon name="location-outline"></ion-icon> Gulmi, Nepal</p>
-    </section>
-  </main>
-
-  <footer>
-    <div class="footer-container">
-      <h2 class="footer-logo">Dipak Bhandari</h2>
-      <p class="footer-text">Connect with me on social media</p>
-
-      <div class="social-icons" role="navigation" aria-label="Social links">
-        <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" class="icon facebook" title="Facebook" rel="noopener"><ion-icon name="logo-facebook"></ion-icon></a>
-        <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" class="icon instagram" title="Instagram" rel="noopener"><ion-icon name="logo-instagram"></ion-icon></a>
-        <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" class="icon linkedin" title="LinkedIn" rel="noopener"><ion-icon name="logo-linkedin"></ion-icon></a>
-        <a href="https://github.com/assitantsris255" target="_blank" class="icon github" title="GitHub" rel="noopener"><ion-icon name="logo-github"></ion-icon></a>
-      </div>
-
-      <p class="footer-copy">&copy; 2025 Dipak Bhandari. All rights reserved.</p>
-    </div>
-  </footer>
-
-  <!-- Mobile nav (hidden by default, toggled with JS) -->
-  <nav id="mobileNav" class="mobile-nav" aria-hidden="true">
-    <div class="nav-grid" role="menu" aria-label="Mobile navigation">
-      <a href="index.html" role="menuitem">Home</a>
-      <a href="about.html" role="menuitem">About</a>
-      <a href="skills.html" role="menuitem">Skills</a>
-      <a href="blog.html" role="menuitem">Blogs</a>
-      <a href="contact.html" role="menuitem">Contact</a>
-    </div>
-  </nav>
-
-  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    </footer>
+  </div>
 
   <script>
+    // Simple menu toggle for small screens (no libraries)
     (function(){
       const menuBtn = document.getElementById('menuBtn');
-      const mobileNav = document.getElementById('mobileNav');
-      const desktopNav = document.querySelector('nav .desktop-nav');
-
-      function isSmall() { return window.innerWidth <= 780; }
-
-      function updateNavVisibility(){
-        if(isSmall()){
-          if(desktopNav) desktopNav.style.display = 'none';
-          menuBtn.style.display = 'inline-flex';
+      const nav = document.querySelector('nav');
+      if(!menuBtn) return;
+      menuBtn.addEventListener('click', () => {
+        const expanded = menuBtn.getAttribute('aria-expanded') === 'true';
+        menuBtn.setAttribute('aria-expanded', String(!expanded));
+        // toggle a simple inline menu for very small screens
+        if(!expanded){
+          nav.style.display = 'block';
+          nav.style.position = 'absolute';
+          nav.style.left = '18px';
+          nav.style.right = '18px';
+          nav.style.top = '68px';
+          nav.style.background = 'var(--card)';
+          nav.style.padding = '12px';
+          nav.style.borderRadius = '12px';
+          nav.style.boxShadow = '0 12px 40px rgba(2,6,23,0.35)';
         } else {
-          if(desktopNav) desktopNav.style.display = 'flex';
-          menuBtn.style.display = 'none';
-          mobileNav.classList.remove('show');
-          mobileNav.setAttribute('aria-hidden','true');
-          menuBtn.setAttribute('aria-expanded','false');
-        }
-      }
-
-      menuBtn.addEventListener('click', function(){
-        const open = mobileNav.classList.toggle('show');
-        mobileNav.setAttribute('aria-hidden', String(!open));
-        menuBtn.setAttribute('aria-expanded', String(open));
-        menuBtn.innerHTML = open ? '<i class="fa fa-times" aria-hidden="true"></i>' : '<i class="fa fa-bars" aria-hidden="true"></i>';
-      });
-
-      window.addEventListener('resize', updateNavVisibility);
-      document.addEventListener('click', (e) => {
-        if (!isSmall()) return;
-        if (!mobileNav.classList.contains('show')) return;
-        const target = e.target;
-        if (!mobileNav.contains(target) && !menuBtn.contains(target)) {
-          mobileNav.classList.remove('show');
-          mobileNav.setAttribute('aria-hidden','true');
-          menuBtn.setAttribute('aria-expanded','false');
-          menuBtn.innerHTML = '<i class="fa fa-bars" aria-hidden="true"></i>';
+          nav.style.display = 'none';
         }
       });
+    })();
 
-      // initial setup
-      updateNavVisibility();
+    // Reveal animations on load for better perceived performance
+    (function(){
+      window.addEventListener('load', () => {
+        document.querySelectorAll('.reveal').forEach((el, i) => {
+          setTimeout(()=> el.classList.add('show'), i*140 + 120);
+        });
+      });
+    })();
+
+    // Auto-scale hero image slightly when it intersects (subtle)
+    (function(){
+      const img = document.querySelector('.hero-image img');
+      if(!img) return;
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if(e.isIntersecting) img.style.transform = 'translateY(-6px) scale(1.02)';
+          else img.style.transform = '';
+        });
+      }, {threshold:0.4});
+      io.observe(img);
     })();
   </script>
 </body>
