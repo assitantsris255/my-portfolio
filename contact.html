@@ -1,131 +1,444 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Contact Me</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contact — Dipak Bhandari</title>
 
-  <!-- Google Fonts & FontAwesome -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
-    rel="stylesheet"
-  />
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    integrity="sha512-pIVqjzQqV6lt2O0J+tpdYfFUlEsRYaysioJUrDQlWlz0KkQmMFJq0wMbO4b3ide2+VqdBu0F3kP+hU5ZzV+W3g=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <link rel="stylesheet" href="contact.css"/>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --surface:#0f1724;
+      --card:#0b1220;
+      --text:#e6eef6;
+      --muted:#9aa4b2;
+      --accent:#6EE7B7;
+      --accent-2:#60A5FA;
+      --danger:#e74c3c;
+      --radius:12px;
+      --container:1100px;
+      --ff-sans: "Inter","Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      --transition: .28s;
+    }
+
+    :root.light{
+      --bg: #f4f7fa;
+      --surface: #ffffff;
+      --card: #ffffff;
+      --text: #0b1220;
+      --muted: #586066;
+      --accent: #0b84ff;
+      --accent-2:#06b6d4;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;padding:0}
+    body{
+      font-family:var(--ff-sans);
+      background: radial-gradient(900px 420px at 8% 12%, rgba(96,165,250,0.04), transparent 6%), var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:12px;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .container{ max-width:var(--container); margin:0 auto; }
+
+    /* Header */
+    .site-header{ position:sticky; top:10px; z-index:1200; margin-bottom:14px; }
+    .header-inner{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:12px 14px; border-radius:12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      border:1px solid rgba(255,255,255,0.03);
+      backdrop-filter: blur(6px);
+    }
+
+    .brand{ display:flex; align-items:center; gap:12px; }
+    .logo{ font-weight:700; font-size:18px; color:var(--accent); text-decoration:none; }
+
+    /* hamburger */
+    .menu-btn{
+      display:inline-grid; place-items:center; width:44px; height:44px; border-radius:10px;
+      background:var(--surface); border:1px solid rgba(255,255,255,0.03); cursor:pointer;
+    }
+    .menu-btn .bar{ width:20px; height:2px; background:var(--muted); margin:3px 0; display:block; transition:transform .28s,opacity .28s; }
+    .menu-btn.open .bar:nth-child(1){ transform: translateY(5px) rotate(45deg); }
+    .menu-btn.open .bar:nth-child(2){ opacity:0; transform:scaleX(.3); }
+    .menu-btn.open .bar:nth-child(3){ transform: translateY(-5px) rotate(-45deg); }
+
+    nav.main-nav{ display:flex; gap:18px; align-items:center; }
+    nav.main-nav a{ color:var(--muted); text-decoration:none; font-weight:600; padding:8px 12px; border-radius:9px; transition: all var(--transition); }
+    nav.main-nav a:hover, nav.main-nav a.active{ color:var(--text); background: rgba(255,255,255,0.03); transform:translateY(-3px); }
+
+    .header-actions{ display:flex; gap:8px; align-items:center; }
+
+    .quick-action{ display:inline-grid; place-items:center; width:40px; height:40px; border-radius:10px; background:var(--surface); border:1px solid rgba(255,255,255,0.03); color:var(--muted); text-decoration:none; }
+    .quick-action:hover{ color:var(--text); transform:translateY(-3px) }
+
+    /* Mobile slide-down nav */
+    .mobile-nav{
+      position:fixed; left:12px; right:12px; top:78px; max-height:0; overflow:hidden;
+      background:var(--surface); border-radius:12px; border:1px solid rgba(255,255,255,0.03);
+      box-shadow:0 20px 50px rgba(2,6,23,0.45); transition:max-height .36s cubic-bezier(.2,.9,.2,1), padding .2s;
+      z-index:1199;
+    }
+    .mobile-nav.open{ max-height:360px; padding:12px; }
+    .mobile-nav a{ display:block; padding:12px; border-radius:10px; color:var(--text); text-decoration:none; margin-bottom:6px; background:transparent; }
+    .mobile-nav a:hover{ background: rgba(255,255,255,0.02) }
+
+    /* Hero */
+    .contact-hero{
+      margin: 6px auto 18px; padding:34px 18px; border-radius:12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      text-align:center;
+      box-shadow: 0 12px 40px rgba(2,6,23,0.12);
+    }
+    .contact-hero h2{ margin:0 0 8px; font-size:1.9rem; color:var(--accent); }
+    .contact-hero p{ margin:0; color:var(--muted) }
+
+    /* Layout */
+    .contact-content{ display:flex; gap:20px; max-width:var(--container); margin:20px auto 40px; align-items:flex-start; flex-wrap:wrap; }
+    .contact-form-section{ flex:1 1 520px; min-width:280px; position:relative; }
+    .contact-details{ flex:0 0 340px; min-width:260px; }
+
+    /* Form */
+    form{ background:var(--surface); padding:20px; border-radius:12px; border:1px solid rgba(255,255,255,0.03); box-shadow:0 8px 30px rgba(2,6,23,0.08); transition:transform .18s; }
+    form:hover{ transform: translateY(-4px) }
+    .form-row{ display:flex; gap:12px; flex-wrap:wrap }
+    .form-group{ flex:1 1 200px; margin-bottom:12px; position:relative }
+    label{ display:block; margin-bottom:6px; font-weight:600; color:var(--text) }
+    label span{ color:var(--danger); margin-left:4px }
+    input, textarea{ width:100%; padding:10px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); font-size:15px; background:var(--card); color:var(--text); }
+    input:focus, textarea:focus{ outline:none; border-color:var(--accent); box-shadow: 0 6px 20px rgba(96,165,250,0.06) }
+    textarea{ min-height:120px; resize:vertical }
+    .error-msg{ color:var(--danger); font-size:13px; min-height:18px; margin-top:6px; display:block }
+
+    .btn-submit{ display:inline-flex; align-items:center; gap:10px; padding:10px 16px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#06202b; font-weight:700; border:none; border-radius:10px; cursor:pointer; box-shadow:0 10px 30px rgba(2,6,23,0.06); }
+    .btn-submit:active{ transform:translateY(1px) }
+
+    /* Success overlay */
+    .success-overlay{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background: rgba(255,255,255,0.85); border-radius:12px; visibility:hidden; opacity:0; transition:opacity .18s, visibility .18s }
+    .success-overlay.show{ visibility:visible; opacity:1 }
+    .success-popup{ background:var(--surface); padding:18px; border-radius:10px; text-align:center; border:1px solid rgba(255,255,255,0.03) }
+    .success-popup h3{ margin:0 0 8px }
+
+    /* Contact details */
+    .contact-info{ background:var(--surface); padding:16px; border-radius:12px; border:1px solid rgba(255,255,255,0.03); box-shadow:0 8px 20px rgba(2,6,23,0.04) }
+    .contact-info p{ display:flex; align-items:center; gap:10px; color:var(--muted); margin:8px 0; font-size:15px }
+    .contact-info i{ color:var(--accent) }
+
+    .map-container{ margin-top:18px; background:var(--surface); padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.03) }
+    .map-container h3{ margin:0 0 8px; font-size:16px; color:var(--text) }
+
+    /* Footer */
+    footer{ margin-top:18px; padding:18px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid rgba(255,255,255,0.03); display:flex; flex-direction:column; gap:12px; align-items:center; }
+    .footer-top{ width:100%; display:flex; align-items:center; justify-content:space-between; gap:12px; max-width:var(--container) }
+    .footer-left{ display:flex; flex-direction:column; gap:6px }
+    .footer-logo{ color:var(--accent); font-weight:700 }
+    .footer-cta{ display:flex; gap:8px; align-items:center }
+    .newsletter-input{ padding:8px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:var(--card); color:var(--text) }
+    .subscribe-btn{ padding:8px 12px; border-radius:8px; border:none; background:var(--accent); color:#06202b; cursor:pointer; font-weight:700 }
+
+    .footer-social{ display:flex; gap:10px; align-items:center }
+    .footer-social a{ width:44px; height:44px; display:inline-grid; place-items:center; border-radius:10px; background:var(--surface); color:var(--muted); text-decoration:none; border:1px solid rgba(255,255,255,0.03); transition:transform .14s, box-shadow .14s }
+    .footer-social a:hover{ transform:translateY(-6px); color:var(--text); box-shadow:0 12px 30px rgba(2,6,23,0.08) }
+
+    .back-top{ position:fixed; right:18px; bottom:18px; width:48px; height:48px; border-radius:12px; display:grid; place-items:center; background:var(--accent); color:#06202b; border:none; cursor:pointer; box-shadow:0 14px 36px rgba(2,6,23,0.12); display:none; z-index:1300 }
+    .back-top.show{ display:grid }
+
+    /* reveal */
+    .reveal{ opacity:0; transform:translateY(10px); transition:opacity .45s, transform .45s }
+    .reveal.visible{ opacity:1; transform:translateY(0) }
+
+    /* Responsive */
+    @media (max-width:980px){
+      nav.main-nav{ display:none }
+      .mobile-nav{ display:block }
+      .header-actions{ gap:6px }
+      .contact-content{ flex-direction:column; gap:14px }
+      .contact-details{ order:2 }
+      .contact-form-section{ order:1 }
+    }
+
+    @media (max-width:520px){
+      .menu-btn{ width:44px; height:44px }
+      .brand .logo{ font-size:16px }
+      .contact-hero h2{ font-size:1.4rem }
+      .map-container iframe{ height:220px }
+      .footer-top{ flex-direction:column; align-items:flex-start; gap:10px }
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <div class="nav-container">
-      <h1 class="logo">Dipak</h1>
-      <nav>
-    <a href="index.html">HOME</a>
-       <a href="about.html">ABOUT</a>
-       <a href="skills.html">SKILLS</a>
-       <a href="blog.html">BLOGS</a>
-       <a href="contact.html" class="active">CONTACT</a>
-      </nav>
-    </div>
-  </header>
+  <div class="container">
+    <header class="site-header" role="banner">
+      <div class="header-inner">
+        <div class="brand">
+          <button id="menuBtn" class="menu-btn" aria-label="Toggle menu" aria-expanded="false">
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+          </button>
+          <a class="logo" href="index.html">Dipak</a>
+        </div>
 
-  <main>
-    <section class="contact-hero">
+        <nav id="mainNav" class="main-nav" role="navigation" aria-label="Main menu">
+          <a href="index.html">HOME</a>
+          <a href="about.html">ABOUT</a>
+          <a href="skills.html">SKILLS</a>
+          <a href="blog.html">BLOGS</a>
+          <a href="contact.html" class="active">CONTACT</a>
+        </nav>
+
+        <div class="header-actions">
+          <a href="tel:+9779826414389" class="quick-action" title="Call"><i class="fa fa-phone"></i></a>
+          <a href="mailto:diwashb32@gmail.com" class="quick-action" title="Email"><i class="fa fa-envelope"></i></a>
+          <button id="themeToggle" class="quick-action" aria-pressed="false" title="Toggle theme"><i id="themeIcon" class="fa fa-moon"></i></button>
+        </div>
+      </div>
+
+      <!-- mobile nav (slide down) -->
+      <nav id="mobileNav" class="mobile-nav" aria-hidden="true">
+        <a href="index.html">HOME</a>
+        <a href="about.html">ABOUT</a>
+        <a href="skills.html">SKILLS</a>
+        <a href="blog.html">BLOGS</a>
+        <a href="contact.html">CONTACT</a>
+        <div style="margin-top:8px; display:flex; gap:8px;">
+          <a href="tel:+9779826414389" class="quick-action" title="Call"><i class="fa fa-phone"></i></a>
+          <a href="mailto:diwashb32@gmail.com" class="quick-action" title="Email"><i class="fa fa-envelope"></i></a>
+          <a id="ctaPortfolio" href="index.html" class="quick-action" title="Portfolio"><i class="fa fa-briefcase"></i></a>
+        </div>
+      </nav>
+    </header>
+
+    <section class="contact-hero reveal">
       <h2>Get in Touch</h2>
-      <p>Have a project or just want to say hi? Fill out the form below.</p>
+      <p>Have a project or just want to say hi? Fill out the form below — I reply as soon as I can.</p>
     </section>
 
     <section class="contact-content">
-      <div class="contact-form-section">
+      <div class="contact-form-section reveal">
         <form id="contactForm" novalidate>
           <div class="form-row">
             <div class="form-group">
               <label for="name">Name<span>*</span></label>
-              <input type="text" id="name" name="name" placeholder="Your name" required/>
-              <small class="error-msg"></small>
+              <input type="text" id="name" name="name" placeholder="Your name" required />
+              <small class="error-msg" aria-live="polite"></small>
             </div>
+
             <div class="form-group">
               <label for="email">Email<span>*</span></label>
-              <input type="email" id="email" name="email" placeholder="you@example.com" required/>
-              <small class="error-msg"></small>
+              <input type="email" id="email" name="email" placeholder="you@example.com" required />
+              <small class="error-msg" aria-live="polite"></small>
             </div>
           </div>
+
           <div class="form-group">
             <label for="subject">Subject</label>
-            <input type="text" id="subject" name="subject" placeholder="Project title or reason"/>
+            <input type="text" id="subject" name="subject" placeholder="Project title or reason" />
           </div>
+
           <div class="form-group">
             <label for="message">Message<span>*</span></label>
             <textarea id="message" name="message" rows="6" placeholder="Your message here..." required></textarea>
-            <small class="error-msg"></small>
+            <small class="error-msg" aria-live="polite"></small>
           </div>
+
           <button type="submit" class="btn-submit">Send Message</button>
-        </form>
-        <div id="successMessage" class="success-overlay">
-          <div class="success-popup">
-            <h3>Thank you!</h3>
-            <p>Your message has been sent.</p>
-            <button id="closeSuccess">Close</button>
+
+          <div id="successMessage" class="success-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+            <div class="success-popup">
+              <h3>Thank you!</h3>
+              <p>Your message has been sent successfully.</p>
+              <button id="closeSuccess" type="button">Close</button>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
 
-      <aside class="contact-details">
-        <div class="contact-info">
-    <p><ion-icon name="mail"></ion-icon> diwashb32@gmail.com</p>
-    <p><ion-icon name="call"></ion-icon> 9826414389</p>
-    <p><ion-icon name="location"></ion-icon> Gulmi, Nepal</p>
+      <aside class="contact-details reveal" aria-labelledby="contact-details-heading">
+        <div class="contact-info" id="contact-details-heading">
+          <p><i class="fa fa-envelope"></i> <strong>diwashb32@gmail.com</strong></p>
+          <p><i class="fa fa-phone"></i> <strong>+977 9826414389</strong></p>
+          <p><i class="fa fa-map-marker-alt"></i> Gulmi, Nepal</p>
 
-
+          <div style="margin-top:12px">
+            <div style="font-weight:700;color:var(--muted);margin-bottom:8px">Connect</div>
+            <div class="social-icons" role="list">
+              <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" rel="noopener" aria-label="Facebook" role="listitem"><i class="fab fa-facebook-f"></i></a>
+              <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" rel="noopener" aria-label="Instagram" role="listitem"><i class="fab fa-instagram"></i></a>
+              <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" rel="noopener" aria-label="LinkedIn" role="listitem"><i class="fab fa-linkedin-in"></i></a>
+              <a href="https://github.com/assitantsris255" target="_blank" rel="noopener" aria-label="GitHub" role="listitem"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
         </div>
-
 
         <div class="map-container">
           <h3>Find Me Here</h3>
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2488.5538792809793!2d83.40297368202064!3d28.032318530457815!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39966fe864b7cc77%3A0x98b466e1ed57b7b5!2sKachhaute!5e1!3m2!1sen!2snp!4v1758260857923!5m2!1sen!2snp"
-            width="100%"
-            height="250"
-            style="border:0;"
-            allowfullscreen=""
-            loading="lazy"
-          ></iframe>
+            width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </aside>
     </section>
-  </main>
-<footer>
-  <div class="footer-container">
-    <h2 class="footer-logo">Dipak Bhandari</h2>
-    <p class="footer-text">Connect with me on social media</p>
-    <div class="social-icons">
-      <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" class="icon facebook" title="Facebook">
-   <ion-icon name="logo-facebook"></ion-icon>
-      </a>
-      <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" class="icon instagram" title="Instagram">
-        <ion-icon name="logo-instagram"></ion-icon>
-      </a>
-      <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" class="icon linkedin" title="LinkedIn">
-        <ion-icon name="logo-linkedin"></ion-icon>
-      </a>
-       <a href="https://github.com/assitantsris255" target="_blank" class="icon github" title="GitHub">
-        <ion-icon name="logo-github"></ion-icon>
-      </a>
-    </div>
-    <p class="footer-copy">&copy; 2025 Dipak Bhandari. All rights reserved.</p>
+
+    <footer>
+      <div class="footer-top">
+        <div class="footer-left">
+          <div class="footer-logo">Dipak Bhandari</div>
+          <div class="footer-text">Connect with me on social media or subscribe for updates</div>
+        </div>
+
+        <div style="display:flex;gap:12px;align-items:center">
+          <input id="newsletterEmail" class="newsletter-input" type="email" placeholder="Your email" aria-label="Subscribe email">
+          <button id="subscribeBtn" class="subscribe-btn">Subscribe</button>
+        </div>
+
+        <div class="footer-social">
+          <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://github.com/assitantsris255" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:center;justify-content:center;width:100%">
+        <div class="footer-copy">&copy; 2025 Dipak Bhandari. All rights reserved.</div>
+      </div>
+    </footer>
   </div>
-</footer>
 
-  
+  <button id="backTop" class="back-top" aria-label="Back to top" title="Back to top"><i class="fa fa-arrow-up"></i></button>
 
+  <script>
+    // Theme toggle with persistence and system fallback
+    (function(){
+      const btn = document.getElementById('themeToggle');
+      const icon = document.getElementById('themeIcon');
+      const root = document.documentElement;
+      const stored = localStorage.getItem('site-theme');
+      const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+      let current = stored || (prefersLight ? 'light' : 'dark');
 
-  <script src="contact.js"></script>
-  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+      function apply(mode){
+        if(mode === 'light'){ root.classList.add('light'); btn.setAttribute('aria-pressed','true'); icon.className='fa fa-sun'; }
+        else { root.classList.remove('light'); btn.setAttribute('aria-pressed','false'); icon.className='fa fa-moon'; }
+      }
+      apply(current);
+
+      btn.addEventListener('click', () => {
+        current = (current === 'light') ? 'dark' : 'light';
+        localStorage.setItem('site-theme', current);
+        apply(current);
+      });
+    })();
+
+    // Mobile menu toggle & outside click handling
+    (function(){
+      const menuBtn = document.getElementById('menuBtn');
+      const mobileNav = document.getElementById('mobileNav');
+      const mainNav = document.getElementById('mainNav');
+
+      function openMobile(){ menuBtn.classList.add('open'); mobileNav.classList.add('open'); mobileNav.setAttribute('aria-hidden','false'); menuBtn.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden' }
+      function closeMobile(){ menuBtn.classList.remove('open'); mobileNav.classList.remove('open'); mobileNav.setAttribute('aria-hidden','true'); menuBtn.setAttribute('aria-expanded','false'); document.body.style.overflow='' }
+
+      menuBtn.addEventListener('click', () => {
+        if(menuBtn.classList.contains('open')) closeMobile(); else openMobile();
+      });
+
+      document.addEventListener('click', (e) => {
+        if(window.innerWidth > 980) return;
+        if(!menuBtn.classList.contains('open')) return;
+        if(e.target.closest('.header-inner') || e.target.closest('.mobile-nav')) return;
+        closeMobile();
+      });
+
+      window.addEventListener('resize', () => {
+        if(window.innerWidth > 980){ mobileNav.classList.remove('open'); mobileNav.setAttribute('aria-hidden','true'); menuBtn.classList.remove('open'); document.body.style.overflow=''; mainNav.style.display='flex'; }
+      });
+    })();
+
+    // Reveal on scroll
+    (function(){
+      const items = document.querySelectorAll('.reveal');
+      if(!items.length) return;
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach(e => {
+          if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }
+        });
+      }, {threshold:0.15});
+      items.forEach(i => io.observe(i));
+    })();
+
+    // Back to top button
+    (function(){
+      const btn = document.getElementById('backTop');
+      window.addEventListener('scroll', () => {
+        if(window.scrollY > 360) btn.classList.add('show'); else btn.classList.remove('show');
+      });
+      btn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+    })();
+
+    // Newsletter quick demo
+    (function(){
+      const input = document.getElementById('newsletterEmail');
+      const btn = document.getElementById('subscribeBtn');
+      btn.addEventListener('click', () => {
+        const email = (input.value||'').trim();
+        if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ alert('Enter a valid email'); return; }
+        alert('Subscribed: ' + email + ' (demo)'); input.value = '';
+      });
+    })();
+
+    // Form validation + success overlay
+    (function(){
+      const form = document.getElementById('contactForm');
+      const successOverlay = document.getElementById('successMessage');
+      const closeBtn = document.getElementById('closeSuccess');
+
+      function validEmail(e){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e) }
+
+      form.addEventListener('submit', (ev) => {
+        ev.preventDefault();
+        let ok = true;
+        form.querySelectorAll('.error-msg').forEach(n => n.textContent = '');
+
+        const name = form.name.value.trim();
+        const email = form.email.value.trim();
+        const msg = form.message.value.trim();
+
+        if(name.length < 2){ ok=false; form.querySelector('#name + .error-msg').textContent='Please enter your name.'; }
+        if(!validEmail(email)){ ok=false; form.querySelector('#email + .error-msg').textContent='Please enter a valid email.'; }
+        if(msg.length < 8){ ok=false; form.querySelector('#message + .error-msg').textContent='Message is too short.'; }
+
+        if(!ok) return;
+
+        successOverlay.classList.add('show');
+        successOverlay.setAttribute('aria-hidden','false');
+
+        setTimeout(()=> {
+          form.reset();
+          setTimeout(()=> { successOverlay.classList.remove('show'); successOverlay.setAttribute('aria-hidden','true'); }, 1400);
+        }, 350);
+      });
+
+      closeBtn.addEventListener('click', () => { successOverlay.classList.remove('show'); successOverlay.setAttribute('aria-hidden','true'); });
+    })();
+
+    // Thumbnail opening (if any) - keep compatibility
+    (function(){
+      document.addEventListener('click', (e) => {
+        const t = e.target.closest('img[data-full]');
+        if(!t) return;
+        window.open(t.dataset.full || t.src, '_blank');
+      });
+    })();
+  </script>
 </body>
 </html>
