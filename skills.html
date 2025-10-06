@@ -3,132 +3,369 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Skills</title>
-  <link rel="stylesheet" href="skill.css"/>
+  <title>Dipak Bhandari | About Me</title>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-pO1O4OhS3bXROkmN/cmZbVuo2+tbQMXkdrmTfN0fH8WeopC9UknyHYvHCnJ+SQZ3kV0KDZVoT20G1hKkP1hKkg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #6c63ff;
+      --light-gray: #f5f5f5;
+      --dark: #111827;
+      --card-bg: #ffffff;
+      --muted: #666;
+      --accent:#7c5cff;
+      --bg-dark:#0f1724;
+      --surface: linear-gradient(180deg,#ffffff,#fffafc);
+      --max-width: 1000px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      font-family: 'Poppins', 'Segoe UI', 'Roboto', sans-serif;
+      color: var(--dark);
+      background: linear-gradient(180deg,#fff8fe 0%,#fff 100%);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      -webkit-text-size-adjust:100%;
+    }
+
+    /* Header */
+    header {
+      background: var(--card-bg);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 120;
+    }
+
+    .nav {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 20px;
+    }
+
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 0.4px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .logo svg{ width:34px; height:34px; }
+
+    nav.desktop {
+      display: flex;
+      gap: 14px;
+    }
+    nav.desktop a {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      padding: 8px 10px;
+      border-radius: 8px;
+    }
+    nav.desktop a:hover { background: rgba(108,99,255,0.08); color: #000; transform: translateY(-2px); }
+
+    /* Mobile menu button (shown on small screens) */
+    .menu-btn {
+      display: none;
+      border: 0;
+      background: transparent;
+      font-size: 1.15rem;
+      color: var(--primary);
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 8px;
+    }
+
+    /* Container */
+    .container {
+      max-width: var(--max-width);
+      margin: 28px auto;
+      padding: 0 20px;
+    }
+
+    /* Hero / About */
+    .hero {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      background: linear-gradient(180deg,#ffffff,#fffafc);
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 8px 30px rgba(16,24,40,0.04);
+    }
+    .hero-text { flex: 1 1 320px; }
+    .hero-text h1 { font-size: 1.8rem; margin-bottom: 12px; color: var(--dark); }
+    .hero-text p { font-size: 1rem; color: var(--muted); line-height: 1.55; white-space: pre-line; }
+    .hero-image { width: 300px; display:grid; place-items:center; flex-shrink:0; }
+    .hero-image img { width: 100%; max-width: 300px; border-radius: 12px; display:block; object-fit: cover; box-shadow: 0 12px 36px rgba(108,99,255,0.08); }
+
+    /* Education / Contact */
+    section.education, section.contact {
+      margin-top: 20px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 8px 28px rgba(16,24,40,0.04);
+    }
+    section.education h2, section.contact h2 { color: var(--primary); margin-bottom: 12px; font-size: 1.05rem; }
+    section.education ul { list-style: disc inside; color: var(--muted); font-size: 0.98rem; }
+    section.contact p { margin: 8px 0; color: var(--muted); display:flex; gap:10px; align-items:center; font-size: 0.98rem; }
+
+    /* Footer */
+    footer.site {
+      margin-top: 28px;
+      background: #1c1c1c;
+      color: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .footer-container { max-width: 800px; margin: auto; }
+    .footer-logo { font-size: 1.15rem; font-weight:700; color: #bfb7ff; margin-bottom: 6px; }
+    .footer-text { color: #d0cbe6; margin-bottom: 12px; }
+    .social-icons { display:flex; justify-content:center; gap: 12px; margin-bottom: 12px; }
+    .icon { display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; background:#333; color:#fff; text-decoration:none; }
+    .icon:hover { transform: translateY(-4px); }
+
+    /* Small-device additions appended (kept minimal and non-destructive) */
+    @media (max-width: 980px) {
+      nav.desktop { display: none; }
+      .menu-btn { display: inline-flex; }
+      .hero { flex-direction: column; padding: 18px; gap: 16px; }
+      .hero-image { width: 160px; }
+      .hero-image img { width: 160px; border-radius: 10px; }
+      .container { padding: 0 14px; }
+      .footer-container { padding: 10px 6px; }
+      footer.site { position: static; margin: 16px auto; }
+    }
+
+    @media (max-width: 520px) {
+      .hero-image { width: 140px; }
+      .hero-text h1 { font-size: 1.25rem; }
+      .hero-text p { font-size: 0.95rem; }
+      .footer-container { padding: 8px; }
+      .icon { width:40px; height:40px; }
+      .menu-btn { padding: 8px; font-size: 1rem; }
+    }
+
+    /* Mobile sheet (hidden by default) */
+    #mobileSheet {
+      display: none;
+      position: fixed;
+      left: 10px;
+      right: 10px;
+      top: 70px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 22px 50px rgba(0,0,0,0.15);
+      padding: 12px;
+      z-index: 200;
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+    #mobileSheet.show { display: block; }
+
+    /* Hide footer on keyboard open heuristics (mobile) */
+    .hide-on-keyboard { transition: opacity 160ms ease, transform 160ms ease; }
+
+    /* Accessibility focus */
+    a:focus, button:focus { outline: 3px solid rgba(108,99,255,0.16); outline-offset: 3px; border-radius: 8px; }
+
+  </style>
 </head>
 <body>
   <header>
-    <div class="container">
-      <h1>Dipak</h1>
-      <nav>
-        <ul>
-           <li><a href="index.html">HOME</a></li>
-        <li><a href="about.html">ABOUT</a></li>
-        <li><a href="skills.html">SKILLS</a></li>
-        <li><a href="blog.html">BLOGS</a></li>
-        <li><a href="contact.html">CONTACT</a></li>
-        </ul>
+    <div class="nav" role="navigation" aria-label="Main navigation">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" fill="#6c63ff"/><path d="M7 12h10" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Dipak Bhandari
+      </div>
+
+      <nav class="desktop" aria-label="Desktop menu">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="skills.html">Skills</a>
+        <a href="blog.html">Blogs</a>
+        <a href="contact.html">Contact me</a>
       </nav>
+
+      <button id="menuBtn" class="menu-btn" aria-controls="mobileSheet" aria-expanded="false" aria-label="Open menu">☰</button>
     </div>
   </header>
 
-  <main>
-    <section id="skills" class="skills">
-      <div class="skill" data-level="90">
-        <h3>HTML</h3>
-        <div class="progress-bar">
-          <div class="progress">
-            <span class="percent-text">0%</span>
-          </div>
-        </div>
+  <!-- Mobile sheet (added for small devices) -->
+  <div id="mobileSheet" role="dialog" aria-hidden="true" aria-modal="false">
+    <nav aria-label="Mobile menu">
+      <a href="index.html" role="menuitem">Home</a>
+      <a href="about.html" role="menuitem">About</a>
+      <a href="skills.html" role="menuitem">Skills</a>
+      <a href="blog.html" role="menuitem">Blogs</a>
+      <a href="contact.html" role="menuitem">Contact me</a>
+    </nav>
+  </div>
+
+  <main class="container">
+    <section id="about" class="hero" aria-labelledby="about-heading">
+      <div class="hero-text">
+        <h1 id="about-heading">Hey, I'm Dipak Bhandari</h1>
+        <p>
+Hi, I’m Dipak Bhandari—born on 2065/03/12 BS in the picturesque village of Chhatrakot-1, Kachhaute, Gulmi. At 17 years old, I carry the pride and support of my family—my father Harilal, my mother Lili, three brothers and one sister—who’ve always encouraged me to dream big.
+My academic journey started at Shree Balkalyan Basic School (grades 1–8), where I built a strong foundation. I then discovered my passion for technology at Shree Saraswati Secondary School, specializing in computer engineering from grades 9–12. Today, I’m thrilled to take the next big step at Lumbini Engineering College, ready to dive deeper into the world of engineering and turn my ideas into reality.
+        </p>
       </div>
-      <div class="skill" data-level="85">
-        <h3>CSS</h3>
-        <div class="progress-bar">
-          <div class="progress">
-            <span class="percent-text">0%</span>
-          </div>
-        </div>
+
+      <div class="hero-image" aria-hidden="false">
+        <img src="photo/mypic.jpg" alt="Dipak Bhandari" onerror="this.style.opacity=.9; this.style.objectFit='cover'">
       </div>
-      <div class="skill" data-level="80">
-        <h3>JavaScript</h3>
-        <div class="progress-bar">
-          <div class="progress">
-            <span class="percent-text">0%</span>
-          </div>
-        </div>
-      </div>
-      <div class="skill" data-level="75">
-        <h3>React</h3>
-        <div class="progress-bar">
-          <div class="progress">
-            <span class="percent-text">0%</span>
-          </div>
-        </div>
-      </div>
-      <div class="skill" data-level="70">
-        <h3>Node.js</h3>
-        <div class="progress-bar">
-          <div class="progress">
-            <span class="percent-text">0%</span>
-          </div>
-        </div>
-      </div>
-      <div class="skill" data-level="80">
-        <h3>Mobile app development</h3>
-        <div class="progress-bar">
-          <div class="progress">
-            <span class="percent-text">0%</span>
-          </div>
-        </div>
-      </div>
-      <div class="skill" data-level="60">
-        <h3>C programming</h3>
-        <div class="progress-bar">
-          <div class="progress">
-            <span class="percent-text">0%</span>
-          </div>
-        </div>
-      </div>
-      <div class="skill" data-level="59">
-        <h3>C++</h3>
-        <div class="progress-bar">
-          <div class="progress">
-            <span class="percent-text">0%</span>
-          </div>
-        </div>
-      </div>
-        <div class="skill" data-level="55">
-            <h3>Python</h3>
-            <div class="progress-bar">
-            <div class="progress">
-                <span class="percent-text">0%</span>
-            </div>
-            </div>
-        </div>
+    </section>
+
+    <section id="education" class="education" aria-labelledby="edu-heading">
+      <h2 id="edu-heading">Education</h2>
+      <ul>
+        <li>Primary Education, Shree Balkalyan Basic School</li>
+        <li>+2 Science (Computer Engineering), Shree Saraswati Secondary School</li>
+        <li>Bachelor of Computer Engineering, Lumbini Engineering College (Ongoing)</li>
+      </ul>
+    </section>
+
+    <section id="contact" class="contact" aria-labelledby="contact-heading">
+      <h2 id="contact-heading">Contact Me</h2>
+      <p><ion-icon name="mail-outline"></ion-icon> diwashb32@gmail.com</p>
+      <p><ion-icon name="location-outline"></ion-icon> Gulmi, Nepal</p>
     </section>
   </main>
 
-  <footer>
-    <div class="container">
-      <footer>
-  <div class="footer-container">
-    <h2 class="footer-logo">Dipak Bhandari</h2>
-    <p class="footer-text">Connect with me on social media</p>
-    <div class="social-icons">
-      <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" class="icon facebook" title="Facebook">
-   <ion-icon name="logo-facebook"></ion-icon>
-      </a>
-      <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" class="icon instagram" title="Instagram">
-        <ion-icon name="logo-instagram"></ion-icon>
-      </a>
-      <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" class="icon linkedin" title="LinkedIn">
-        <ion-icon name="logo-linkedin"></ion-icon>
-      </a>
-       <a href="https://github.com/assitantsris255" target="_blank" class="icon github" title="GitHub">
-        <ion-icon name="logo-github"></ion-icon>
-      </a>
+  <footer class="site hide-on-keyboard" role="contentinfo">
+    <div class="footer-container">
+      <h2 class="footer-logo">Dipak Bhandari</h2>
+      <p class="footer-text">Connect with me on social media</p>
+      <div class="social-icons" role="navigation" aria-label="social links">
+        <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" class="icon facebook" title="Facebook" rel="noopener">
+          <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" class="icon instagram" title="Instagram" rel="noopener">
+          <ion-icon name="logo-instagram"></ion-icon>
+        </a>
+        <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" class="icon linkedin" title="LinkedIn" rel="noopener">
+          <ion-icon name="logo-linkedin"></ion-icon>
+        </a>
+         <a href="https://github.com/assitantsris255" target="_blank" class="icon github" title="GitHub" rel="noopener">
+          <ion-icon name="logo-github"></ion-icon>
+        </a>
+      </div>
+      <p class="footer-copy">&copy; 2025 Dipak Bhandari. All rights reserved.</p>
     </div>
-    <p class="footer-copy">&copy; 2025 Dipak Bhandari. All rights reserved.</p>
-  </div>
-</footer>
+  </footer>
 
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
- 
-     
+  <script>
+    (function(){
+      // Mobile menu sheet toggle (adds small-device behavior without changing existing layout)
+      const menuBtn = document.getElementById('menuBtn');
+      const mobileSheet = document.getElementById('mobileSheet');
+      const desktopNav = document.querySelector('nav.desktop');
+      const footer = document.querySelector('footer.site');
 
-  <script src="skill.js"></script>
- <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+      function isSmall() { return window.innerWidth <= 980; }
+
+      function updateUiOnResize(){
+        // Show menu button on small screens, hide desktop nav
+        if(isSmall()){
+          if(menuBtn) menuBtn.style.display = 'inline-flex';
+          if(desktopNav) desktopNav.style.display = 'none';
+        } else {
+          if(menuBtn) menuBtn.style.display = 'none';
+          if(desktopNav) desktopNav.style.display = 'flex';
+          // ensure mobile sheet closed
+          if(mobileSheet) { mobileSheet.classList.remove('show'); mobileSheet.setAttribute('aria-hidden','true'); menuBtn.setAttribute('aria-expanded','false'); menuBtn.textContent = '☰'; }
+        }
+      }
+      updateUiOnResize();
+      window.addEventListener('resize', updateUiOnResize);
+
+      if(menuBtn && mobileSheet){
+        menuBtn.addEventListener('click', function(){
+          const open = mobileSheet.classList.toggle('show');
+          mobileSheet.setAttribute('aria-hidden', String(!open));
+          menuBtn.setAttribute('aria-expanded', String(open));
+          menuBtn.textContent = open ? '✕' : '☰';
+        });
+
+        // close mobile sheet on outside tap/click
+        document.addEventListener('click', function(e){
+          if(!isSmall()) return;
+          if(!mobileSheet.classList.contains('show')) return;
+          if(menuBtn.contains(e.target) || mobileSheet.contains(e.target)) return;
+          mobileSheet.classList.remove('show');
+          mobileSheet.setAttribute('aria-hidden','true');
+          menuBtn.setAttribute('aria-expanded','false');
+          menuBtn.textContent = '☰';
+        }, { passive: true });
+      }
+
+      // Hide footer heuristically when on-screen keyboard likely open (mobile)
+      let initialInnerHeight = window.innerHeight;
+      window.addEventListener('resize', function(){
+        // If viewport height shrank significantly (keyboard open), hide footer to avoid overlaying inputs
+        if(window.innerHeight < initialInnerHeight - 150){
+          if(footer) { footer.style.opacity = '0'; footer.style.pointerEvents = 'none'; footer.style.transform = 'translateY(6px)'; }
+        } else {
+          if(footer) { footer.style.opacity = ''; footer.style.pointerEvents = ''; footer.style.transform = ''; }
+          initialInnerHeight = Math.max(initialInnerHeight, window.innerHeight);
+        }
+      });
+
+      // Improve touch targets on small screens
+      function enhanceTouchTargets(){
+        if(window.innerWidth <= 520){
+          document.querySelectorAll('a, button').forEach(el=>{
+            el.style.touchAction = 'manipulation';
+            if(!el.style.minHeight) el.style.minHeight = '44px';
+          });
+        } else {
+          document.querySelectorAll('a, button').forEach(el=>{
+            el.style.touchAction = '';
+            el.style.minHeight = '';
+          });
+        }
+      }
+      enhanceTouchTargets();
+      window.addEventListener('resize', enhanceTouchTargets);
+
+      // Accessibility: close mobile sheet with Escape
+      document.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape'){
+          if(mobileSheet && mobileSheet.classList.contains('show')){
+            mobileSheet.classList.remove('show');
+            mobileSheet.setAttribute('aria-hidden','true');
+            menuBtn.setAttribute('aria-expanded','false');
+            menuBtn.textContent = '☰';
+          }
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
