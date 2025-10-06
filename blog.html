@@ -1,118 +1,357 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-   <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    integrity="sha512-pM+XoVqVQ4lYaQJ/6k/oGmDlDUiATo6/3SI+eV2C+uOjJ6K0zYkEIkV7Iw4WahzsZGDG8m04pc2hEYVY8y5+5g=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dipak Bhandari | Blog</title>
 
-  <title>My Portfolio Blog</title>
-  <link rel="stylesheet" href="blog.css">
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,700&display=swap" rel="stylesheet"> 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pO1O4OhS3bXROkmN/cmZbVuo2+tbQMXkdrmTfN0fH8WeopC9UknyHYvHCnJ+SQZ3kV0KDZVoT20G1hKkP1hKkg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root{
+      --primary:#4a90e2;
+      --bg:#0b1220;
+      --surface:#0f1724;
+      --card:#0b1220;
+      --muted:#9aa4b2;
+      --text:#e6eef6;
+      --accent-1:#60A5FA;
+      --accent-2:#6EE7B7;
+      --white:#ffffff;
+      --radius:12px;
+      --max-width:1100px;
+      --gap:18px;
+      --ff-sans: "Poppins","Roboto",system-ui,-apple-system,"Segoe UI",Arial;
+    }
+
+    /* Light theme */
+    :root.light{
+      --bg:#f6f8fb;
+      --surface:#ffffff;
+      --card:#ffffff;
+      --text:#0b1220;
+      --muted:#586066;
+      --primary:#2563eb;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;padding:0}
+    body{
+      font-family:var(--ff-sans);
+      background:
+        radial-gradient(800px 360px at 10% 10%, rgba(96,165,250,0.04), transparent 6%),
+        linear-gradient(180deg,var(--bg),var(--surface));
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:18px;
+      transition: background .28s ease,color .28s ease;
+    }
+
+    .container{ max-width:var(--max-width); margin:0 auto; }
+
+    /* Header */
+    .site-header { margin-bottom:18px; position:relative; }
+    .header-inner{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:10px 14px; border-radius:12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      border:1px solid rgba(255,255,255,0.03); backdrop-filter: blur(6px);
+    }
+    .brand{ display:flex; align-items:center; gap:12px; }
+    .logo{ font-weight:700; color:var(--accent-2); text-decoration:none; font-size:18px; }
+    .menu-btn{
+      display:inline-grid; place-items:center; width:44px; height:44px; border-radius:10px;
+      background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); cursor:pointer;
+    }
+    .menu-btn .bar{ width:20px; height:2px; background:var(--muted); margin:3px 0; display:block; transition:transform .28s,opacity .28s; }
+    .menu-btn.open .bar:nth-child(1){ transform: translateY(5px) rotate(45deg); }
+    .menu-btn.open .bar:nth-child(2){ opacity:0; transform:scaleX(.3); }
+    .menu-btn.open .bar:nth-child(3){ transform: translateY(-5px) rotate(-45deg); }
+
+    nav.main-nav{ }
+    nav.main-nav ul{ display:flex; gap:12px; margin:0; padding:0; list-style:none; align-items:center; }
+    nav.main-nav a{ color:var(--muted); text-decoration:none; padding:8px 10px; border-radius:8px; font-weight:600; transition: all .18s; }
+    nav.main-nav a:hover, nav.main-nav a.active{ color:var(--text); background: rgba(255,255,255,0.02); transform:translateY(-3px); }
+
+    .controls{ display:flex; gap:8px; align-items:center; }
+    .toggle-btn{ display:inline-flex; gap:8px; align-items:center; padding:8px 10px; border-radius:10px; background:rgba(255,255,255,0.03); color:var(--muted); border:1px solid rgba(255,255,255,0.03); cursor:pointer; font-weight:700; }
+    .toggle-btn:active{ transform:scale(.98) }
+
+    /* Layout */
+    .layout{ display:grid; grid-template-columns: 2fr 1fr; gap:var(--gap); margin-top:12px; align-items:start; }
+
+    main{ min-width:0 }
+    .post{ background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); padding:18px; border-radius:12px; border:1px solid rgba(255,255,255,0.03); box-shadow:0 10px 30px rgba(2,6,23,0.22); }
+    .featured-img{ width:100%; height:auto; border-radius:8px; display:block; object-fit:cover; }
+    .post h2{ margin:14px 0 6px; font-size:22px }
+    .meta{ color:var(--muted); font-size:0.9rem }
+    .post p{ color:var(--muted); line-height:1.7 }
+    .btn{ display:inline-block; margin-top:14px; padding:10px 14px; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#06202b; border-radius:10px; font-weight:700; text-decoration:none; }
+
+    /* Sidebar / profile */
+    aside .profile-container{ background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent); padding:18px; border-radius:12px; border:1px solid rgba(255,255,255,0.02); box-shadow:0 8px 26px rgba(2,6,23,0.12); text-align:center; }
+    .profile-pic{ width:120px; height:120px; border-radius:50%; object-fit:cover; margin:0 auto 12px; display:block; border:4px solid rgba(255,255,255,0.03) }
+    .profile-info h2{ margin:0 0 8px; color:var(--text); }
+    .search-box{ position:relative; margin-bottom:14px }
+    .search-box input{ width:100%; padding:10px 42px 10px 14px; border-radius:999px; border:1px solid rgba(255,255,255,0.04); background: rgba(255,255,255,0.02); color:var(--text); }
+    .search-box button{ position:absolute; right:8px; top:50%; transform:translateY(-50%); border:none; background:transparent; color:var(--muted); cursor:pointer; font-size:18px; }
+
+    .social-icons{ display:flex; gap:10px; justify-content:center; margin-top:8px }
+    .social-icons a{ width:44px; height:44px; display:inline-grid; place-items:center; border-radius:10px; background:rgba(255,255,255,0.03); color:var(--muted); text-decoration:none; border:1px solid rgba(255,255,255,0.03); transition:transform .14s, box-shadow .14s }
+    .social-icons a:hover{ transform:translateY(-6px); color:var(--text); box-shadow:0 12px 30px rgba(2,6,23,0.18) }
+
+    /* Footer */
+    footer{ margin-top:22px; padding:18px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid rgba(255,255,255,0.02); display:flex; justify-content:space-between; align-items:center; gap:12px }
+    .footer-left{ display:flex; flex-direction:column; gap:6px }
+    .footer-logo{ color:var(--accent-2); font-weight:700 }
+    .footer-social{ display:flex; gap:8px; align-items:center }
+    .footer-social a{ width:44px; height:44px; display:inline-grid; place-items:center; border-radius:10px; background:rgba(255,255,255,0.03); color:var(--muted); text-decoration:none; border:1px solid rgba(255,255,255,0.03); transition:transform .14s, box-shadow .14s }
+    .footer-social a:hover{ transform:translateY(-6px); color:var(--text); box-shadow:0 12px 30px rgba(2,6,23,0.18) }
+
+    /* Small media */
+    .thumb-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap:8px; margin-top:10px }
+    .thumb-grid img{ width:100%; height:70px; object-fit:cover; border-radius:8px; cursor:pointer; border:1px solid rgba(255,255,255,0.03); transition:transform .18s, box-shadow .18s }
+    .thumb-grid img:hover{ transform:translateY(-6px); box-shadow:0 12px 30px rgba(2,6,23,0.28) }
+
+    /* utilities & reveal */
+    .reveal{ opacity:0; transform:translateY(8px); transition:opacity .45s, transform .45s }
+    .reveal.visible{ opacity:1; transform:translateY(0) }
+
+    /* Responsive */
+    @media (max-width:980px){
+      .layout{ grid-template-columns: 1fr; }
+      nav.main-nav ul{ display:none } /* hide desktop nav on smaller screens; use burger */
+      .hero{ grid-template-columns:1fr; }
+      .grid{ grid-template-columns:1fr; }
+      footer{ flex-direction:column; align-items:flex-start; gap:12px }
+      .featured-img{ max-height:360px; object-fit:cover }
+      .thumb-grid img{ height:56px }
+    }
+
+    @media (max-width:520px){
+      body{ padding:12px }
+      .menu-btn{ width:44px; height:44px }
+      .header-inner{ padding:10px }
+      .logo{ font-size:16px }
+      .profile-pic{ width:100px; height:100px }
+    }
+  </style>
 </head>
 <body>
-  <!-- Header & Navigation -->
-  <header>
-    <div class="container">
-      <h1 class="logo">DIPAK</h1>
-      <nav>
-        <ul>
-         <li><a href="index.html">HOME</a></li>
-        <li><a href="about.html">ABOUT</a></li>
-        <li><a href="skills.html">SKILLS</a></li>
-        <li><a href="blog.html">BLOGS</a></li>
-        <li><a href="contact.html">CONTACT</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+  <div class="container">
+    <!-- header with hamburger -->
+    <header class="site-header" role="banner">
+      <div class="header-inner">
+        <div class="brand">
+          <button id="menuBtn" class="menu-btn" aria-label="Toggle menu" aria-expanded="false">
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+          </button>
+          <a class="logo" href="index.html">DIPAK</a>
+        </div>
 
-  <!-- Main Content & Sidebar -->
-  <div class="layout container">
-    <main>
-      <article class="post">
-        <img src="photo/pic.webp" alt="Journey" class="featured-img">
-        <h2>How Did I Become A COMPUTER OVERSEER - My Journey!</h2>
-        <p class="meta">by Dipak&bull; 11 April 2025</p>
-        <p>Hello! My name is Dipak. I am currently studying aa COMPUTER ENGINEERING at LBC. I just want to share my experience how I could find myself as a COMPUTER OVERSEER. Bear with me <em>wink</em></p>
-        <a href="#" class="btn">READ ARTICLE</a>
-      </article>
-    </main>
+        <nav id="mainNav" class="main-nav" role="navigation" aria-label="Main menu">
+          <ul>
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="about.html">ABOUT</a></li>
+            <li><a href="skills.html">SKILLS</a></li>
+            <li><a href="blog.html" class="active">BLOGS</a></li>
+            <li><a href="contact.html">CONTACT</a></li>
+          </ul>
+        </nav>
 
-    <aside>
-  
-  <div class="profile-container">
-    <div class="search-box">
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="Search Blogs.."
-        aria-label="Search Blogs"
-      />
-      <button id="searchBtn">
-   
-      </button>
-    </div>
-
-    <div class="profile-info">
-      <img
-        src="photo/profile.jpeg"
-        alt="Dipak Bhandari"
-        class="profile-pic"
-      />
-      <h2>Dipak Bhandari</h2>
-      <div class="social-icons">
-        <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" class="icon facebook" title="Facebook">
-   <ion-icon name="logo-facebook"></ion-icon>
-      </a>
-      <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" class="icon instagram" title="Instagram">
-        <ion-icon name="logo-instagram"></ion-icon>
-      </a>
-      <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" class="icon linkedin" title="LinkedIn">
-        <ion-icon name="logo-linkedin"></ion-icon>
-      </a>
-       <a href="https://github.com/assitantsris255" target="_blank" class="icon github" title="GitHub">
-        <ion-icon name="logo-github"></ion-icon>
-      
-        </a>
+        <div class="controls">
+          <button id="themeToggle" class="toggle-btn" aria-pressed="false" title="Toggle theme">
+            <i id="themeIcon" class="fa fa-moon"></i>
+            <span id="themeLabel">Dark</span>
+          </button>
+        </div>
       </div>
-    </div>
-  </div>
-  </aside>
+    </header>
 
-<footer>
-  <div class="footer-container">
-    <h2 class="footer-logo">Dipak Bhandari</h2>
-    <p class="footer-text">Connect with me on social media</p>
-    <div class="social-icons">
-      <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" class="icon facebook" title="Facebook">
-   <ion-icon name="logo-facebook"></ion-icon>
-      </a>
-      <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" class="icon instagram" title="Instagram">
-        <ion-icon name="logo-instagram"></ion-icon>
-      </a>
-      <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" class="icon linkedin" title="LinkedIn">
-        <ion-icon name="logo-linkedin"></ion-icon>
-      </a>
-       <a href="https://github.com/assitantsris255" target="_blank" class="icon github" title="GitHub">
-        <ion-icon name="logo-github"></ion-icon>
-      </a>
-    </div>
-    <p class="footer-copy">&copy; 2025 Dipak Bhandari. All rights reserved.</p>
-  </div>
-</footer>
+    <!-- layout -->
+    <div class="layout">
+      <main>
+        <article class="post reveal">
+          <img src="photo/pic.webp" alt="Journey" class="featured-img">
+          <h2>How Did I Become A COMPUTER OVERSEER - My Journey!</h2>
+          <p class="meta">by Dipak • 11 April 2025</p>
+          <p>Hello! My name is Dipak. I am currently studying COMPUTER ENGINEERING at LBC. I want to share how I found myself as a COMPUTER OVERSEER. Bear with me <em>wink</em>.</p>
+          <a href="#" class="btn">READ ARTICLE</a>
+        </article>
+      </main>
 
-  <script src="script.js"></script>
-  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+      <aside>
+        <div class="profile-container reveal">
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search Blogs.." aria-label="Search blogs">
+            <button id="searchBtn" aria-label="Search"><i class="fa fa-search"></i></button>
+          </div>
+
+          <div class="profile-info">
+            <img src="photo/profile.jpeg" alt="Dipak Bhandari" class="profile-pic">
+            <h2>Dipak Bhandari</h2>
+            <p class="muted-small">Computer Engineering Student • Lumbini Engineering College</p>
+
+            <div class="social-icons" role="list">
+              <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" rel="noopener" aria-label="Facebook" role="listitem"><i class="fab fa-facebook-f"></i></a>
+              <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" rel="noopener" aria-label="Instagram" role="listitem"><i class="fab fa-instagram"></i></a>
+              <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" rel="noopener" aria-label="LinkedIn" role="listitem"><i class="fab fa-linkedin-in"></i></a>
+              <a href="https://github.com/assitantsris255" target="_blank" rel="noopener" aria-label="GitHub" role="listitem"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <section class="small-media reveal" aria-labelledby="media-heading" style="margin-top:18px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="media-card" style="padding:14px;border-radius:12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.02)">
+          <strong style="color:var(--text)">Listen: Short Intro</strong>
+          <p style="margin:8px 0 10px;color:var(--muted)">A short voice clip about me.</p>
+          <audio controls preload="none"><source src="audio/sample.mp3" type="audio/mpeg">Your browser does not support audio.</audio>
+        </div>
+
+        <div class="media-card" style="padding:14px;border-radius:12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.02)">
+          <strong style="color:var(--text)">Watch: Project Peek</strong>
+          <p style="margin:8px 0 10px;color:var(--muted)">Short muted demo.</p>
+          <video controls muted playsinline preload="metadata" poster="photo/video-poster.jpg"><source src="video/sample.mp4" type="video/mp4">Your browser does not support video.</video>
+        </div>
+      </div>
+
+      <div style="margin-top:12px">
+        <div class="thumb-grid" id="thumbGrid">
+          <img src="photo/thumb1.jpg" alt="Thumb 1" data-full="photo/full1.jpg">
+          <img src="photo/thumb2.jpg" alt="Thumb 2" data-full="photo/full2.jpg">
+          <img src="photo/thumb3.jpg" alt="Thumb 3" data-full="photo/full3.jpg">
+        </div>
+      </div>
+    </section>
+
+    <footer class="reveal" style="margin-top:20px">
+      <div class="footer-left">
+        <div class="footer-logo">Dipak Bhandari</div>
+        <div class="muted-small">Connect with me on social media</div>
+      </div>
+
+      <div class="footer-social">
+        <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://github.com/assitantsris255" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Mobile menu handling
+    (function(){
+      const menuBtn = document.getElementById('menuBtn');
+      const mainNav = document.querySelector('nav.main-nav');
+      if(!menuBtn || !mainNav) return;
+
+      function openMenu(){
+        menuBtn.classList.add('open');
+        mainNav.style.display = 'block';
+        menuBtn.setAttribute('aria-expanded','true');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeMenu(){
+        menuBtn.classList.remove('open');
+        mainNav.style.display = '';
+        menuBtn.setAttribute('aria-expanded','false');
+        document.body.style.overflow = '';
+      }
+
+      menuBtn.addEventListener('click', (e) => {
+        const open = menuBtn.classList.contains('open');
+        if(open) closeMenu(); else openMenu();
+      });
+
+      // Hide nav on wider screens
+      function handleResize(){ if(window.innerWidth > 980){ mainNav.style.display='block'; } else if(!menuBtn.classList.contains('open')){ mainNav.style.display=''; } }
+      window.addEventListener('resize', handleResize);
+      handleResize();
+
+      // close on outside click for mobile
+      document.addEventListener('click', (e) => {
+        if(window.innerWidth > 980) return;
+        if(!menuBtn.classList.contains('open')) return;
+        if(e.target.closest('.header-inner')) return;
+        closeMenu();
+      });
+    })();
+
+    // Theme toggle with persistence
+    (function(){
+      const btn = document.getElementById('themeToggle');
+      const icon = document.getElementById('themeIcon');
+      const label = document.getElementById('themeLabel');
+      const root = document.documentElement;
+
+      function apply(mode){
+        if(mode === 'light'){
+          root.classList.add('light');
+          btn.setAttribute('aria-pressed','true');
+          icon.className = 'fa fa-sun';
+          label.textContent = 'Light';
+        } else {
+          root.classList.remove('light');
+          btn.setAttribute('aria-pressed','false');
+          icon.className = 'fa fa-moon';
+          label.textContent = 'Dark';
+        }
+      }
+
+      const stored = localStorage.getItem('site-theme');
+      const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+      let current = stored || (prefersLight ? 'light' : 'dark');
+      apply(current);
+
+      btn.addEventListener('click', () => {
+        current = (current === 'light') ? 'dark' : 'light';
+        localStorage.setItem('site-theme', current);
+        apply(current);
+      });
+    })();
+
+    // Reveal on scroll
+    (function(){
+      const items = document.querySelectorAll('.reveal');
+      if(!items.length) return;
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach(e => {
+          if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }
+        });
+      }, {threshold:0.18});
+      items.forEach(i => io.observe(i));
+    })();
+
+    // Search button (simple filter demo)
+    (function(){
+      const input = document.getElementById('searchInput');
+      const btn = document.getElementById('searchBtn');
+      btn?.addEventListener('click', () => {
+        const q = input.value.trim().toLowerCase();
+        if(!q){ alert('Type a keyword to search your blogs.'); return; }
+        alert('Search demo: searching for \"' + q + '\". Implement search backend to show results.');
+      });
+    })();
+
+    // Thumbnails open full size
+    (function(){
+      const grid = document.getElementById('thumbGrid');
+      if(!grid) return;
+      grid.addEventListener('click', (e) => {
+        const img = e.target.closest('img');
+        if(!img) return;
+        const full = img.dataset.full || img.src;
+        window.open(full, '_blank');
+      });
+    })();
+  </script>
 </body>
 </html>
