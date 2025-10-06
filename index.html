@@ -2,592 +2,402 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Dipak | CTO & Sr. Software Engineer</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
     :root{
-      --bg:#0f1724;
-      --card:#0b1220;
+      --bg:#071026;
+      --surface:#0b1220;
+      --card: rgba(255,255,255,0.03);
       --text:#e6eef6;
+      --muted:#9aa4b2;
       --accent:#6EE7B7;
       --accent-2:#60A5FA;
-      --muted: #9aa4b2;
-      --glass: rgba(255,255,255,0.04);
-      --radius:14px;
-      --ff-sans: "Poppins", "Roboto", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      --radius:12px;
+      --max-width:1100px;
+      --ff: "Poppins","Roboto",system-ui,-apple-system,"Segoe UI",Arial;
+      --trans:.28s;
     }
-
-    :root.light {
+    :root.light{
       --bg:#f6f8fb;
+      --surface:#ffffff;
       --card:#ffffff;
       --text:#0b1220;
+      --muted:#556270;
       --accent:#0b84ff;
       --accent-2:#06b6d4;
-      --muted:#556270;
-      --glass: rgba(2,6,23,0.03);
     }
 
     *{box-sizing:border-box}
-    html,body{height:100%}
+    html,body{height:100%;margin:0;padding:0}
     body{
-      margin:0;
-      font-family:var(--ff-sans);
+      font-family:var(--ff);
       background:
-        radial-gradient(1200px 600px at 10% 10%, rgba(96,165,250,0.06), transparent 8%),
-        radial-gradient(1000px 500px at 90% 90%, rgba(110,231,183,0.04), transparent 8%),
-        linear-gradient(180deg, var(--bg) 0%, var(--bg) 100%);
+        radial-gradient(900px 420px at 8% 12%, rgba(96,165,250,0.04), transparent 6%),
+        linear-gradient(180deg,var(--bg),var(--surface));
       color:var(--text);
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
-      transition: background .28s ease, color .28s ease;
-    }
-
-    header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:14px 22px;
-      gap:12px;
-      position:sticky;
-      top:0;
-      backdrop-filter: blur(6px);
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-      border-bottom: 1px solid rgba(255,255,255,0.03);
-      z-index:10;
-    }
-
-    .logo{
-      font-weight:700;
-      letter-spacing:2px;
-      color:var(--accent);
-      font-size:18px;
-    }
-
-    nav ul{
-      margin:0;
-      padding:0;
-      display:flex;
-      gap:14px;
-      list-style:none;
-    }
-
-    nav a{
-      color:var(--muted);
-      text-decoration:none;
-      font-weight:600;
-      font-size:13px;
-      padding:8px 10px;
-      border-radius:8px;
-      transition:all .18s ease;
-    }
-
-    nav a:hover{ color:var(--text); background: rgba(255,255,255,0.03); transform:translateY(-2px);}
-
-    .controls{display:flex;gap:10px;align-items:center}
-
-    .toggle-btn{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border-radius:10px;
-      background:var(--glass);
-      color:var(--muted);
-      border:1px solid rgba(255,255,255,0.03);
-      cursor:pointer;
-      font-weight:700;
-      font-size:13px;
-      transition:transform .15s ease, background .18s ease, color .18s ease;
-    }
-    .toggle-btn:hover{ transform:translateY(-4px) }
-
-    main{max-width:1100px;margin:26px auto;padding:0 18px}
-
-    .intro{
-      display:grid;
-      grid-template-columns: 1fr 420px;
-      gap:28px;
-      align-items:center;
-      margin-top:12px;
-    }
-
-    .text h1{
-      margin:0 0 12px 0;
-      line-height:1;
-      font-size:44px;
-      letter-spacing:0.6px;
-      font-weight:700;
-    }
-
-    .text h1 span{
-      color:transparent;
-      background: linear-gradient(90deg,var(--accent), var(--accent-2));
-      -webkit-background-clip:text;
-      background-clip:text;
-    }
-
-    .text p{
-      margin:8px 0 18px 0;
-      color:var(--muted);
-      font-weight:600;
-      letter-spacing:0.6px;
-    }
-
-    .buttons{display:flex;gap:12px}
-    .btn{
-      display:inline-block;
-      padding:12px 16px;
-      border-radius:10px;
-      font-weight:700;
-      font-size:13px;
-      text-decoration:none;
-      transition:transform .18s ease, box-shadow .18s ease;
-      box-shadow: 0 6px 20px rgba(2,6,23,0.08);
-      color:var(--text);
-    }
-
-    .btn.primary{
-      background: linear-gradient(90deg,var(--accent), var(--accent-2));
-      color:#06202b;
-    }
-
-    .btn.outline{
-      background:transparent;
-      color:var(--accent-2);
-      border:1px solid rgba(96,165,250,0.14);
-    }
-
-    .btn:hover{ transform:translateY(-6px); box-shadow: 0 12px 30px rgba(2,6,23,0.12) }
-
-    .illustration{
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-      border-radius:var(--radius);
-      padding:18px;
-      display:flex;
-      gap:12px;
-      align-items:center;
-      justify-content:center;
-      position:relative;
-      min-height:320px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02), 0 8px 30px rgba(2,6,23,0.06);
-    }
-
-    .illustration img{
-      width:220px;
-      height:220px;
-      object-fit:cover;
-      border-radius:14px;
-      border:4px solid rgba(255,255,255,0.04);
-      box-shadow: 0 18px 40px rgba(2,6,23,0.06);
-      transform: translateY(0);
-      transition:transform .6s cubic-bezier(.2,.9,.3,1);
-    }
-
-    .illustration:hover img{ transform: translateY(-8px) rotate(-1deg) scale(1.02) }
-
-    .speech-bubble{
-      position:absolute;
-      top:18px;
-      left:18px;
-      background: rgba(255,255,255,0.04);
-      color:var(--text);
-      padding:8px 12px;
-      border-radius:999px;
-      font-weight:700;
-      font-size:13px;
-      border:1px solid rgba(255,255,255,0.03);
-      box-shadow: 0 6px 18px rgba(2,6,23,0.04);
-    }
-
-    .glimmer{
-      position:absolute;
-      right:18px;
-      bottom:18px;
-      width:80px;
-      height:80px;
-      border-radius:50%;
-      background: radial-gradient(circle at 30% 30%, rgba(96,165,250,0.12), transparent 30%), radial-gradient(circle at 70% 70%, rgba(110,231,183,0.08), transparent 30%);
-      filter: blur(8px);
-      transform:translateZ(0);
-      pointer-events:none;
-    }
-
-    .hero{
-      display:flex;
-      gap:24px;
-      align-items:center;
-      margin:34px 0;
-      padding:22px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.004));
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,0.02);
-    }
-
-    .hero-text{flex:1}
-    .hero-text h1{margin:0;font-size:26px}
-    .hero-text p{color:var(--muted);line-height:1.6;margin-top:10px;font-size:15px}
-
-    .hero-image img{
-      width:220px;height:220px;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,0.03);
-      box-shadow: 0 12px 30px rgba(2,6,23,0.06);
-    }
-
-    .education, .contact{
-      margin-top:18px;
-      padding:18px;
-      border-radius:12px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.008), transparent);
-      border:1px solid rgba(255,255,255,0.02);
-    }
-
-    .education h2, .contact h2{margin:0 0 12px 0;font-size:20px}
-    .education ul{margin:0;padding-left:18px;color:var(--muted);line-height:1.9}
-    .contact p{margin:6px 0;color:var(--muted);display:flex;gap:10px;align-items:center}
-
-    .social-icons{display:flex;gap:10px;margin-top:12px}
-    .social-icons a{
-      display:inline-flex;
-      width:44px;height:44px;border-radius:10px;align-items:center;justify-content:center;
-      background:var(--glass); color:var(--muted); text-decoration:none; transition: all .15s ease;
-      border:1px solid rgba(255,255,255,0.03);
-    }
-    .social-icons a:hover{ transform:translateY(-6px); color:var(--text); box-shadow: 0 12px 30px rgba(2,6,23,0.08) }
-
-    .small-media{
-      margin-top:18px;
       padding:14px;
-      border-radius:12px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.008), transparent);
-      border:1px solid rgba(255,255,255,0.02);
-      display:grid;
-      grid-template-columns: 1fr 300px;
-      gap:14px;
-      align-items:start;
+      transition:background var(--trans), color var(--trans);
     }
 
-    .media-left{display:flex;flex-direction:column;gap:12px}
-    .media-card{
-      background:rgba(255,255,255,0.01);
-      padding:10px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,0.02);
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-direction:column;
+    .wrap{ max-width:var(--max-width); margin:0 auto; }
+
+    /* Header */
+    .site-header{ position:sticky; top:12px; z-index:1200; margin-bottom:18px; }
+    .header-inner{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:12px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      border:1px solid rgba(255,255,255,0.03); backdrop-filter: blur(6px);
     }
+    .brand{ display:flex; align-items:center; gap:12px; }
+    .logo{ font-weight:700; letter-spacing:2px; color:var(--accent-2); text-decoration:none; font-size:18px; }
 
-    .media-card strong{display:block;color:var(--text);font-size:14px}
-    .media-card p{margin:0;color:var(--muted);font-size:13px}
+    nav.main-nav{ display:flex; gap:14px; align-items:center; }
+    nav.main-nav a{ color:var(--muted); text-decoration:none; font-weight:700; padding:8px 10px; border-radius:8px; transition:all var(--trans); }
+    nav.main-nav a:hover, nav.main-nav a.active{ color:var(--text); background: rgba(255,255,255,0.03); transform:translateY(-3px); }
 
-    audio, video{
-      width:100%;
-      border-radius:8px;
-      background:#000;
-      outline:none;
-    }
+    .header-actions{ display:flex; gap:8px; align-items:center; }
+    .quick-action{ display:inline-grid; place-items:center; width:42px; height:42px; border-radius:10px; background:var(--surface); border:1px solid rgba(255,255,255,0.03); color:var(--muted); text-decoration:none; }
+    .quick-action:hover{ color:var(--text); transform:translateY(-3px) }
 
-    .media-right{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      align-items:center;
-    }
+    .menu-btn{ display:none; width:44px; height:44px; border-radius:10px; background:var(--surface); border:1px solid rgba(255,255,255,0.03); cursor:pointer; align-items:center; justify-content:center; }
+    .menu-btn .bar{ display:block; width:20px; height:2px; background:var(--muted); margin:3px 0; transition:transform .28s, opacity .28s; }
+    .menu-btn.open .bar:nth-child(1){ transform: translateY(5px) rotate(45deg); }
+    .menu-btn.open .bar:nth-child(2){ opacity:0; transform:scaleX(.3); }
+    .menu-btn.open .bar:nth-child(3){ transform: translateY(-5px) rotate(-45deg); }
 
-    .thumb-grid{
-      width:100%;
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:8px;
-    }
+    .mobile-nav{ position:fixed; left:12px; right:12px; top:78px; max-height:0; overflow:hidden; background:var(--surface); border-radius:12px; border:1px solid rgba(255,255,255,0.03); box-shadow:0 20px 50px rgba(2,6,23,0.45); transition:max-height .36s, padding .2s; z-index:1199; display:none; }
+    .mobile-nav.open{ max-height:420px; padding:12px; display:block; }
+    .mobile-nav a{ display:block; padding:12px; border-radius:10px; color:var(--text); text-decoration:none; margin-bottom:6px; }
 
-    .thumb-grid img{
-      width:100%;
-      height:70px;
-      object-fit:cover;
-      border-radius:8px;
-      border:1px solid rgba(255,255,255,0.03);
-      cursor:pointer;
-      transition:transform .18s ease, box-shadow .18s ease;
-    }
+    /* Intro */
+    .intro{ display:grid; grid-template-columns:1fr 420px; gap:28px; align-items:center; margin-top:6px; }
+    .text h1{ margin:0 0 12px 0; font-size:44px; line-height:1; }
+    .text h1 span{ background:linear-gradient(90deg,var(--accent-2),var(--accent)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .text p{ margin:6px 0 18px; color:var(--muted); font-weight:600; letter-spacing:.6px; }
 
-    .thumb-grid img:hover{ transform:translateY(-6px); box-shadow: 0 12px 30px rgba(2,6,23,0.06) }
+    .buttons{ display:flex; gap:12px; }
+    .btn{ padding:12px 16px; border-radius:10px; font-weight:700; text-decoration:none; display:inline-block; }
+    .btn.primary{ background: linear-gradient(90deg,var(--accent-2),var(--accent)); color:#06202b; }
+    .btn.outline{ background:transparent; color:var(--accent-2); border:1px solid rgba(96,165,250,0.14); }
 
-    .media-play{
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      padding:8px 12px;
-      border-radius:10px;
-      background:linear-gradient(90deg,var(--accent),var(--accent-2));
-      color:#06202b;
-      font-weight:700;
-      cursor:pointer;
-      border:none;
-      outline:none;
-    }
+    .illustration{ background:var(--card); padding:18px; border-radius:14px; display:flex; align-items:center; justify-content:center; position:relative; min-height:320px; box-shadow: 0 8px 30px rgba(2,6,23,0.6); }
+    .illustration img{ width:220px; height:220px; object-fit:cover; border-radius:14px; border:4px solid rgba(255,255,255,0.04); transition:transform .6s; }
+    .illustration img:hover{ transform:translateY(-8px) rotate(-1deg) scale(1.02); }
+    .speech-bubble{ position:absolute; top:18px; left:18px; background: rgba(255,255,255,0.04); color:var(--text); padding:8px 12px; border-radius:999px; font-weight:700; font-size:13px; }
 
-    footer{
-      margin:40px auto 60px auto;
-      max-width:1100px;
-      padding:18px;
-      border-radius:12px;
-      color:var(--muted);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-      border:1px solid rgba(255,255,255,0.02);
-      background: linear-gradient(180deg, rgba(255,255,255,0.004), transparent);
-    }
+    .hero{ display:flex; gap:28px; align-items:center; margin:42px 0; padding:28px; border-radius:14px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.03); }
+    .hero-text{ flex:1 }
+    .hero-text h1{ margin:0 0 8px; font-size:28px }
+    .hero-text p{ color:var(--muted); line-height:1.6 }
 
-    .footer-left{display:flex;flex-direction:column;gap:6px}
-    .footer-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
-    .footer-logo{color:var(--accent);font-weight:700;margin:0}
-    .footer-copy{margin:0;color:var(--muted)}
+    .hero-image img{ width:220px; height:220px; object-fit:cover; border-radius:12px; border:1px solid rgba(255,255,255,0.03); box-shadow:0 12px 30px rgba(2,6,23,0.6); }
 
-    /* Footer social row */
-    .footer-social{display:flex;gap:8px;align-items:center}
-    .footer-social a{
-      display:inline-flex;
-      width:40px;height:40px;border-radius:8px;align-items:center;justify-content:center;
-      background:var(--glass); color:var(--muted); text-decoration:none; transition: all .15s ease;
-      border:1px solid rgba(255,255,255,0.03);
-    }
-    .footer-social a:hover{ transform:translateY(-6px); color:var(--text); box-shadow: 0 12px 30px rgba(2,6,23,0.08) }
+    .education, .contact{ margin-top:26px; padding:22px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.015), transparent); border:1px solid rgba(255,255,255,0.02); }
+    .education h2, .contact h2{ margin:0 0 12px 0; font-size:20px }
+    .education ul{ margin:0; padding-left:18px; color:var(--muted); line-height:1.9 }
+
+    .small-media{ display:grid; grid-template-columns:1fr 300px; gap:18px; margin-top:26px; }
+    .media-card{ padding:12px; border-radius:10px; background:rgba(255,255,255,0.01); border:1px solid rgba(255,255,255,0.02); color:var(--muted); }
+    audio, video{ width:100%; border-radius:8px; background:#000; outline:none; display:block; }
+
+    .thumb-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px; }
+    .thumb-grid img{ width:100%; height:70px; object-fit:cover; border-radius:8px; cursor:pointer; transition:transform .18s, box-shadow .18s; border:1px solid rgba(255,255,255,0.03); }
+    .thumb-grid img:hover{ transform:translateY(-6px); box-shadow:0 12px 30px rgba(2,6,23,0.4); }
+
+    footer{ margin:40px auto 20px; padding:18px; border-radius:12px; display:flex; align-items:center; justify-content:space-between; gap:16px; border:1px solid rgba(255,255,255,0.02); background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); max-width:var(--max-width); }
+    .footer-left{ display:flex; flex-direction:column; gap:6px }
+    .footer-logo{ color:var(--accent); font-weight:700 }
+    .footer-text{ color:var(--muted) }
+    .footer-right{ display:flex; gap:12px; align-items:center }
+    .newsletter-input{ padding:8px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:var(--card); color:var(--text) }
+    .subscribe-btn{ padding:8px 12px; border-radius:8px; border:none; background:linear-gradient(90deg,var(--accent-2),var(--accent)); color:#06202b; cursor:pointer; font-weight:700 }
+
+    .footer-social{ display:flex; gap:10px; align-items:center }
+    .footer-social a{ width:44px; height:44px; display:inline-grid; place-items:center; border-radius:10px; background:var(--surface); color:var(--muted); text-decoration:none; border:1px solid rgba(255,255,255,0.03); transition:transform .14s, box-shadow .14s; }
+    .footer-social a:hover{ transform:translateY(-6px); color:var(--text); box-shadow:0 12px 30px rgba(2,6,23,0.08); }
+
+    .back-top{ position:fixed; right:18px; bottom:18px; width:48px; height:48px; border-radius:12px; display:grid; place-items:center; background:var(--accent-2); color:#06202b; border:none; cursor:pointer; box-shadow:0 14px 36px rgba(2,6,23,0.12); display:none; z-index:1300 }
+    .back-top.show{ display:grid }
+
+    .reveal{ opacity:0; transform:translateY(8px); transition:opacity .45s, transform .45s }
+    .reveal.visible{ opacity:1; transform:translateY(0) }
 
     @media (max-width:980px){
-      .intro{grid-template-columns:1fr; padding-bottom:8px}
-      .illustration{order:-1}
-      .hero{flex-direction:column;align-items:flex-start}
-      .hero-image{align-self:center}
-      header{padding:10px 14px}
-      .small-media{grid-template-columns:1fr}
-      .thumb-grid{grid-template-columns: repeat(4, 1fr)}
-      footer{flex-direction:column;align-items:flex-start;gap:12px}
-      .footer-right{align-items:flex-start}
+      .intro{ grid-template-columns:1fr; }
+      nav.main-nav{ display:none }
+      .menu-btn{ display:flex }
+      .mobile-nav{ display:block }
+      .hero{ flex-direction:column; gap:18px }
+      .small-media{ grid-template-columns:1fr; }
+      footer{ flex-direction:column; align-items:flex-start; gap:12px; }
     }
 
     @media (max-width:520px){
-      .text h1{font-size:28px}
-      .illustration img{width:180px;height:180px}
-      .hero-image img{width:160px;height:160px}
-      nav ul{gap:8px}
-      nav a{font-size:12px;padding:6px 8px}
-      .thumb-grid img{height:56px}
+      .text h1{ font-size:28px }
+      .illustration img{ width:180px; height:180px }
+      .hero-image img{ width:160px; height:160px }
+      .thumb-grid img{ height:56px }
+      .back-top{ right:12px; bottom:12px }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">DIPAK</div>
+  <div class="wrap">
+    <header class="site-header" role="banner">
+      <div class="header-inner">
+        <div class="brand">
+          <button id="menuBtn" class="menu-btn" aria-label="Toggle menu" aria-expanded="false" style="display:none">
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+          </button>
+          <a class="logo" href="index.html">DIPAK</a>
+        </div>
 
-    <nav aria-label="Main navigation">
-      <ul>
-        <li><a href="index.html">HOME</a></li>
-        <li><a href="about.html">ABOUT</a></li>
-        <li><a href="skills.html">SKILLS</a></li>
-        <li><a href="blog.html">BLOGS</a></li>
-        <li><a href="contact.html">CONTACT</a></li>
-      </ul>
-    </nav>
+        <nav id="mainNav" class="main-nav" role="navigation" aria-label="Main menu">
+          <a href="index.html">HOME</a>
+          <a href="about.html" class="active">ABOUT</a>
+          <a href="skills.html">SKILLS</a>
+          <a href="blog.html">BLOGS</a>
+          <a href="contact.html">CONTACT</a>
+        </nav>
 
-    <div class="controls">
-      <button id="theme-toggle" class="toggle-btn" aria-pressed="false" title="Toggle light and dark mode">
-        <i id="theme-icon" class="fa fa-moon-o" aria-hidden="true"></i>
-        <span id="theme-label">Dark</span>
-      </button>
-    </div>
-  </header>
-
-  <main>
-    <section class="intro" aria-labelledby="intro-heading">
-      <div class="text">
-        <h1 id="intro-heading">HELLO<br>I AM <span>DIPAK</span></h1>
-        <p>Computer Engineering Student and Aspiring Software Architect</p>
-        <div class="buttons">
-          <a href="#" class="btn primary" aria-label="Open portfolio">DIPAK'S PORTFOLIO</a>
-          <a href="#" class="btn outline" aria-label="Download CV">MY LATEST CV</a>
+        <div class="header-actions">
+          <a href="tel:+9779826414389" class="quick-action" title="Call"><i class="fa fa-phone"></i></a>
+          <a href="mailto:diwashb32@gmail.com" class="quick-action" title="Email"><i class="fa fa-envelope"></i></a>
+          <button id="themeToggle" class="quick-action" aria-pressed="false" title="Toggle theme"><i id="themeIcon" class="fa fa-moon"></i></button>
         </div>
       </div>
 
-      <div class="illustration" aria-hidden="false">
-        <div class="speech-bubble">Hi!</div>
-        <img src="photo/my.jpg" alt="Portrait of Dipak" />
-        <div class="glimmer" aria-hidden="true"></div>
-      </div>
-    </section>
+      <nav id="mobileNav" class="mobile-nav" aria-hidden="true" style="display:none">
+        <a href="index.html">HOME</a>
+        <a href="about.html" class="active">ABOUT</a>
+        <a href="skills.html">SKILLS</a>
+        <a href="blog.html">BLOGS</a>
+        <a href="contact.html">CONTACT</a>
+        <div style="margin-top:8px; display:flex; gap:8px;">
+          <a href="tel:+9779826414389" class="quick-action" title="Call"><i class="fa fa-phone"></i></a>
+          <a href="mailto:diwashb32@gmail.com" class="quick-action" title="Email"><i class="fa fa-envelope"></i></a>
+          <a href="index.html" class="quick-action" title="Portfolio"><i class="fa fa-briefcase"></i></a>
+        </div>
+      </nav>
+    </header>
 
-    <section id="about" class="hero" aria-labelledby="about-heading">
-      <div class="hero-text">
-        <h1 id="about-heading">Hey, I'm Dipak Bhandari</h1>
-        <p>
-          Hi, I’m Dipak Bhandari—born on 2065/03/12 BS in Chhatrakot-1, Kachhaute, Gulmi. I grew up curious about how things work and found my way to computer engineering. I built a strong foundation at Shree Balkalyan Basic School and specialized in computers at Shree Saraswati Secondary School. I'm currently studying at Lumbini Engineering College and excited to build reliable software solutions and grow as an engineer.
-        </p>
-      </div>
-      <div class="hero-image">
-        <img src="photo/mypic.jpg" alt="Dipak Bhandari" />
-      </div>
-    </section>
-
-    <section id="education" class="education" aria-labelledby="education-heading">
-      <h2 id="education-heading">Education</h2>
-      <ul>
-        <li>Primary Education, Shree Balkalyan Basic School</li>
-        <li>+2 Science Computer Engineering, Shree Saraswati Secondary School</li>
-        <li>Bachelor of Computer Engineering, Lumbini Engineering College (Ongoing)</li>
-      </ul>
-    </section>
-
-    <section id="contact" class="contact" aria-labelledby="contact-heading">
-      <h2 id="contact-heading">Contact Me</h2>
-      <p><i class="fa fa-envelope" aria-hidden="true"></i> <strong style="color:var(--accent)">&nbsp;diwashb32@gmail.com</strong></p>
-      <p><i class="fa fa-map-marker" aria-hidden="true"></i> <span style="color:var(--muted)">&nbsp;Gulmi, Nepal</span></p>
-
-      <div class="social-icons" aria-hidden="false">
-        <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" title="Facebook" aria-label="Facebook">
-          <i class="fa fa-facebook" style="font-size:18px"></i>
-        </a>
-        <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" title="Instagram" aria-label="Instagram">
-          <i class="fa fa-instagram" style="font-size:18px"></i>
-        </a>
-        <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" title="LinkedIn" aria-label="LinkedIn">
-          <i class="fa fa-linkedin" style="font-size:18px"></i>
-        </a>
-        <a href="https://github.com/assitantsris255" target="_blank" title="GitHub" aria-label="GitHub">
-          <i class="fa fa-github" style="font-size:18px"></i>
-        </a>
-      </div>
-    </section>
-
-    <section id="small-media" class="small-media" aria-labelledby="media-heading">
-      <div class="media-left">
-        <div class="media-card" aria-hidden="false" style="flex-direction:column;align-items:stretch;">
-          <strong>Listen: Short Intro</strong>
-          <p style="margin-bottom:8px">A 30–60 second voice intro or short podcast clip. Click play to listen.</p>
-          <audio controls preload="none">
-            <source src="audio/sample.mp3" type="audio/mpeg">
-            Your browser does not support the audio element.
-          </audio>
+    <main>
+      <section class="intro reveal" aria-labelledby="intro-heading">
+        <div class="text">
+          <h1 id="intro-heading">HELLO<br>I AM <span>DIPAK</span></h1>
+          <p>COMPUTER ENGINEERING STUDENT & COMPUTER OVERSEER</p>
+          <div class="buttons">
+            <a href="#" class="btn primary">DIPAK'S PORTFOLIO</a>
+            <a href="#" class="btn outline">MY LATEST CV</a>
+          </div>
         </div>
 
-        <div class="media-card" aria-hidden="false" style="flex-direction:column;align-items:stretch;">
-          <strong>Watch: Project Quick Peek</strong>
-          <p style="margin-bottom:8px">Short muted looped demo or video introduction.</p>
-          <video controls muted playsinline preload="metadata" poster="photo/video-poster.jpg">
-            <source src="video/sample.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
+        <div class="illustration">
+          <div class="speech-bubble">Hi!</div>
+          <img src="photo/my.jpg" alt="Dipak portrait" />
         </div>
+      </section>
+
+      <section id="about" class="hero reveal" aria-labelledby="about-heading">
+        <div class="hero-text">
+          <h1 id="about-heading">Hey, I'm Dipak Bhandari</h1>
+          <p>
+            Hi, I’m Dipak Bhandari—born on 2065/03/12 BS in the picturesque village of Chhatrakot-1, Kachhaute, Gulmi. I grew up curious about how things work and found my way to computer engineering. I built a strong foundation at Shree Balkalyan Basic School and specialized in computers at Shree Saraswati Secondary School. I'm currently studying at Lumbini Engineering College and excited to build reliable software solutions and grow as an engineer.
+          </p>
+        </div>
+
+        <div class="hero-image">
+          <img src="photo/mypic.jpg" alt="Dipak Bhandari" />
+        </div>
+      </section>
+
+      <section id="education" class="education reveal" aria-labelledby="education-heading">
+        <h2 id="education-heading">Education</h2>
+        <ul>
+          <li>Primary Education, Shree Balkalyan Basic School</li>
+          <li>+2 Science Computer Engineering, Shree Saraswati Secondary School</li>
+          <li>Bachelor of Computer Engineering, Lumbini Engineering College (Ongoing)</li>
+        </ul>
+      </section>
+
+      <section id="contact" class="contact reveal" aria-labelledby="contact-heading">
+        <h2 id="contact-heading">Contact Me</h2>
+        <p><i class="fa fa-envelope" aria-hidden="true"></i> <strong style="color:var(--accent-2)">&nbsp;diwashb32@gmail.com</strong></p>
+        <p><i class="fa fa-map-marker-alt" aria-hidden="true"></i> <span style="color:var(--muted)">&nbsp;Gulmi, Nepal</span></p>
+      </section>
+
+      <section id="small-media" class="small-media reveal" aria-labelledby="media-heading">
+        <div class="media-left">
+          <div class="media-card">
+            <strong>Listen: Short Intro</strong>
+            <p style="margin-bottom:8px">A 30–60 second voice intro or short podcast clip. Click play to listen.</p>
+            <audio controls preload="none"><source src="audio/sample.mp3" type="audio/mpeg">Your browser does not support audio.</audio>
+          </div>
+
+          <div class="media-card" style="margin-top:12px">
+            <strong>Watch: Project Quick Peek</strong>
+            <p style="margin-bottom:8px">Short muted looped demo or video introduction.</p>
+            <video controls muted playsinline preload="metadata" poster="photo/video-poster.jpg"><source src="video/sample.mp4" type="video/mp4">Your browser does not support video.</video>
+          </div>
+        </div>
+
+        <aside class="media-right" aria-label="Media gallery">
+          <div style="width:100%;display:flex;justify-content:space-between;align-items:center;">
+            <strong style="color:var(--text)">Small Gallery</strong>
+            <button class="media-play" id="open-gallery">View All</button>
+          </div>
+
+          <div class="thumb-grid" id="thumb-grid" aria-hidden="false" style="margin-top:10px">
+            <img src="photo/thumb1.jpg" alt="Thumbnail 1" data-full="photo/full1.jpg">
+            <img src="photo/thumb2.jpg" alt="Thumbnail 2" data-full="photo/full2.jpg">
+            <img src="photo/thumb3.jpg" alt="Thumbnail 3" data-full="photo/full3.jpg">
+          </div>
+
+          <p style="color:var(--muted);font-size:13px;margin:8px 0 0 0;text-align:center">Click a thumbnail to open the full image in a new tab.</p>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="reveal">
+      <div class="footer-left">
+        <div class="footer-logo">Dipak Bhandari</div>
+        <div class="footer-text">Connect with me on social media</div>
       </div>
 
-      <aside class="media-right" aria-label="Media gallery">
-        <div style="width:100%;display:flex;justify-content:space-between;align-items:center;">
-          <strong style="color:var(--text)">Small Gallery</strong>
-          <button class="media-play" id="open-gallery">View All</button>
+      <div class="footer-right">
+        <input id="newsletterEmail" class="newsletter-input" type="email" placeholder="Your email" aria-label="Subscribe email">
+        <button id="subscribeBtn" class="subscribe-btn">Subscribe</button>
+        <div class="footer-social" aria-label="Footer social links" style="margin-left:12px">
+          <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://github.com/assitantsris255" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
         </div>
-
-        <div class="thumb-grid" id="thumb-grid" aria-hidden="false">
-          <img src="photo/thumb1.jpg" alt="Thumbnail 1" data-full="photo/full1.jpg">
-          <img src="photo/thumb2.jpg" alt="Thumbnail 2" data-full="photo/full2.jpg">
-          <img src="photo/thumb3.jpg" alt="Thumbnail 3" data-full="photo/full3.jpg">
-        </div>
-
-        <p style="color:var(--muted);font-size:13px;margin:0;text-align:center">Click a thumbnail to open the full image in a new tab.</p>
-      </aside>
-    </section>
-
-  </main>
-
-  <footer>
-    <div class="footer-left">
-      <h2 class="footer-logo">Dipak Bhandari</h2>
-      <p class="footer-text">Connect with me on social media</p>
-      <div class="footer-social" aria-hidden="false" aria-label="Footer social links">
-        <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" title="Facebook" aria-label="Facebook">
-          <i class="fa fa-facebook" aria-hidden="true"></i>
-        </a>
-        <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" title="Instagram" aria-label="Instagram">
-          <i class="fa fa-instagram" aria-hidden="true"></i>
-        </a>
-        <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" title="LinkedIn" aria-label="LinkedIn">
-          <i class="fa fa-linkedin" aria-hidden="true"></i>
-        </a>
-        <a href="https://github.com/assitantsris255" target="_blank" title="GitHub" aria-label="GitHub">
-          <i class="fa fa-github" aria-hidden="true"></i>
-        </a>
       </div>
-    </div>
+    </footer>
+  </div>
 
-    <div class="footer-right">
-      <p class="footer-copy">&copy; 2025 Dipak Bhandari. All rights reserved.</p>
-      <p style="color:var(--muted);font-size:13px;margin:0">Made with care in Nepal</p>
-    </div>
-  </footer>
+  <button id="backTop" class="back-top" aria-label="Back to top" title="Back to top"><i class="fa fa-arrow-up"></i></button>
 
   <script>
-    // Theme toggle with persistence
+    // Theme toggle (persisted)
     (function(){
-      const toggle = document.getElementById('theme-toggle');
-      const icon = document.getElementById('theme-icon');
-      const label = document.getElementById('theme-label');
+      const btn = document.getElementById('themeToggle') || document.getElementById('theme-toggle');
+      const icon = document.getElementById('themeIcon') || document.getElementById('theme-icon');
       const root = document.documentElement;
-
-      const applyTheme = (mode) => {
-        if(mode === 'light'){
-          root.classList.add('light');
-          toggle.setAttribute('aria-pressed','true');
-          icon.className = 'fa fa-sun-o';
-          label.textContent = 'Light';
-        } else {
-          root.classList.remove('light');
-          toggle.setAttribute('aria-pressed','false');
-          icon.className = 'fa fa-moon-o';
-          label.textContent = 'Dark';
-        }
-      };
-
       const stored = localStorage.getItem('site-theme');
       const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
       let current = stored || (prefersLight ? 'light' : 'dark');
-      applyTheme(current);
 
-      toggle.addEventListener('click', () => {
-        current = (current === 'light') ? 'dark' : 'light';
-        localStorage.setItem('site-theme', current);
-        applyTheme(current);
-      });
+      function apply(mode){
+        if(mode === 'light'){ root.classList.add('light'); if(btn) btn.setAttribute('aria-pressed','true'); if(icon) icon.className='fa fa-sun'; }
+        else { root.classList.remove('light'); if(btn) btn.setAttribute('aria-pressed','false'); if(icon) icon.className='fa fa-moon'; }
+      }
+      apply(current);
+
+      if(btn) btn.addEventListener('click', () => { current = (current === 'light') ? 'dark' : 'light'; localStorage.setItem('site-theme', current); apply(current); });
     })();
 
-    // Small interactive polish: gently pulse the speech bubble occasionally
+    // Mobile menu handling
     (function(){
-      const bubble = document.querySelector('.speech-bubble');
-      if(!bubble) return;
-      let t = 0;
-      setInterval(() => {
-        t = (t+1) % 6;
-        bubble.style.transform = t === 0 ? 'translateY(-6px)' : 'translateY(0)';
-      }, 2200);
-    })();
+      const menuBtn = document.getElementById('menuBtn');
+      const mobileNav = document.getElementById('mobileNav');
+      const mainNav = document.getElementById('mainNav');
 
-    // Thumbnail click behavior: open full image in new tab
-    (function(){
-      const thumbs = document.querySelectorAll('#thumb-grid img');
-      thumbs.forEach(img => {
-        img.addEventListener('click', () => {
-          const full = img.dataset.full || img.src;
-          window.open(full, '_blank');
+      function updateMenuVisibility(){
+        if(window.innerWidth <= 980){
+          if(menuBtn) menuBtn.style.display = 'inline-flex';
+          if(mainNav) mainNav.style.display = 'none';
+          if(mobileNav && !mobileNav.classList.contains('open')) mobileNav.style.display = 'none';
+        } else {
+          if(menuBtn) menuBtn.style.display = 'none';
+          if(mobileNav){ mobileNav.classList.remove('open'); mobileNav.style.display = 'none'; mobileNav.setAttribute('aria-hidden','true'); }
+          if(mainNav) mainNav.style.display = 'flex';
+          document.body.style.overflow = '';
+        }
+      }
+      updateMenuVisibility();
+      window.addEventListener('resize', updateMenuVisibility);
+
+      if(menuBtn && mobileNav){
+        menuBtn.addEventListener('click', () => {
+          const open = menuBtn.classList.toggle('open');
+          mobileNav.classList.toggle('open', open);
+          mobileNav.setAttribute('aria-hidden', String(!open));
+          mobileNav.style.display = open ? 'block' : 'none';
+          menuBtn.setAttribute('aria-expanded', String(open));
+          document.body.style.overflow = open ? 'hidden' : '';
         });
-      });
 
-      document.getElementById('open-gallery').addEventListener('click', () => {
-        const first = thumbs[0];
+        document.addEventListener('click', (e) => {
+          if(window.innerWidth > 980) return;
+          if(!menuBtn.classList.contains('open')) return;
+          if(e.target.closest('.header-inner') || e.target.closest('.mobile-nav')) return;
+          menuBtn.classList.remove('open'); mobileNav.classList.remove('open'); mobileNav.setAttribute('aria-hidden','true'); mobileNav.style.display='none'; document.body.style.overflow='';
+        });
+      }
+    })();
+
+    // Reveal on scroll
+    (function(){
+      const items = document.querySelectorAll('.reveal');
+      if(!items.length) return;
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach(e => {
+          if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }
+        });
+      }, {threshold:0.15});
+      items.forEach(i => io.observe(i));
+    })();
+
+    // Back to top
+    (function(){
+      const btn = document.getElementById('backTop');
+      if(!btn) return;
+      window.addEventListener('scroll', () => { btn.classList.toggle('show', window.scrollY > 360); });
+      btn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+    })();
+
+    // Subscribe demo
+    (function(){
+      const input = document.getElementById('newsletterEmail');
+      const btn = document.getElementById('subscribeBtn');
+      if(!btn) return;
+      btn.addEventListener('click', () => {
+        const email = (input.value||'').trim();
+        if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ alert('Enter a valid email'); return; }
+        alert('Subscribed: ' + email + ' (demo)'); input.value = '';
+      });
+    })();
+
+    // Speech bubble pulse
+    (function(){
+      const b = document.querySelector('.speech-bubble');
+      if(!b) return;
+      setInterval(()=>{ b.style.transform='translateY(-6px)'; setTimeout(()=>b.style.transform='',420); }, 2500);
+    })();
+
+    // Thumbnails open
+    (function(){
+      const grid = document.getElementById('thumb-grid');
+      if(!grid) return;
+      grid.addEventListener('click', (e)=> {
+        const img = e.target.closest('img');
+        if(!img) return;
+        const full = img.dataset.full || img.src;
+        window.open(full, '_blank');
+      });
+      document.getElementById('open-gallery')?.addEventListener('click', ()=> {
+        const first = grid.querySelector('img');
         if(first) window.open(first.dataset.full || first.src, '_blank');
       });
     })();
