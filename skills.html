@@ -1,371 +1,390 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dipak Bhandari | About Me</title>
-
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    integrity="sha512-pO1O4OhS3bXROkmN/cmZbVuo2+tbQMXkdrmTfN0fH8WeopC9UknyHYvHCnJ+SQZ3kV0KDZVoT20G1hKkP1hKkg=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,700&display=swap" rel="stylesheet">
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Skills — Dipak (Responsive)</title>
   <style>
-    :root {
-      --primary: #6c63ff;
-      --light-gray: #f5f5f5;
-      --dark: #111827;
-      --card-bg: #ffffff;
-      --muted: #666;
-      --accent:#7c5cff;
+    /* ===== Theme & Reset ===== */
+    :root{
       --bg-dark:#0f1724;
-      --surface: linear-gradient(180deg,#ffffff,#fffafc);
-      --max-width: 1000px;
+      --card-dark:#0c1220;
+      --accent:#7c5cff;
+      --accent2:#ff6b9a;
+      --muted:#9aa4b2;
+      --glass: rgba(255,255,255,0.03);
+      --max-width:980px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;font-family:Inter, Poppins, system-ui,-apple-system,"Segoe UI",Roboto;background:var(--bg-dark);color:#e6eef8;-webkit-font-smoothing:antialiased;line-height:1.35}
+    a{color:inherit;text-decoration:none}
+
+    /* layout */
+    .wrap{max-width:var(--max-width);margin:20px auto;padding:14px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+    header .brand{display:flex;gap:10px;align-items:center}
+    header h1{font-size:20px;color:var(--accent);font-weight:700;margin:0}
+    nav.desktop{display:flex;gap:10px;align-items:center}
+    nav.desktop a{color:var(--muted);padding:8px 10px;border-radius:8px;font-weight:600}
+    nav.desktop a:hover{color:#fff;background:rgba(255,255,255,0.03);transform:translateY(-2px)}
+    .controls{display:flex;gap:8px;align-items:center}
+
+    /* toolbar */
+    .toolbar{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+    .search{flex:1;min-width:160px}
+    .input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    .select,.btn{padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit;cursor:pointer}
+
+    /* grid */
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);position:relative;overflow:hidden}
+    .card h3{font-size:16px;margin-bottom:8px}
+    .meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:13px;color:var(--muted)}
+    .progress-bar{height:12px;background:rgba(255,255,255,0.04);border-radius:999px;overflow:hidden}
+    .progress{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;color:#fff;font-weight:700;font-size:12px;transition:width 1400ms cubic-bezier(.2,.9,.26,1)}
+    .tag{display:inline-block;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.03);font-size:12px;color:var(--muted);margin-left:8px}
+
+    /* actions & tooltip */
+    .actions{position:absolute;right:10px;top:10px;display:flex;gap:8px}
+    .icon-btn{background:transparent;border:0;color:var(--muted);cursor:pointer;padding:6px;border-radius:8px}
+    .icon-btn:hover{background:var(--glass);color:#fff}
+    .tooltip{position:absolute;background:#111;padding:6px 8px;border-radius:6px;font-size:12px;color:#fff;transform:translateY(-8px);pointer-events:none;opacity:0;transition:opacity 160ms,transform 160ms}
+    .tooltip.show{opacity:1;transform:translateY(0)}
+
+    /* modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:220}
+    .modal{background:#0e1726;padding:16px;border-radius:12px;max-width:520px;width:92%;box-shadow:0 22px 46px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.03)}
+    .modal h4{margin:0 0 8px;color:#fff}
+    .modal p{color:var(--muted);font-size:14px;line-height:1.45}
+
+    /* footer */
+    footer.site{margin-top:16px;color:var(--muted);font-size:13px;text-align:center;padding:14px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border:1px solid rgba(255,255,255,0.02)}
+    footer.site .social{display:flex;gap:8px;justify-content:center;margin:8px 0}
+    footer.site a{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.03);color:var(--muted);text-decoration:none}
+    footer.site a:hover{background:rgba(255,255,255,0.06);color:#fff;transform:translateY(-4px)}
+
+    /* reveal */
+    .reveal{opacity:0;transform:translateY(12px);transition:all 420ms ease}
+    .reveal.show{opacity:1;transform:none}
+
+    /* ===== Mobile-first responsive rules ===== */
+    @media (max-width: 980px){
+      .grid{grid-template-columns:repeat(2,1fr)}
+      nav.desktop{display:none}
+      header{align-items:flex-start}
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html, body {
-      height: 100%;
-      font-family: 'Poppins', 'Segoe UI', 'Roboto', sans-serif;
-      color: var(--dark);
-      background: linear-gradient(180deg,#fff8fe 0%,#fff 100%);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      -webkit-text-size-adjust:100%;
+    @media (max-width: 520px){
+      .toolbar{gap:8px}
+      .grid{grid-template-columns:1fr;gap:10px}
+      .card{padding:12px}
+      .progress-bar{height:14px}
+      .progress{font-size:12px;padding-right:10px}
+      .controls{gap:6px}
+      .select, .btn, .input{padding:10px;border-radius:10px}
+      header h1{font-size:17px}
+      .actions{top:8px;right:8px}
     }
 
-    /* Header */
-    header {
-      background: var(--card-bg);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-      position: sticky;
-      top: 0;
-      z-index: 120;
+    @media (max-width: 360px){
+      .input, .select, .btn{padding:12px 14px;font-size:14px}
+      .icon-btn{padding:8px}
+      .progress{font-size:13px}
     }
-
-    .nav {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 14px 20px;
-    }
-
-    .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--primary);
-      letter-spacing: 0.4px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    .logo svg{ width:34px; height:34px; }
-
-    nav.desktop {
-      display: flex;
-      gap: 14px;
-    }
-    nav.desktop a {
-      text-decoration: none;
-      color: var(--dark);
-      font-weight: 500;
-      padding: 8px 10px;
-      border-radius: 8px;
-    }
-    nav.desktop a:hover { background: rgba(108,99,255,0.08); color: #000; transform: translateY(-2px); }
-
-    /* Mobile menu button (shown on small screens) */
-    .menu-btn {
-      display: none;
-      border: 0;
-      background: transparent;
-      font-size: 1.15rem;
-      color: var(--primary);
-      cursor: pointer;
-      padding: 8px;
-      border-radius: 8px;
-    }
-
-    /* Container */
-    .container {
-      max-width: var(--max-width);
-      margin: 28px auto;
-      padding: 0 20px;
-    }
-
-    /* Hero / About */
-    .hero {
-      display: flex;
-      gap: 28px;
-      align-items: center;
-      background: linear-gradient(180deg,#ffffff,#fffafc);
-      border-radius: 12px;
-      padding: 28px;
-      box-shadow: 0 8px 30px rgba(16,24,40,0.04);
-    }
-    .hero-text { flex: 1 1 320px; }
-    .hero-text h1 { font-size: 1.8rem; margin-bottom: 12px; color: var(--dark); }
-    .hero-text p { font-size: 1rem; color: var(--muted); line-height: 1.55; white-space: pre-line; }
-    .hero-image { width: 300px; display:grid; place-items:center; flex-shrink:0; }
-    .hero-image img { width: 100%; max-width: 300px; border-radius: 12px; display:block; object-fit: cover; box-shadow: 0 12px 36px rgba(108,99,255,0.08); }
-
-    /* Education / Contact */
-    section.education, section.contact {
-      margin-top: 20px;
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 8px 28px rgba(16,24,40,0.04);
-    }
-    section.education h2, section.contact h2 { color: var(--primary); margin-bottom: 12px; font-size: 1.05rem; }
-    section.education ul { list-style: disc inside; color: var(--muted); font-size: 0.98rem; }
-    section.contact p { margin: 8px 0; color: var(--muted); display:flex; gap:10px; align-items:center; font-size: 0.98rem; }
-
-    /* Footer */
-    footer.site {
-      margin-top: 28px;
-      background: #1c1c1c;
-      color: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-    }
-    .footer-container { max-width: 800px; margin: auto; }
-    .footer-logo { font-size: 1.15rem; font-weight:700; color: #bfb7ff; margin-bottom: 6px; }
-    .footer-text { color: #d0cbe6; margin-bottom: 12px; }
-    .social-icons { display:flex; justify-content:center; gap: 12px; margin-bottom: 12px; }
-    .icon { display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; background:#333; color:#fff; text-decoration:none; }
-    .icon:hover { transform: translateY(-4px); }
-
-    /* Small-device additions appended (kept minimal and non-destructive) */
-    @media (max-width: 980px) {
-      nav.desktop { display: none; }
-      .menu-btn { display: inline-flex; }
-      .hero { flex-direction: column; padding: 18px; gap: 16px; }
-      .hero-image { width: 160px; }
-      .hero-image img { width: 160px; border-radius: 10px; }
-      .container { padding: 0 14px; }
-      .footer-container { padding: 10px 6px; }
-      footer.site { position: static; margin: 16px auto; }
-    }
-
-    @media (max-width: 520px) {
-      .hero-image { width: 140px; }
-      .hero-text h1 { font-size: 1.25rem; }
-      .hero-text p { font-size: 0.95rem; }
-      .footer-container { padding: 8px; }
-      .icon { width:40px; height:40px; }
-      .menu-btn { padding: 8px; font-size: 1rem; }
-    }
-
-    /* Mobile sheet (hidden by default) */
-    #mobileSheet {
-      display: none;
-      position: fixed;
-      left: 10px;
-      right: 10px;
-      top: 70px;
-      background: var(--card-bg);
-      border-radius: 12px;
-      box-shadow: 0 22px 50px rgba(0,0,0,0.15);
-      padding: 12px;
-      z-index: 200;
-      border: 1px solid rgba(0,0,0,0.04);
-    }
-    #mobileSheet.show { display: block; }
-
-    /* Hide footer on keyboard open heuristics (mobile) */
-    .hide-on-keyboard { transition: opacity 160ms ease, transform 160ms ease; }
-
-    /* Accessibility focus */
-    a:focus, button:focus { outline: 3px solid rgba(108,99,255,0.16); outline-offset: 3px; border-radius: 8px; }
-
   </style>
 </head>
 <body>
-  <header>
-    <div class="nav" role="navigation" aria-label="Main navigation">
-      <div class="logo">
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" fill="#6c63ff"/><path d="M7 12h10" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg>
-        Dipak Bhandari
+  <div class="wrap">
+    <header class="reveal" id="topbar">
+      <div class="brand">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden focusable="false"><circle cx="12" cy="12" r="10" fill="#7c5cff"/><path d="M7 12h10" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <h1>Dipak — Skills</h1>
       </div>
 
-      <nav class="desktop" aria-label="Desktop menu">
+      <nav class="desktop" aria-label="primary">
         <a href="index.html">Home</a>
         <a href="about.html">About</a>
-        <a href="skills.html">Skills</a>
+        <a href="skills.html" aria-current="page">Skills</a>
         <a href="blog.html">Blogs</a>
-        <a href="contact.html">Contact me</a>
+        <a href="contact.html">Contact</a>
       </nav>
 
-      <button id="menuBtn" class="menu-btn" aria-controls="mobileSheet" aria-expanded="false" aria-label="Open menu">☰</button>
-    </div>
-  </header>
+      <div class="controls">
+        <button id="exportCsv" class="btn" title="Export CSV">Export CSV</button>
+        <button id="toggleTheme" class="btn" title="Toggle theme">Theme</button>
+      </div>
+    </header>
 
-  <!-- Mobile sheet (added for small devices) -->
-  <div id="mobileSheet" role="dialog" aria-hidden="true" aria-modal="false">
-    <nav aria-label="Mobile menu">
-      <a href="index.html" role="menuitem">Home</a>
-      <a href="about.html" role="menuitem">About</a>
-      <a href="skills.html" role="menuitem">Skills</a>
-      <a href="blog.html" role="menuitem">Blogs</a>
-      <a href="contact.html" role="menuitem">Contact me</a>
-    </nav>
+    <div class="toolbar reveal" id="toolbar">
+      <div class="search">
+        <input id="search" class="input" placeholder="Search skill (e.g., JavaScript)" aria-label="Search skills" />
+      </div>
+
+      <select id="filter" class="select" aria-label="Filter by range">
+        <option value="all">All levels</option>
+        <option value="80">80%+</option>
+        <option value="70">70%+</option>
+        <option value="60">60%+</option>
+      </select>
+
+      <select id="sort" class="select" aria-label="Sort skills">
+        <option value="default">Default</option>
+        <option value="level-desc">Level: High → Low</option>
+        <option value="level-asc">Level: Low → High</option>
+        <option value="name-asc">Name A → Z</option>
+      </select>
+    </div>
+
+    <main id="grid" class="grid reveal" aria-live="polite">
+      <!-- cards -->
+      <article class="card skill" data-name="HTML" data-level="90">
+        <div class="actions">
+          <button class="icon-btn" data-action="info" title="Details">ℹ</button>
+          <button class="icon-btn" data-action="copy" title="Copy">📋</button>
+        </div>
+        <h3>HTML <span class="tag">Markup</span></h3>
+        <div class="meta"><span>Level</span><strong>90%</strong></div>
+        <div class="progress-bar"><div class="progress" aria-valuenow="0"><span>0%</span></div></div>
+        <div class="tooltip" aria-hidden="true">Copied</div>
+      </article>
+
+      <article class="card skill" data-name="CSS" data-level="85">
+        <div class="actions">
+          <button class="icon-btn" data-action="info">ℹ</button>
+          <button class="icon-btn" data-action="copy">📋</button>
+        </div>
+        <h3>CSS <span class="tag">Styling</span></h3>
+        <div class="meta"><span>Level</span><strong>85%</strong></div>
+        <div class="progress-bar"><div class="progress" aria-valuenow="0"><span>0%</span></div></div>
+        <div class="tooltip" aria-hidden="true">Copied</div>
+      </article>
+
+      <article class="card skill" data-name="JavaScript" data-level="80">
+        <div class="actions">
+          <button class="icon-btn" data-action="info">ℹ</button>
+          <button class="icon-btn" data-action="copy">📋</button>
+        </div>
+        <h3>JavaScript <span class="tag">Frontend</span></h3>
+        <div class="meta"><span>Level</span><strong>80%</strong></div>
+        <div class="progress-bar"><div class="progress" aria-valuenow="0"><span>0%</span></div></div>
+        <div class="tooltip" aria-hidden="true">Copied</div>
+      </article>
+
+      <article class="card skill" data-name="React" data-level="75">
+        <div class="actions">
+          <button class="icon-btn" data-action="info">ℹ</button>
+          <button class="icon-btn" data-action="copy">📋</button>
+        </div>
+        <h3>React <span class="tag">Library</span></h3>
+        <div class="meta"><span>Level</span><strong>75%</strong></div>
+        <div class="progress-bar"><div class="progress" aria-valuenow="0"><span>0%</span></div></div>
+        <div class="tooltip" aria-hidden="true">Copied</div>
+      </article>
+
+      <article class="card skill" data-name="Node.js" data-level="70">
+        <div class="actions">
+          <button class="icon-btn" data-action="info">ℹ</button>
+          <button class="icon-btn" data-action="copy">📋</button>
+        </div>
+        <h3>Node.js <span class="tag">Backend</span></h3>
+        <div class="meta"><span>Level</span><strong>70%</strong></div>
+        <div class="progress-bar"><div class="progress" aria-valuenow="0"><span>0%</span></div></div>
+        <div class="tooltip" aria-hidden="true">Copied</div>
+      </article>
+
+      <article class="card skill" data-name="Mobile app development" data-level="80">
+        <div class="actions">
+          <button class="icon-btn" data-action="info">ℹ</button>
+          <button class="icon-btn" data-action="copy">📋</button>
+        </div>
+        <h3>Mobile app development <span class="tag">Flutter</span></h3>
+        <div class="meta"><span>Level</span><strong>80%</strong></div>
+        <div class="progress-bar"><div class="progress" aria-valuenow="0"><span>0%</span></div></div>
+        <div class="tooltip" aria-hidden="true">Copied</div>
+      </article>
+
+      <article class="card skill" data-name="C programming" data-level="60">
+        <div class="actions">
+          <button class="icon-btn" data-action="info">ℹ</button>
+          <button class="icon-btn" data-action="copy">📋</button>
+        </div>
+        <h3>C programming <span class="tag">Systems</span></h3>
+        <div class="meta"><span>Level</span><strong>60%</strong></div>
+        <div class="progress-bar"><div class="progress" aria-valuenow="0"><span>0%</span></div></div>
+        <div class="tooltip" aria-hidden="true">Copied</div>
+      </article>
+
+      <article class="card skill" data-name="C++" data-level="59">
+        <div class="actions">
+          <button class="icon-btn" data-action="info">ℹ</button>
+          <button class="icon-btn" data-action="copy">📋</button>
+        </div>
+        <h3>C++ <span class="tag">OOP</span></h3>
+        <div class="meta"><span>Level</span><strong>59%</strong></div>
+        <div class="progress-bar"><div class="progress" aria-valuenow="0"><span>0%</span></div></div>
+        <div class="tooltip" aria-hidden="true">Copied</div>
+      </article>
+
+      <article class="card skill" data-name="Python" data-level="55">
+        <div class="actions">
+          <button class="icon-btn" data-action="info">ℹ</button>
+          <button class="icon-btn" data-action="copy">📋</button>
+        </div>
+        <h3>Python <span class="tag">Scripting</span></h3>
+        <div class="meta"><span>Level</span><strong>55%</strong></div>
+        <div class="progress-bar"><div class="progress" aria-valuenow="0"><span>0%</span></div></div>
+        <div class="tooltip" aria-hidden="true">Copied</div>
+      </article>
+    </main>
+
+    <footer class="site reveal" id="foot">
+      <div>© 2025 Dipak Bhandari</div>
+      <div class="social" aria-label="social links">
+        <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" rel="noopener" aria-label="Facebook">F</a>
+        <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" rel="noopener" aria-label="Instagram">I</a>
+        <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" rel="noopener" aria-label="LinkedIn">L</a>
+        <a href="https://github.com/assitantsris255" target="_blank" rel="noopener" aria-label="GitHub">G</a>
+      </div>
+      <div style="margin-top:8px;color:var(--muted);font-size:13px">Connect with me on social media</div>
+    </footer>
   </div>
 
-  <main class="container">
-    <section id="about" class="hero" aria-labelledby="about-heading">
-      <div class="hero-text">
-        <h1 id="about-heading">Hey, I'm Dipak Bhandari</h1>
-        <p>
-Hi, I’m Dipak Bhandari—born on 2065/03/12 BS in the picturesque village of Chhatrakot-1, Kachhaute, Gulmi. At 17 years old, I carry the pride and support of my family—my father Harilal, my mother Lili, three brothers and one sister—who’ve always encouraged me to dream big.
-My academic journey started at Shree Balkalyan Basic School (grades 1–8), where I built a strong foundation. I then discovered my passion for technology at Shree Saraswati Secondary School, specializing in computer engineering from grades 9–12. Today, I’m thrilled to take the next big step at Lumbini Engineering College, ready to dive deeper into the world of engineering and turn my ideas into reality.
-        </p>
+  <!-- Modal -->
+  <div class="modal-backdrop" id="modal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h4 id="modalTitle">Skill details</h4>
+      <p id="modalText">Details go here</p>
+      <div style="text-align:right;margin-top:12px">
+        <button id="modalClose" class="select" style="padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--muted);cursor:pointer">Close</button>
       </div>
-
-      <div class="hero-image" aria-hidden="false">
-        <img src="photo/mypic.jpg" alt="Dipak Bhandari" onerror="this.style.opacity=.9; this.style.objectFit='cover'">
-      </div>
-    </section>
-
-    <section id="education" class="education" aria-labelledby="edu-heading">
-      <h2 id="edu-heading">Education</h2>
-      <ul>
-        <li>Primary Education, Shree Balkalyan Basic School</li>
-        <li>+2 Science (Computer Engineering), Shree Saraswati Secondary School</li>
-        <li>Bachelor of Computer Engineering, Lumbini Engineering College (Ongoing)</li>
-      </ul>
-    </section>
-
-    <section id="contact" class="contact" aria-labelledby="contact-heading">
-      <h2 id="contact-heading">Contact Me</h2>
-      <p><ion-icon name="mail-outline"></ion-icon> diwashb32@gmail.com</p>
-      <p><ion-icon name="location-outline"></ion-icon> Gulmi, Nepal</p>
-    </section>
-  </main>
-
-  <footer class="site hide-on-keyboard" role="contentinfo">
-    <div class="footer-container">
-      <h2 class="footer-logo">Dipak Bhandari</h2>
-      <p class="footer-text">Connect with me on social media</p>
-      <div class="social-icons" role="navigation" aria-label="social links">
-        <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" class="icon facebook" title="Facebook" rel="noopener">
-          <ion-icon name="logo-facebook"></ion-icon>
-        </a>
-        <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" class="icon instagram" title="Instagram" rel="noopener">
-          <ion-icon name="logo-instagram"></ion-icon>
-        </a>
-        <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" class="icon linkedin" title="LinkedIn" rel="noopener">
-          <ion-icon name="logo-linkedin"></ion-icon>
-        </a>
-         <a href="https://github.com/assitantsris255" target="_blank" class="icon github" title="GitHub" rel="noopener">
-          <ion-icon name="logo-github"></ion-icon>
-        </a>
-      </div>
-      <p class="footer-copy">&copy; 2025 Dipak Bhandari. All rights reserved.</p>
     </div>
-  </footer>
-
-  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  </div>
 
   <script>
-    (function(){
-      // Mobile menu sheet toggle (adds small-device behavior without changing existing layout)
-      const menuBtn = document.getElementById('menuBtn');
-      const mobileSheet = document.getElementById('mobileSheet');
-      const desktopNav = document.querySelector('nav.desktop');
-      const footer = document.querySelector('footer.site');
+    // element refs
+    const skills = Array.from(document.querySelectorAll('.skill'));
+    const grid = document.getElementById('grid');
+    const search = document.getElementById('search');
+    const filter = document.getElementById('filter');
+    const sort = document.getElementById('sort');
+    const exportBtn = document.getElementById('exportCsv');
+    const toggleTheme = document.getElementById('toggleTheme');
+    const modal = document.getElementById('modal');
+    const modalText = document.getElementById('modalText');
+    const modalClose = document.getElementById('modalClose');
 
-      function isSmall() { return window.innerWidth <= 980; }
+    // entrance reveals
+    setTimeout(()=> document.querySelectorAll('.reveal').forEach(el=>el.classList.add('show')), 120);
 
-      function updateUiOnResize(){
-        // Show menu button on small screens, hide desktop nav
-        if(isSmall()){
-          if(menuBtn) menuBtn.style.display = 'inline-flex';
-          if(desktopNav) desktopNav.style.display = 'none';
-        } else {
-          if(menuBtn) menuBtn.style.display = 'none';
-          if(desktopNav) desktopNav.style.display = 'flex';
-          // ensure mobile sheet closed
-          if(mobileSheet) { mobileSheet.classList.remove('show'); mobileSheet.setAttribute('aria-hidden','true'); menuBtn.setAttribute('aria-expanded','false'); menuBtn.textContent = '☰'; }
+    // animate bars when in viewport
+    const io = new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          const prog = entry.target.querySelector('.progress');
+          const val = entry.target.getAttribute('data-level') || prog.getAttribute('aria-valuenow') || 60;
+          prog.style.width = val + '%';
+          prog.setAttribute('aria-valuenow', val);
+          prog.querySelector('span').textContent = val + '%';
+          io.unobserve(entry.target);
         }
-      }
-      updateUiOnResize();
-      window.addEventListener('resize', updateUiOnResize);
+      });
+    }, {threshold:0.24});
+    skills.forEach(s=>io.observe(s));
 
-      if(menuBtn && mobileSheet){
-        menuBtn.addEventListener('click', function(){
-          const open = mobileSheet.classList.toggle('show');
-          mobileSheet.setAttribute('aria-hidden', String(!open));
-          menuBtn.setAttribute('aria-expanded', String(open));
-          menuBtn.textContent = open ? '✕' : '☰';
+    // filtering & sorting
+    function applyFilters(){
+      const q = (search.value || '').trim().toLowerCase();
+      const min = filter.value === 'all' ? 0 : parseInt(filter.value,10);
+      let list = skills.slice();
+
+      if(q) list = list.filter(el => el.dataset.name.toLowerCase().includes(q));
+
+      list = list.filter(el => Number(el.dataset.level) >= min);
+
+      const s = sort.value;
+      if(s === 'level-desc') list.sort((a,b)=>b.dataset.level - a.dataset.level);
+      else if(s === 'level-asc') list.sort((a,b)=>a.dataset.level - b.dataset.level);
+      else if(s === 'name-asc') list.sort((a,b)=> a.dataset.name.localeCompare(b.dataset.name));
+
+      grid.innerHTML = '';
+      list.forEach(el => grid.appendChild(el));
+      list.forEach(el => io.observe(el));
+    }
+    search.addEventListener('input', applyFilters);
+    filter.addEventListener('change', applyFilters);
+    sort.addEventListener('change', applyFilters);
+
+    // card actions (info and copy)
+    grid.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-action]');
+      if(!btn) return;
+      const card = btn.closest('.skill');
+      const action = btn.dataset.action;
+      if(action === 'info'){
+        const name = card.dataset.name;
+        const lvl = card.dataset.level;
+        modalText.textContent = `${name} — proficiency ${lvl}%. Tag: ${card.querySelector('.tag')?.textContent || 'General'}.`;
+        modal.style.display = 'flex';
+      } else if(action === 'copy'){
+        const text = `${card.dataset.name}: ${card.dataset.level}%`;
+        navigator.clipboard?.writeText(text).then(()=> {
+          const tip = card.querySelector('.tooltip');
+          tip.textContent = 'Copied';
+          tip.classList.add('show');
+          setTimeout(()=> tip.classList.remove('show'), 1200);
+        }).catch(()=> {
+          const tip = card.querySelector('.tooltip');
+          tip.textContent = 'Failed';
+          tip.classList.add('show');
+          setTimeout(()=> tip.classList.remove('show'), 1200);
         });
-
-        // close mobile sheet on outside tap/click
-        document.addEventListener('click', function(e){
-          if(!isSmall()) return;
-          if(!mobileSheet.classList.contains('show')) return;
-          if(menuBtn.contains(e.target) || mobileSheet.contains(e.target)) return;
-          mobileSheet.classList.remove('show');
-          mobileSheet.setAttribute('aria-hidden','true');
-          menuBtn.setAttribute('aria-expanded','false');
-          menuBtn.textContent = '☰';
-        }, { passive: true });
       }
+    });
 
-      // Hide footer heuristically when on-screen keyboard likely open (mobile)
-      let initialInnerHeight = window.innerHeight;
-      window.addEventListener('resize', function(){
-        // If viewport height shrank significantly (keyboard open), hide footer to avoid overlaying inputs
-        if(window.innerHeight < initialInnerHeight - 150){
-          if(footer) { footer.style.opacity = '0'; footer.style.pointerEvents = 'none'; footer.style.transform = 'translateY(6px)'; }
-        } else {
-          if(footer) { footer.style.opacity = ''; footer.style.pointerEvents = ''; footer.style.transform = ''; }
-          initialInnerHeight = Math.max(initialInnerHeight, window.innerHeight);
-        }
+    modalClose.addEventListener('click', ()=> modal.style.display = 'none');
+    modal.addEventListener('click', (e)=> { if(e.target === modal) modal.style.display = 'none' });
+
+    // export CSV
+    exportBtn.addEventListener('click', ()=> {
+      const rows = [['Skill','Level','Tag']];
+      skills.forEach(s=>{
+        const tag = s.querySelector('.tag')?.textContent || '';
+        rows.push([s.dataset.name, s.dataset.level, tag]);
       });
+      const csv = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], {type:'text/csv'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'skills.csv';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
 
-      // Improve touch targets on small screens
-      function enhanceTouchTargets(){
-        if(window.innerWidth <= 520){
-          document.querySelectorAll('a, button').forEach(el=>{
-            el.style.touchAction = 'manipulation';
-            if(!el.style.minHeight) el.style.minHeight = '44px';
-          });
-        } else {
-          document.querySelectorAll('a, button').forEach(el=>{
-            el.style.touchAction = '';
-            el.style.minHeight = '';
-          });
-        }
+    // simple theme toggle
+    let light = false;
+    toggleTheme.addEventListener('click', ()=>{
+      light = !light;
+      if(light){
+        document.documentElement.style.setProperty('--bg-dark','#f7f8fc');
+        document.documentElement.style.setProperty('--card-dark','#ffffff');
+        document.documentElement.style.setProperty('--muted','#475569');
+        document.body.style.color = '#0b1220';
+      } else {
+        document.documentElement.style.setProperty('--bg-dark','#0f1724');
+        document.documentElement.style.setProperty('--card-dark','#0c1220');
+        document.documentElement.style.setProperty('--muted','#9aa4b2');
+        document.body.style.color = '#e6eef8';
       }
-      enhanceTouchTargets();
-      window.addEventListener('resize', enhanceTouchTargets);
+    });
 
-      // Accessibility: close mobile sheet with Escape
-      document.addEventListener('keydown', (e) => {
-        if(e.key === 'Escape'){
-          if(mobileSheet && mobileSheet.classList.contains('show')){
-            mobileSheet.classList.remove('show');
-            mobileSheet.setAttribute('aria-hidden','true');
-            menuBtn.setAttribute('aria-expanded','false');
-            menuBtn.textContent = '☰';
-          }
-        }
-      });
-    })();
+    // accessibility: close modal with Escape
+    document.addEventListener('keydown', (e)=> { if(e.key === 'Escape') modal.style.display = 'none'; });
+
+    // initial apply
+    applyFilters();
   </script>
 </body>
 </html>
