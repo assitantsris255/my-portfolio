@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Dipak Bhandari | About Me</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
-    /* Mobile-first variables */
     :root{
       --bg:#071026;
       --card: rgba(255,255,255,0.03);
@@ -20,10 +19,10 @@
       --accent-1:#60A5FA;
       --accent-2:#6EE7B7;
       --glass: rgba(255,255,255,0.04);
-      --radius:12px;
-      --container-gap:16px;
-      --touch:48px; /* target min size */
-      --ff-sans: "Poppins", "Roboto", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      --radius:14px;
+      --max-width:1100px;
+      --ff-sans: "Poppins","Roboto",system-ui,-apple-system,"Segoe UI",Arial;
+      --transition: .28s;
     }
 
     :root.light{
@@ -37,153 +36,183 @@
     }
 
     *{box-sizing:border-box}
-    html,body{height:100%; margin:0; padding:0}
+    html,body{height:100%;margin:0;padding:0}
     body{
       font-family:var(--ff-sans);
       background:
-        radial-gradient(800px 400px at 10% 10%, rgba(96,165,250,0.06), transparent 6%),
-        radial-gradient(700px 350px at 90% 90%, rgba(110,231,183,0.05), transparent 6%),
+        radial-gradient(900px 420px at 8% 12%, rgba(96,165,250,0.06), transparent 6%),
+        radial-gradient(700px 360px at 92% 88%, rgba(110,231,183,0.05), transparent 6%),
         var(--bg);
       color:var(--text);
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
-      padding:18px;
-      transition: background .28s ease, color .25s ease;
+      transition: background var(--transition) ease, color var(--transition) ease;
+      padding:12px;
     }
 
-    /* container */
-    .wrap{ max-width:980px; margin:0 auto; }
+    .container{ max-width:var(--max-width); margin:0 auto; }
 
-    /* header - compact and touch friendly */
-    header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:12px;
+    /* Responsive header with hamburger menu */
+    .site-header { width:100%; margin-bottom:12px; }
+    .header-inner { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 14px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border:1px solid rgba(255,255,255,0.03); backdrop-filter: blur(6px); }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .logo { font-weight:700; color:var(--accent-2); text-decoration:none; font-size:18px; }
+    .menu-btn{
+      display:inline-grid; place-items:center;
+      width:44px; height:44px; border-radius:10px;
+      background:var(--glass); border:1px solid rgba(255,255,255,0.04);
+      cursor:pointer; padding:6px;
     }
-    .logo{ font-weight:700; color:var(--accent-2); letter-spacing:1px; font-size:18px }
-    .nav-toggle{ width:var(--touch); height:var(--touch); display:inline-grid; place-items:center; background:var(--glass); border-radius:10px; border:1px solid rgba(255,255,255,0.03); color:var(--muted); cursor:pointer }
-    nav{ display:none } /* hidden on small screens; accessible via "menu" */
-    .top-actions{ display:flex; gap:10px; align-items:center }
+    .menu-btn .bar{ display:block; width:20px; height:2px; background:var(--muted); margin:3px 0; transition: transform .28s ease, opacity .28s ease; }
+    .menu-btn.open .bar:nth-child(1){ transform: translateY(5px) rotate(45deg); }
+    .menu-btn.open .bar:nth-child(2){ opacity:0; transform:scaleX(.3); }
+    .menu-btn.open .bar:nth-child(3){ transform: translateY(-5px) rotate(-45deg); }
 
-    /* hero stacked (mobile-first) */
+    .main-nav { }
+    .main-nav ul{ display:flex; gap:12px; margin:0; padding:0; list-style:none; align-items:center; }
+    .main-nav a{ color:var(--muted); text-decoration:none; padding:8px 10px; border-radius:9px; font-weight:600; transition:all var(--transition); }
+    .main-nav a:hover{ color:var(--text); background: rgba(255,255,255,0.02); transform:translateY(-3px) }
+
+    .header-controls{ display:flex; gap:8px; align-items:center; }
+    .toggle-btn{ display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:10px; background:var(--glass); color:var(--muted); border:1px solid rgba(255,255,255,0.03); cursor:pointer; font-weight:700; }
+    .toggle-btn:active{ transform:scale(.98) }
+
+    /* Hero and content */
     .hero{
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-      padding:14px;
-      border-radius:12px;
+      display:grid; grid-template-columns: 1fr 360px; gap:22px; align-items:center;
+      padding:20px; border-radius:16px;
       background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-      border:1px solid rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.03); box-shadow: 0 12px 40px rgba(2,6,23,0.28);
+      animation: floatIn .7s cubic-bezier(.2,.9,.2,1) both;
     }
-    .hero-text h1{ margin:0 0 8px 0; font-size:20px }
-    .hero-text p{ margin:0; color:var(--muted); line-height:1.6; font-size:14px; white-space:pre-wrap }
+    @keyframes floatIn { from{ transform:translateY(8px); opacity:0 } to{ transform:translateY(0); opacity:1 } }
 
-    .hero-image{
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      position:relative;
-    }
-    .hero-image img{
-      width:180px; height:180px; object-fit:cover; border-radius:12px; border:5px solid rgba(255,255,255,0.03);
-      box-shadow: 0 14px 30px rgba(2,6,23,0.35);
-      transition: transform .28s ease;
-    }
-    .hero-image img:active{ transform: translateY(-4px) scale(1.01) }
+    .hero-text h1{ margin:0 0 12px 0; font-size:26px; }
+    .hero-text p{ margin:0; color:var(--muted); line-height:1.7; white-space:pre-wrap; font-size:15px; }
 
-    /* chips */
-    .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px }
-    .chip{ display:inline-flex; gap:8px; align-items:center; padding:8px 12px; border-radius:999px; background:var(--glass); color:var(--muted); font-weight:700; text-decoration:none }
+    .hero-image{ display:flex; align-items:center; justify-content:center; position:relative; }
+    .hero-image img{ width:320px; height:320px; object-fit:cover; border-radius:14px; border:6px solid rgba(255,255,255,0.03); box-shadow: 0 20px 50px rgba(2,6,23,0.45); transition: transform .6s cubic-bezier(.2,.9,.3,1); }
+    .hero-image img:hover{ transform: translateY(-8px) scale(1.02) rotate(-1deg); }
 
-    /* grid for education & contact (stacked mobile) */
-    .stack{ margin-top:14px; display:flex; flex-direction:column; gap:12px }
-    .card{ padding:12px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid rgba(255,255,255,0.02); box-shadow: 0 8px 24px rgba(2,6,23,0.14) }
-    .card h2{ margin:0 0 8px 0; font-size:16px }
-    .card ul{ margin:0; padding-left:18px; color:var(--muted); line-height:1.8; font-size:14px }
-    .contact p{ margin:8px 0; color:var(--muted); font-size:14px; display:flex; gap:8px; align-items:center }
+    .accent-dots{ position:absolute; right:12px; top:12px; display:flex; gap:8px; pointer-events:none; }
+    .dot{ width:10px; height:10px; border-radius:50%; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); box-shadow:0 8px 18px rgba(2,6,23,0.25); animation: pulse 2.4s infinite ease-in-out; opacity:.9; }
+    .dot:nth-child(2){ animation-delay:.15s } .dot:nth-child(3){ animation-delay:.3s }
+    @keyframes pulse{ 0%{ transform:scale(.8); opacity:.6 } 50%{ transform:scale(1.25); opacity:1 } 100%{ transform:scale(.8); opacity:.6 } }
 
-    /* footer */
-    footer{ margin-top:18px; padding:12px; border-radius:12px; display:flex; flex-direction:column; gap:10px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid rgba(255,255,255,0.02) }
-    .footer-top{ display:flex; gap:10px; align-items:center; justify-content:space-between }
-    .footer-social{ display:flex; gap:8px; align-items:center }
-    .footer-social a{ width:44px; height:44px; display:inline-grid; place-items:center; background:var(--glass); color:var(--muted); text-decoration:none; border-radius:10px; border:1px solid rgba(255,255,255,0.03) }
+    .grid{ display:grid; grid-template-columns: 1fr 360px; gap:20px; margin-top:22px; }
+    .card{ background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); padding:18px; border-radius:12px; border:1px solid rgba(255,255,255,0.02); box-shadow: 0 8px 26px rgba(2,6,23,0.16); }
+    .card h2{ margin:0 0 12px 0; font-size:18px }
+    .education ul{ margin:0; padding-left:18px; color:var(--muted); line-height:1.9 }
+    .contact p{ margin:8px 0; color:var(--muted); display:flex; gap:8px; align-items:center }
 
-    /* small enhancements for touch and readability */
-    a { color:inherit }
-    button, .chip, .nav-toggle { -webkit-tap-highlight-color: transparent }
+    /* Small media */
+    .small-media{ display:grid; grid-template-columns: 1fr; gap:12px; margin-top:16px; }
+    .media-card{ padding:12px; border-radius:12px; background: rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.02); color:var(--muted); }
+    audio, video{ width:100%; border-radius:8px; background:#000; outline:none; display:block; }
+    .thumb-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; margin-top:8px; }
+    .thumb-grid img{ width:100%; height:70px; object-fit:cover; border-radius:8px; cursor:pointer; transition:transform .18s ease, box-shadow .18s ease; border:1px solid rgba(255,255,255,0.03); }
+    .thumb-grid img:hover{ transform:translateY(-6px); box-shadow:0 12px 30px rgba(2,6,23,0.4); }
+
+    /* Footer */
+    footer{ margin-top:28px; padding:18px; border-radius:12px; display:flex; align-items:center; justify-content:space-between; gap:12px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid rgba(255,255,255,0.02); }
+    .footer-left{ display:flex; flex-direction:column; gap:6px; }
+    .footer-social{ display:flex; gap:8px; align-items:center; margin-top:6px; }
+    .footer-social a{ width:44px; height:44px; display:inline-grid; place-items:center; background:var(--glass); color:var(--muted); text-decoration:none; border-radius:10px; border:1px solid rgba(255,255,255,0.03); transition: transform .14s ease, box-shadow .14s ease; }
+    .footer-social a:hover{ transform:translateY(-6px); color:var(--text); box-shadow:0 12px 30px rgba(2,6,23,0.18); }
+
+    .chip{ display:inline-flex; gap:8px; align-items:center; padding:8px 10px; border-radius:999px; background:var(--glass); color:var(--muted); font-weight:700; text-decoration:none; }
     .muted-small{ color:var(--muted); font-size:13px }
 
-    /* simple appear animation */
-    .reveal{ opacity:0; transform: translateY(6px); transition: opacity .45s ease, transform .45s ease }
-    .reveal.show{ opacity:1; transform: translateY(0) }
+    .reveal{ opacity:0; transform:translateY(8px); transition: opacity .45s ease, transform .45s ease; }
+    .reveal.visible{ opacity:1; transform:translateY(0); }
 
-    /* Larger screens: show nav, two-column layout for hero and grid */
-    @media (min-width:680px){
-      nav{ display:block }
-      .nav-toggle{ display:none }
-      .hero{ flex-direction:row; align-items:center }
-      .hero-text{ flex:1 }
-      .hero-image img{ width:280px; height:280px }
-      .stack{ flex-direction:row; gap:20px }
-      .stack .card{ flex:1 }
-      footer{ flex-direction:row; justify-content:space-between; align-items:center }
+    /* Mobile-specific: collapsible menu */
+    @media (max-width:880px){
+      .main-nav{ position:fixed; left:12px; right:12px; top:72px; max-height:0; overflow:hidden; background:var(--card); border-radius:12px; border:1px solid rgba(255,255,255,0.03); box-shadow:0 18px 40px rgba(2,6,23,0.4); transition: max-height .36s cubic-bezier(.2,.9,.2,1), padding .24s ease; z-index:1199; }
+      .main-nav.open{ max-height:420px; padding:12px; }
+      .main-nav ul{ display:flex; flex-direction:column; gap:8px; margin:0; padding:0; }
+      .main-nav a{ display:block; padding:12px; font-size:16px; color:var(--text); }
+      .menu-btn{ display:inline-grid; }
     }
 
-    @media (min-width:980px){
-      body{ padding:28px }
-      .wrap{ max-width:1100px }
-      .hero-image img{ width:320px; height:320px }
+    @media (max-width:980px){
+      .hero, .grid{ grid-template-columns: 1fr; }
+      .hero-image img{ width:220px; height:220px; border-width:5px; }
+      .grid{ gap:16px; }
+      footer{ flex-direction:column; align-items:flex-start; gap:12px; }
+      .small-media{ grid-template-columns: 1fr; }
+    }
+
+    @media (max-width:520px){
+      body{ padding:10px; }
+      .hero-image img{ width:180px; height:180px; }
+      .hero{ padding:14px; gap:12px; border-radius:12px; }
+      .menu-btn{ width:44px; height:44px }
+      .chip{ padding:8px 10px; font-size:13px }
+      .thumb-grid img{ height:56px; }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="logo">Dipak Bhandari</div>
+  <div class="container">
+    <header class="site-header" role="banner">
+      <div class="header-inner">
+        <div class="brand">
+          <button id="menuBtn" class="menu-btn" aria-label="Open menu" aria-expanded="false">
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+          </button>
+          <a class="logo" href="index.html">Dipak Bhandari</a>
+        </div>
 
-      <nav aria-label="Main navigation">
-        <ul style="display:flex;gap:10px;margin:0;padding:0;list-style:none">
-          <li><a href="index.html" class="muted-small">Home</a></li>
-          <li><a href="about.html" class="muted-small" aria-current="page">About</a></li>
-          <li><a href="skills.html" class="muted-small">Skills</a></li>
-          <li><a href="blog.html" class="muted-small">Blogs</a></li>
-          <li><a href="contact.html" class="muted-small">Contact</a></li>
-        </ul>
-      </nav>
+        <nav id="mainNav" class="main-nav" role="navigation" aria-label="Main menu">
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html" aria-current="page">About</a></li>
+            <li><a href="skills.html">Skills</a></li>
+            <li><a href="blog.html">Blogs</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
 
-      <div class="top-actions">
-        <button id="menuBtn" class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
-          <i class="fa fa-bars"></i>
-        </button>
+        <div class="header-controls">
+          <button id="themeToggle" class="toggle-btn" aria-pressed="false" title="Toggle theme">
+            <i id="themeIcon" class="fa fa-moon"></i>
+            <span id="themeLabel">Dark</span>
+          </button>
+        </div>
       </div>
     </header>
 
     <main>
-      <section class="hero reveal" id="aboutSection" aria-labelledby="aboutHeading">
-        <div class="hero-text">
-          <h1 id="aboutHeading">Hey, I'm Dipak Bhandari</h1>
-          <p>
+      <section id="about" class="hero reveal" aria-labelledby="about-heading">
+        <div style="position:relative;">
+          <div class="accent-dots" aria-hidden="true">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </div>
+
+          <div class="hero-text">
+            <h1 id="about-heading">Hey, I'm Dipak Bhandari</h1>
+            <p>
 Hi, I’m Dipak Bhandari—born on 2065/03/12 BS in the picturesque village of Chhatrakot-1, Kachhaute, Gulmi. At 17 years old, I carry the pride and support of my family—my father Harilal, my mother Lili, three brothers and one sister—who’ve always encouraged me to dream big.
 My academic journey started at Shree Balkalyan Basic School (grades 1–8), where I built a strong foundation. I then discovered my passion for technology at Shree Saraswati Secondary School, specializing in computer engineering from grades 9–12. Today, I’m thrilled to take the next big step at Lumbini Engineering College, ready to dive deeper into the world of engineering and turn my ideas into reality.
-          </p>
+            </p>
 
-          <div class="chips" aria-hidden="false">
-            <a class="chip" href="skills.html"><i class="fa fa-code"></i> Skills</a>
-            <a class="chip" href="contact.html"><i class="fa fa-envelope"></i> Contact</a>
-            <span class="chip muted-small"><i class="fa fa-graduation-cap"></i> Student, Lumbini Engineering College</span>
+            <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+              <a class="chip" href="skills.html"><i class="fa fa-code"></i> Skills</a>
+              <a class="chip" href="contact.html"><i class="fa fa-envelope"></i> Contact</a>
+              <span class="chip muted-small"><i class="fa fa-graduation-cap"></i> Student, Lumbini Engineering College</span>
+            </div>
           </div>
         </div>
 
-        <div class="hero-image" aria-hidden="false">
+        <div class="hero-image">
           <img src="photo/mypic.jpg" alt="Portrait of Dipak Bhandari" />
         </div>
       </section>
 
-      <div class="stack">
-        <section id="education" class="card reveal" aria-labelledby="educationHeading">
-          <h2 id="educationHeading">Education</h2>
+      <div class="grid">
+        <section id="education" class="card reveal" aria-labelledby="education-heading">
+          <h2 id="education-heading">Education</h2>
           <ul>
             <li>Primary Education, Shree Balkalyan Basic School</li>
             <li>+2 Science (Computer Engineering), Shree Saraswati Secondary School</li>
@@ -191,14 +220,14 @@ My academic journey started at Shree Balkalyan Basic School (grades 1–8), wher
           </ul>
         </section>
 
-        <aside id="contact" class="card reveal" aria-labelledby="contactHeading">
-          <h2 id="contactHeading">Contact Me</h2>
+        <aside id="contact" class="card reveal" aria-labelledby="contact-heading">
+          <h2 id="contact-heading">Contact Me</h2>
           <p><i class="fa fa-envelope"></i>&nbsp; <strong>diwashb32@gmail.com</strong></p>
           <p><i class="fa fa-map-marker-alt"></i>&nbsp; Gulmi, Nepal</p>
 
-          <div style="margin-top:12px">
+          <div style="margin-top:14px">
             <div class="muted-small">Connect</div>
-            <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+            <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
               <a class="chip" href="https://web.facebook.com/diwash.bhandari.167" target="_blank" rel="noopener"><i class="fab fa-facebook"></i> Facebook</a>
               <a class="chip" href="https://www.instagram.com/diwash.bhandari/" target="_blank" rel="noopener"><i class="fab fa-instagram"></i> Instagram</a>
               <a class="chip" href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a>
@@ -206,15 +235,47 @@ My academic journey started at Shree Balkalyan Basic School (grades 1–8), wher
           </div>
         </aside>
       </div>
-    </main>
 
-    <footer>
-      <div class="footer-top">
-        <div>
-          <h3 style="margin:0;color:var(--accent-2)">Dipak Bhandari</h3>
-          <div class="muted-small">Connect with me on social media</div>
+      <section id="small-media" class="small-media reveal" aria-labelledby="media-heading">
+        <div class="media-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <strong style="color:var(--text)">Listen: Short Intro</strong>
+            <span class="muted-small">30–60s</span>
+          </div>
+          <p style="margin:0 0 8px 0;color:var(--muted)">Play a short voice intro or podcast clip.</p>
+          <audio controls preload="none">
+            <source src="audio/sample.mp3" type="audio/mpeg">
+            Your browser does not support audio.
+          </audio>
         </div>
 
+        <div class="media-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <strong style="color:var(--text)">Watch: Project Peek</strong>
+            <button id="openGallery" class="chip" style="background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#06202b;">View All</button>
+          </div>
+          <p style="margin:0 0 8px 0;color:var(--muted)">Short muted demo video (looped preview).</p>
+          <video controls muted playsinline preload="metadata" poster="photo/video-poster.jpg">
+            <source src="video/sample.mp4" type="video/mp4">
+            Your browser does not support video.
+          </video>
+
+          <div style="width:100%; margin-top:10px;">
+            <div class="thumb-grid" id="thumbGrid">
+              <img src="photo/thumb1.jpg" alt="Thumbnail 1" data-full="photo/full1.jpg">
+              <img src="photo/thumb2.jpg" alt="Thumbnail 2" data-full="photo/full2.jpg">
+              <img src="photo/thumb3.jpg" alt="Thumbnail 3" data-full="photo/full3.jpg">
+            </div>
+            <p style="margin:8px 0 0 0; color:var(--muted); font-size:13px; text-align:center">Click to open full image</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer role="contentinfo" class="reveal">
+      <div class="footer-left">
+        <h3 style="margin:0; color:var(--accent-2)">Dipak Bhandari</h3>
+        <div class="muted-small">Connect with me on social media</div>
         <div class="footer-social" aria-label="Footer social links">
           <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
           <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -223,7 +284,7 @@ My academic journey started at Shree Balkalyan Basic School (grades 1–8), wher
         </div>
       </div>
 
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <div style="text-align:right">
         <div class="muted-small">&copy; 2025 Dipak Bhandari. All rights reserved.</div>
         <div class="muted-small">Made with care in Nepal</div>
       </div>
@@ -231,51 +292,134 @@ My academic journey started at Shree Balkalyan Basic School (grades 1–8), wher
   </div>
 
   <script>
-    // Simple menu toggle for small screens (no libraries)
+    // Mobile header menu toggle and accessibility handling
     (function(){
       const menuBtn = document.getElementById('menuBtn');
-      const nav = document.querySelector('nav');
-      if(!menuBtn) return;
-      menuBtn.addEventListener('click', () => {
-        const expanded = menuBtn.getAttribute('aria-expanded') === 'true';
-        menuBtn.setAttribute('aria-expanded', String(!expanded));
-        // toggle a simple inline menu for very small screens
-        if(!expanded){
-          nav.style.display = 'block';
-          nav.style.position = 'absolute';
-          nav.style.left = '18px';
-          nav.style.right = '18px';
-          nav.style.top = '68px';
-          nav.style.background = 'var(--card)';
-          nav.style.padding = '12px';
-          nav.style.borderRadius = '12px';
-          nav.style.boxShadow = '0 12px 40px rgba(2,6,23,0.35)';
+      const mainNav = document.getElementById('mainNav');
+
+      if(!menuBtn || !mainNav) return;
+
+      function openMenu(){
+        menuBtn.classList.add('open');
+        mainNav.classList.add('open');
+        menuBtn.setAttribute('aria-expanded','true');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeMenu(){
+        menuBtn.classList.remove('open');
+        mainNav.classList.remove('open');
+        menuBtn.setAttribute('aria-expanded','false');
+        document.body.style.overflow = '';
+      }
+
+      menuBtn.addEventListener('click', (e) => {
+        const expanded = menuBtn.classList.contains('open');
+        if(expanded) closeMenu(); else openMenu();
+      });
+
+      // Close when clicking outside the menu (small screens)
+      document.addEventListener('click', (e) => {
+        if(window.innerWidth > 880) return;
+        if(!mainNav.classList.contains('open')) return;
+        if(e.target.closest('#mainNav') || e.target.closest('#menuBtn')) return;
+        closeMenu();
+      });
+
+      // Close on Escape key
+      document.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape' && mainNav.classList.contains('open')) closeMenu();
+      });
+
+      // Close menu on link click (mobile)
+      mainNav.addEventListener('click', (e) => {
+        const a = e.target.closest('a');
+        if(!a) return;
+        if(window.innerWidth <= 880) closeMenu();
+      });
+    })();
+
+    // Theme toggle with persistence
+    (function(){
+      const btn = document.getElementById('themeToggle');
+      const icon = document.getElementById('themeIcon');
+      const label = document.getElementById('themeLabel');
+      const root = document.documentElement;
+
+      function apply(mode) {
+        if(mode === 'light'){
+          root.classList.add('light');
+          btn.setAttribute('aria-pressed','true');
+          icon.className = 'fa fa-sun';
+          label.textContent = 'Light';
         } else {
-          nav.style.display = 'none';
+          root.classList.remove('light');
+          btn.setAttribute('aria-pressed','false');
+          icon.className = 'fa fa-moon';
+          label.textContent = 'Dark';
         }
+      }
+
+      const stored = localStorage.getItem('site-theme');
+      const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+      let current = stored || (prefersLight ? 'light' : 'dark');
+      apply(current);
+
+      btn.addEventListener('click', () => {
+        current = (current === 'light') ? 'dark' : 'light';
+        localStorage.setItem('site-theme', current);
+        apply(current);
       });
     })();
 
-    // Reveal animations on load for better perceived performance
+    // Reveal on scroll
     (function(){
-      window.addEventListener('load', () => {
-        document.querySelectorAll('.reveal').forEach((el, i) => {
-          setTimeout(()=> el.classList.add('show'), i*140 + 120);
+      const items = document.querySelectorAll('.reveal');
+      if(!items.length) return;
+      const io = new IntersectionObserver((entries, ob) => {
+        entries.forEach(e => {
+          if(e.isIntersecting){
+            e.target.classList.add('visible');
+            ob.unobserve(e.target);
+          }
         });
+      }, {threshold: 0.18});
+      items.forEach(i => io.observe(i));
+    })();
+
+    // Speech bubble pulse (if present)
+    (function(){
+      const bubble = document.querySelector('.speech-bubble');
+      if(!bubble) return;
+      setInterval(()=>{ bubble.classList.add('pulse'); setTimeout(()=>bubble.classList.remove('pulse'),420); }, 2500);
+    })();
+
+    // Thumbnails open full image
+    (function(){
+      const grid = document.getElementById('thumbGrid');
+      if(!grid) return;
+      grid.addEventListener('click', (e) => {
+        const img = e.target.closest('img');
+        if(!img) return;
+        const full = img.dataset.full || img.src;
+        window.open(full, '_blank');
+      });
+      document.getElementById('openGallery')?.addEventListener('click', () => {
+        const first = grid.querySelector('img');
+        if(first) window.open(first.dataset.full || first.src, '_blank');
       });
     })();
 
-    // Auto-scale hero image slightly when it intersects (subtle)
+    // Hero image subtle pop on intersection
     (function(){
-      const img = document.querySelector('.hero-image img');
-      if(!img) return;
+      const heroImg = document.querySelector('.hero-image img');
+      if(!heroImg) return;
       const io = new IntersectionObserver((entries) => {
         entries.forEach(e => {
-          if(e.isIntersecting) img.style.transform = 'translateY(-6px) scale(1.02)';
-          else img.style.transform = '';
+          if(e.isIntersecting) heroImg.style.transform = 'translateY(-6px) scale(1.02)';
+          else heroImg.style.transform = '';
         });
-      }, {threshold:0.4});
-      io.observe(img);
+      }, {threshold: 0.4});
+      io.observe(heroImg);
     })();
   </script>
 </body>
