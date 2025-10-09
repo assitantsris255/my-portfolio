@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mini Excel Billing (Auto-add rows)</title>
+  <style>
+    :root{
+      --bg: #eef7ff;
+      --card: #ffffff;
+      --accent: #0b63d6;
+      --muted: #5b6b7a;
+      --row-even: #ffffff;
+      --row-odd: #f7fbff;
+      --row-hover: #e6f0ff;
+      --row-border: #cfe6ff;
+    }
+    *{box-sizing:border-box;font-family:Inter,Segoe UI,system-ui,Arial;}
+    body{margin:0;background:var(--bg);color:#0b2236;-webkit-font-smoothing:antialiased;}
+    header{background:var(--accent);color:#fff;padding:14px 20px;}
+    header h1{margin:0;font-size:18px;}
+    main{padding:16px;max-width:1100px;margin:18px auto;}
+
+    .company-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:12px;}
+    .company-preview{display:flex;align-items:center;gap:12px;}
+    .company-logo-wrap{width:64px;height:64px;border-radius:6px;overflow:hidden;background:#fff;border:1px solid #e6eef8;display:flex;align-items:center;justify-content:center;}
+    .company-logo-wrap img{width:100%;height:100%;object-fit:contain;}
+    .company-info{min-width:220px;}
+    .company-name{font-weight:700;font-size:16px;color:var(--accent);}
+    .company-actions button{padding:8px 10px;border-radius:6px;border:1px solid #d0d7e6;background:#fff;cursor:pointer;}
+    .company-form{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
+    .company-form label{display:flex;flex-direction:column;font-size:13px;}
+    .company-form input{padding:8px;border-radius:6px;border:1px solid #d0d7e6;background:#fff;width:100%;}
+    .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px;}
+
+    .controls-and-info { display:flex; gap:12px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; margin-bottom:12px; }
+    .controls { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    .controls button, .controls input{padding:8px 10px;border-radius:6px;border:1px solid #d0d7e6;background:#fff;cursor:pointer;}
+    .controls input{width:80px;}
+    .payment-box { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .payment-box label { display:flex; flex-direction:column; font-size:13px; }
+    .payment-box input, .payment-box select { padding:8px; border-radius:6px; border:1px solid #d0d7e6; background:#fff; min-width:120px; }
+    #remaining-amount { background:#f3f6fb; color:#0b2236; }
+
+    .invoice-top{display:flex;gap:16px;align-items:flex-start;margin-bottom:12px;}
+    .invoice-fields{display:flex;flex-direction:column;gap:8px;flex:1;}
+    .invoice-fields label{display:flex;flex-direction:column;font-size:13px;}
+    .invoice-fields input{padding:8px;border-radius:6px;border:1px solid #d0d7e6;background:#fff;width:100%;}
+    .signature-panel{width:340px;background:#fff;padding:10px;border-radius:8px;border:1px solid #e6eef8;display:flex;flex-direction:column;align-items:center;}
+    .sig-header{font-weight:700;margin-bottom:6px;}
+    #sig-canvas{background:#fff;border:1px dashed #cbd6ea;border-radius:4px;touch-action:none;}
+    .sig-controls{display:flex;gap:6px;margin-top:8px;}
+    .sig-controls button{padding:6px 8px;border-radius:6px;border:1px solid #d0d7e6;background:#fff;cursor:pointer;}
+    .sig-note{margin-top:6px;text-align:center;}
+
+    .grid-wrap{overflow:auto;background:var(--card);padding:12px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.06);}
+    table{ width:100%; border-collapse: separate; border-spacing: 0; min-width:760px; }
+    thead th{ background:#e9f6ff; padding:10px; text-align:left; border-bottom:2px solid #bfd9ff; }
+    tbody td, tfoot td { padding:10px; border-bottom:1px solid var(--row-border); border-right:1px solid #f6fbff; vertical-align:middle; color:#0b2236; font-size:14px; }
+    tbody tr td:last-child, tfoot tr td:last-child { border-right:none; }
+    tbody tr:nth-child(even){ background: var(--row-even); }
+    tbody tr:nth-child(odd){ background: var(--row-odd); }
+    tbody tr:hover{ background: var(--row-hover); box-shadow: inset 0 0 0 1px rgba(11,99,214,0.06); }
+    tbody td[contenteditable="true"]{ background:#fffbe6; outline:none; }
+    .label{text-align:right;font-weight:600;padding-right:12px;}
+    tfoot td{font-weight:700;background:var(--card); border-top:2px solid #bfd9ff;}
+
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;padding:20px;}
+    .modal.hidden{display:none;}
+    .modal-content{background:var(--card);padding:18px;border-radius:8px;width:760px;max-width:100%;position:relative;}
+    .close{position:absolute;right:10px;top:10px;border:none;background:transparent;font-size:22px;cursor:pointer;}
+    #invoice-content h2{margin:0 0 10px;}
+    .invoice-table{width:100%;border-collapse:collapse;margin-top:6px;}
+    .invoice-table th, .invoice-table td{border:1px solid #ddd;padding:8px;text-align:left;}
+    .invoice-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;}
+    .small{font-size:13px;color:var(--muted);}
+
+    .invoice-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
+    .invoice-header .left{flex:1;}
+    .invoice-header .right{text-align:right;}
+    .invoice-sign{margin-top:14px;text-align:right;}
+    .invoice-sign img{max-width:220px;max-height:90px;border:1px solid #eee;}
+    .invoice-payment { border-top: 1px solid #e6eef8; padding-top:10px; }
+
+    @media (max-width: 880px) {
+      .controls-and-info { flex-direction:column; align-items:stretch; gap:10px; }
+      .controls { width:100%; justify-content:flex-start; gap:6px; overflow:auto; padding-bottom:6px; }
+      .payment-box { width:100%; justify-content:flex-start; gap:6px; }
+      .invoice-top { flex-direction:column; gap:12px; }
+      .signature-panel { width:100%; }
+      table { min-width:600px; font-size:13px; }
+    }
+    @media (max-width:480px) {
+      .controls button, .controls input { padding:6px 8px; font-size:13px; }
+      .payment-box input, .payment-box select { min-width:100px; padding:6px; }
+      thead th { font-size:13px; padding:8px; }
+      tbody td, tfoot td { padding:8px; }
+    }
+  </style>
+
+  <!-- html2canvas and jsPDF for PDF download -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <header><h1>Mini Excel Billing</h1></header>
+
+  <main>
+    <section class="company-bar">
+      <div class="company-preview">
+        <div class="company-logo-wrap"><img id="company-logo-preview" src="" alt="Logo" style="display:none;" /></div>
+        <div class="company-info">
+          <div id="company-name-preview" class="company-name small">Your Company</div>
+          <div id="company-address-preview" class="small">Address line 1</div>
+          <div id="company-contact-preview" class="small">Phone • Email</div>
+        </div>
+      </div>
+      <div class="company-actions"><button id="edit-company">Edit Company</button></div>
+    </section>
+
+    <div id="company-modal" class="modal hidden">
+      <div class="modal-content">
+        <button class="close" id="close-company">×</button>
+        <h3>Company Details</h3>
+        <div class="company-form">
+          <label>Company Name<input id="company-name" type="text" placeholder="Company name" /></label>
+          <label>Address<input id="company-address" type="text" placeholder="Company address" /></label>
+          <label>Phone<input id="company-phone" type="text" placeholder="+1 555 5555" /></label>
+          <label>Email<input id="company-email" type="email" placeholder="email@example.com" /></label>
+          <label>VAT / Tax ID<input id="company-vat" type="text" placeholder="VAT / Tax ID" /></label>
+          <label>Logo URL<input id="company-logo" type="url" placeholder="https://..." /></label>
+          <div class="modal-actions"><button id="save-company">Save</button><button id="cancel-company">Cancel</button></div>
+        </div>
+      </div>
+    </div>
+
+    <section class="controls-and-info">
+      <div class="controls">
+        <button id="add-row">Add Row</button>
+        <button id="remove-row">Remove Last Row</button>
+        <button id="save">Save</button>
+        <button id="load">Load</button>
+        <button id="clear">Clear All</button>
+        <button id="export-csv">Export CSV</button>
+        <label class="tax-label">Tax %: <input id="tax" type="number" value="13" min="0" step="0.01" /></label>
+        <button id="generate-invoice">Generate Invoice</button>
+      </div>
+
+      <div class="payment-box">
+        <label>Paid Amount<input id="paid-amount" type="number" min="0" step="0.01" value="0" /></label>
+        <label>Remaining<input id="remaining-amount" type="text" readonly value="0.00" /></label>
+        <label>Payment Method
+          <select id="payment-method"><option value="">Select</option><option>Cash</option><option>Bank Transfer</option><option>Credit Card</option><option>Mobile Pay</option></select>
+        </label>
+      </div>
+    </section>
+
+    <section class="invoice-top">
+      <div class="invoice-fields">
+        <label>Customer Name<input id="cust-name" type="text" placeholder="Customer name" /></label>
+        <label>Address<input id="cust-address" type="text" placeholder="Customer address" /></label>
+        <label>Invoice Date<input id="invoice-date" type="date" /></label>
+      </div>
+
+      <div class="signature-panel">
+        <div class="sig-header">Signature</div>
+        <canvas id="sig-canvas" width="300" height="120"></canvas>
+        <div class="sig-controls">
+          <button id="sig-clear">Clear</button>
+          <button id="sig-save">Save Signature</button>
+          <button id="sig-remove">Remove Saved</button>
+        </div>
+        <div class="sig-note small">Draw signature with mouse or touch; saved signature will appear on invoices</div>
+      </div>
+    </section>
+
+    <section class="grid-wrap">
+      <table id="sheet">
+        <thead><tr><th>S.N</th><th>ITEMS NAME</th><th>QUANTITY</th><th>Price</th><th>Discount</th><th>Amount</th></tr></thead>
+        <tbody id="sheet-body"></tbody>
+        <tfoot>
+          <tr><td colspan="5" class="label">Subtotal</td><td id="subtotal">0.00</td></tr>
+          <tr><td colspan="5" class="label">Tax</td><td id="tax-amount">0.00</td></tr>
+          <tr><td colspan="5" class="label">Total</td><td id="total">0.00</td></tr>
+        </tfoot>
+      </table>
+    </section>
+  </main>
+
+  <div id="invoice-modal" class="modal hidden">
+    <div class="modal-content">
+      <button class="close" id="close-invoice">×</button>
+      <div id="invoice-content"></div>
+      <div class="invoice-actions">
+        <button id="print-invoice">Print</button>
+        <button id="download-csv-invoice">Download CSV</button>
+        <button id="download-pdf-invoice">Download PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Element refs
+    const sheetBody = document.getElementById('sheet-body');
+    const addRowBtn = document.getElementById('add-row');
+    const removeRowBtn = document.getElementById('remove-row');
+    const saveBtn = document.getElementById('save');
+    const loadBtn = document.getElementById('load');
+    const clearBtn = document.getElementById('clear');
+    const exportCsvBtn = document.getElementById('export-csv');
+    const taxInput = document.getElementById('tax');
+    const subtotalEl = document.getElementById('subtotal');
+    const taxAmountEl = document.getElementById('tax-amount');
+    const totalEl = document.getElementById('total');
+    const generateInvoiceBtn = document.getElementById('generate-invoice');
+    const invoiceModal = document.getElementById('invoice-modal');
+    const invoiceContent = document.getElementById('invoice-content');
+    const closeInvoiceBtn = document.getElementById('close-invoice');
+    const printInvoiceBtn = document.getElementById('print-invoice');
+    const downloadCsvInvoiceBtn = document.getElementById('download-csv-invoice');
+    const downloadPdfInvoiceBtn = document.getElementById('download-pdf-invoice');
+
+    const custNameInput = document.getElementById('cust-name');
+    const custAddressInput = document.getElementById('cust-address');
+    const invoiceDateInput = document.getElementById('invoice-date');
+
+    const paidInput = document.getElementById('paid-amount');
+    const remainingInput = document.getElementById('remaining-amount');
+    const paymentMethodSelect = document.getElementById('payment-method');
+
+    const sigCanvas = document.getElementById('sig-canvas');
+    const sigClearBtn = document.getElementById('sig-clear');
+    const sigSaveBtn = document.getElementById('sig-save');
+    const sigRemoveBtn = document.getElementById('sig-remove');
+
+    const editCompanyBtn = document.getElementById('edit-company');
+    const companyModal = document.getElementById('company-modal');
+    const closeCompanyBtn = document.getElementById('close-company');
+    const saveCompanyBtn = document.getElementById('save-company');
+    const cancelCompanyBtn = document.getElementById('cancel-company');
+
+    const companyNameInput = document.getElementById('company-name');
+    const companyAddressInput = document.getElementById('company-address');
+    const companyPhoneInput = document.getElementById('company-phone');
+    const companyEmailInput = document.getElementById('company-email');
+    const companyVatInput = document.getElementById('company-vat');
+    const companyLogoInput = document.getElementById('company-logo');
+
+    const companyNamePreview = document.getElementById('company-name-preview');
+    const companyAddressPreview = document.getElementById('company-address-preview');
+    const companyContactPreview = document.getElementById('company-contact-preview');
+    const companyLogoPreview = document.getElementById('company-logo-preview');
+
+    const STORAGE_KEY = 'mini_excel_sheet_v_full_v1';
+    const COMPANY_KEY = 'mini_excel_company_v1';
+    const SIG_KEY = 'mini_excel_signature_v1';
+
+    // Canvas signature
+    let sigCtx = sigCanvas.getContext('2d');
+    let drawing = false;
+    let lastX = 0, lastY = 0;
+    function resizeCanvasForDPR() {
+      const dpr = window.devicePixelRatio || 1;
+      const w = 300; const h = 120;
+      sigCanvas.width = w * dpr; sigCanvas.height = h * dpr;
+      sigCanvas.style.width = w + 'px'; sigCanvas.style.height = h + 'px';
+      sigCtx.scale(dpr, dpr);
+      sigCtx.lineCap = 'round'; sigCtx.lineJoin = 'round'; sigCtx.lineWidth = 2.2;
+      loadSavedSignatureToCanvas();
+    }
+    window.addEventListener('resize', resizeCanvasForDPR);
+    resizeCanvasForDPR();
+
+    function getPointerPos(e) {
+      const r = sigCanvas.getBoundingClientRect();
+      if (e.touches && e.touches[0]) return { x: e.touches[0].clientX - r.left, y: e.touches[0].clientY - r.top };
+      return { x: e.clientX - r.left, y: e.clientY - r.top };
+    }
+    function pointerDown(e) { drawing = true; const p = getPointerPos(e); lastX = p.x; lastY = p.y; }
+    function pointerMove(e) { if (!drawing) return; e.preventDefault(); const p = getPointerPos(e); sigCtx.beginPath(); sigCtx.moveTo(lastX, lastY); sigCtx.lineTo(p.x, p.y); sigCtx.stroke(); lastX = p.x; lastY = p.y; }
+    function pointerUp() { drawing = false; }
+
+    sigCanvas.addEventListener('mousedown', pointerDown);
+    sigCanvas.addEventListener('mousemove', pointerMove);
+    sigCanvas.addEventListener('mouseup', pointerUp);
+    sigCanvas.addEventListener('mouseout', pointerUp);
+    sigCanvas.addEventListener('touchstart', pointerDown, {passive:false});
+    sigCanvas.addEventListener('touchmove', pointerMove, {passive:false});
+    sigCanvas.addEventListener('touchend', pointerUp);
+
+    function clearCanvas() { sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height); }
+    function saveSignature() { const data = sigCanvas.toDataURL('image/png'); localStorage.setItem(SIG_KEY, data); alert('Signature saved'); loadSavedSignatureToCanvas(); }
+    function removeSavedSignature() { localStorage.removeItem(SIG_KEY); clearCanvas(); alert('Saved signature removed'); }
+    function loadSavedSignatureToCanvas() {
+      const data = localStorage.getItem(SIG_KEY); clearCanvas(); if (!data) return;
+      const img = new Image();
+      img.onload = () => {
+        const pad = 8;
+        const cw = sigCanvas.width / (window.devicePixelRatio || 1);
+        const ch = sigCanvas.height / (window.devicePixelRatio || 1);
+        const scale = Math.min((cw - pad*2) / img.width, (ch - pad*2) / img.height, 1);
+        const dw = img.width * scale; const dh = img.height * scale;
+        const dx = (cw - dw) / 2; const dy = (ch - dh) / 2;
+        sigCtx.drawImage(img, dx, dy, dw, dh);
+      };
+      img.src = data;
+    }
+    sigClearBtn.addEventListener('click', () => { clearCanvas(); });
+    sigSaveBtn.addEventListener('click', saveSignature);
+    sigRemoveBtn.addEventListener('click', removeSavedSignature);
+
+    // Helpers
+    function createCell(text = '', editable = true, classes = '') {
+      const td = document.createElement('td');
+      td.textContent = text;
+      if (editable) {
+        td.contentEditable = 'true';
+        td.className = classes;
+        td.addEventListener('input', (e) => {
+          recalc();
+          checkAndAddRowOnInput(e.target);
+        });
+        td.addEventListener('blur', () => saveToLocal());
+      } else {
+        td.contentEditable = 'false';
+        td.className = classes;
+      }
+      return td;
+    }
+    function toNum(v) { if (v === null || v === undefined) return 0; const n = parseFloat(String(v).replace(/[^0-9.\-]+/g, '')); return isNaN(n) ? 0 : n; }
+    function toNumInput(v) { const n = parseFloat(String(v).replace(/[^0-9.\-]+/g, '')); return isNaN(n) ? 0 : n; }
+    function escapeHtml(s) { return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+    // Check last row and auto-add when user fills it
+    function isRowNonEmpty(tr) {
+      if (!tr) return false;
+      const desc = (tr.querySelector('.desc')?.textContent || '').trim();
+      const qty = (tr.querySelector('.qty')?.textContent || '').trim();
+      const price = (tr.querySelector('.price')?.textContent || '').trim();
+      const discount = (tr.querySelector('.discount')?.textContent || '').trim();
+      // consider non-empty if description has text or qty/price different from default empty/zero
+      if (desc.length > 0) return true;
+      if (qty.length > 0 && toNum(qty) !== 0) return true;
+      if (price.length > 0 && toNum(price) !== 0) return true;
+      if (discount.length > 0 && toNum(discount) !== 0) return true;
+      return false;
+    }
+
+    function checkAndAddRowOnInput(targetTd) {
+      const tr = targetTd.closest('tr');
+      if (!tr) return;
+      // if this tr is the last row in tbody and becomes non-empty -> add a new blank row
+      const last = sheetBody.lastElementChild;
+      if (tr === last && isRowNonEmpty(tr)) {
+        // only add if last row is not already blank placeholder (prevents duplicates)
+        // small delay to avoid interfering with typing events
+        setTimeout(() => {
+          const stillLast = sheetBody.lastElementChild;
+          if (tr === stillLast && isRowNonEmpty(tr)) {
+            addRow();
+            saveToLocal();
+          }
+        }, 120);
+      }
+    }
+
+    // Rows
+    function addRow(data = {}) {
+      const row = document.createElement('tr');
+      const idxTd = document.createElement('td');
+      idxTd.textContent = sheetBody.children.length + 1;
+      row.appendChild(idxTd);
+
+      row.appendChild(createCell(data.description || '', true, 'desc'));
+      row.appendChild(createCell(data.qty != null ? data.qty : '1', true, 'qty'));
+      row.appendChild(createCell(data.price != null ? data.price : '0.00', true, 'price'));
+      row.appendChild(createCell(data.discount != null ? data.discount : '0', true, 'discount'));
+      row.appendChild(createCell('', false, 'amount'));
+      sheetBody.appendChild(row);
+      recalc();
+    }
+    function removeLastRow() {
+      if (sheetBody.lastElementChild) sheetBody.removeChild(sheetBody.lastElementChild);
+      recalc();
+    }
+
+    function recalc() {
+      let subtotal = 0;
+      Array.from(sheetBody.children).forEach((tr) => {
+        const qty = toNum(tr.querySelector('.qty').textContent);
+        const price = toNum(tr.querySelector('.price').textContent);
+        const discount = toNum(tr.querySelector('.discount').textContent);
+        const raw = qty * price;
+        const amount = raw - (raw * discount / 100);
+        tr.querySelector('.amount').textContent = amount.toFixed(2);
+        subtotal += amount;
+      });
+      subtotalEl.textContent = subtotal.toFixed(2);
+      const taxPerc = toNum(taxInput.value);
+      const taxAmount = subtotal * (taxPerc / 100);
+      taxAmountEl.textContent = taxAmount.toFixed(2);
+      totalEl.textContent = (subtotal + taxAmount).toFixed(2);
+      updateRemaining();
+    }
+
+    function updateRemaining() {
+      const total = toNum(subtotalEl.textContent) + toNum(taxAmountEl.textContent);
+      const paid = toNumInput(paidInput.value);
+      let remaining = total - paid;
+      if (remaining < 0) remaining = 0;
+      remainingInput.value = remaining.toFixed(2);
+      remainingInput.style.background = (remaining <= 0) ? '#e6ffef' : '#f3f6fb';
+    }
+
+    function saveToLocal() {
+      const rows = Array.from(sheetBody.children).map((tr) => ({
+        description: tr.querySelector('.desc').textContent,
+        qty: tr.querySelector('.qty').textContent,
+        price: tr.querySelector('.price').textContent,
+        discount: tr.querySelector('.discount').textContent
+      }));
+      const payload = {
+        rows,
+        tax: taxInput.value || '0',
+        customer: {
+          name: custNameInput.value || '',
+          address: custAddressInput.value || '',
+          date: invoiceDateInput.value || ''
+        },
+        payment: {
+          paid: paidInput.value || '0',
+          method: paymentMethodSelect.value || ''
+        }
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    }
+    function loadFromLocal() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      try {
+        const { rows = [], tax = '0', customer = {}, payment = {} } = JSON.parse(raw);
+        sheetBody.innerHTML = '';
+        rows.forEach(r => addRow(r));
+        taxInput.value = tax;
+        custNameInput.value = customer.name || '';
+        custAddressInput.value = customer.address || '';
+        invoiceDateInput.value = customer.date || '';
+        paidInput.value = payment.paid || '0';
+        paymentMethodSelect.value = payment.method || '';
+        recalc();
+        loadSavedSignatureToCanvas();
+      } catch (e) {
+        console.error('Failed to parse saved sheet', e);
+      }
+    }
+    function clearAll() {
+      if (confirm('Clear all data and saved storage?')) {
+        sheetBody.innerHTML = '';
+        localStorage.removeItem(STORAGE_KEY);
+        recalc();
+      }
+    }
+
+    function exportCSV(filename = 'sheet.csv') {
+      const rows = Array.from(sheetBody.children).map(tr => {
+        return [
+          tr.querySelector('.desc').textContent,
+          tr.querySelector('.qty').textContent,
+          tr.querySelector('.price').textContent,
+          tr.querySelector('.discount').textContent,
+          tr.querySelector('.amount').textContent
+        ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(',');
+      });
+      const footer = [
+        `"Subtotal","", "", "", "${subtotalEl.textContent}"`,
+        `"Tax ${taxInput.value}%","", "", "", "${taxAmountEl.textContent}"`,
+        `"Total","", "", "", "${totalEl.textContent}"`
+      ];
+      const csv = ['Description,Qty,Price,Discount,Amount', ...rows, ...footer].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    // Company details
+    function openCompanyModal() {
+      const saved = loadCompany();
+      companyNameInput.value = saved.name || '';
+      companyAddressInput.value = saved.address || '';
+      companyPhoneInput.value = saved.phone || '';
+      companyEmailInput.value = saved.email || '';
+      companyVatInput.value = saved.vat || '';
+      companyLogoInput.value = saved.logo || '';
+      companyModal.classList.remove('hidden');
+    }
+    function closeCompanyModal() { companyModal.classList.add('hidden'); }
+    function saveCompany() {
+      const payload = {
+        name: companyNameInput.value || '',
+        address: companyAddressInput.value || '',
+        phone: companyPhoneInput.value || '',
+        email: companyEmailInput.value || '',
+        vat: companyVatInput.value || '',
+        logo: companyLogoInput.value || ''
+      };
+      localStorage.setItem(COMPANY_KEY, JSON.stringify(payload));
+      applyCompanyPreview(payload);
+      closeCompanyModal();
+    }
+    function loadCompany() {
+      const raw = localStorage.getItem(COMPANY_KEY);
+      if (!raw) return {};
+      try { return JSON.parse(raw); } catch (e) { return {}; }
+    }
+    function applyCompanyPreview(data) {
+      const d = data || loadCompany();
+      companyNamePreview.textContent = d.name || 'Your Company';
+      companyAddressPreview.textContent = d.address || 'Address line 1';
+      const contact = [d.phone || '', d.email || ''].filter(Boolean).join(' • ');
+      companyContactPreview.textContent = contact || 'Phone • Email';
+      if (d.logo) {
+        companyLogoPreview.src = d.logo;
+        companyLogoPreview.style.display = 'block';
+      } else {
+        companyLogoPreview.src = '';
+        companyLogoPreview.style.display = 'none';
+      }
+    }
+
+    // Invoice builders
+    function buildInvoiceHeaderHtml() {
+      const company = loadCompany();
+      const compName = escapeHtml(company.name || 'Your Company');
+      const compAddr = escapeHtml(company.address || 'Address line 1');
+      const compPhone = escapeHtml(company.phone || '');
+      const compEmail = escapeHtml(company.email || '');
+      const compVat = escapeHtml(company.vat || '');
+      const compLogo = company.logo ? `<div style="margin-bottom:8px;"><img src="${company.logo}" alt="logo" style="max-height:64px;max-width:220px;object-fit:contain;border:1px solid #eee;" /></div>` : '';
+      const name = escapeHtml(custNameInput.value || '');
+      const addr = escapeHtml(custAddressInput.value || '');
+      const date = invoiceDateInput.value ? escapeHtml(new Date(invoiceDateInput.value).toLocaleDateString()) : escapeHtml(new Date().toLocaleDateString());
+      const left = `<div class="left">${compLogo}<div style="font-weight:700;font-size:18px;margin-bottom:6px;">${compName}</div><div class="small">${compAddr}</div><div class="small">${compPhone ? compPhone + ' • ' : ''}${compEmail}</div>${compVat ? `<div class="small">VAT: ${compVat}</div>` : ''}</div>`;
+      const right = `<div class="right"><h2>Invoice</h2><div class="small">Date: ${date}</div><div style="margin-top:8px;"><strong>Bill To:</strong><div>${name}</div><div>${addr}</div></div></div>`;
+      return `<div class="invoice-header">${left}${right}</div>`;
+    }
+    function buildInvoicePaymentHtml() {
+      const paid = toNumInput(paidInput.value).toFixed(2);
+      const remaining = toNumInput(remainingInput.value || 0).toFixed(2);
+      const method = escapeHtml(paymentMethodSelect.value || '—');
+      return `<div class="invoice-payment" style="margin-top:12px;display:flex;justify-content:space-between;align-items:center;gap:12px;"><div style="min-width:220px;"><div><strong>Payment Method:</strong> ${method}</div><div><strong>Paid:</strong> ${paid}</div></div><div style="text-align:right;"><div style="font-size:16px;font-weight:700">Remaining: ${remaining}</div></div></div>`;
+    }
+    function buildInvoiceSignatureHtml() {
+      const sigData = localStorage.getItem(SIG_KEY);
+      const sigImgHtml = sigData ? `<div class="invoice-sign"><div class="small">Authorized signature</div><img src="${sigData}" alt="signature" /></div>` : `<div class="invoice-sign small">No saved signature</div>`;
+      const name = escapeHtml(custNameInput.value || '');
+      const addr = escapeHtml(custAddressInput.value || '');
+      return `<div style="margin-top:14px;display:flex;justify-content:space-between;align-items:flex-end;"><div><div><strong>Customer</strong></div><div>${name}</div><div class="small">${addr}</div></div>${sigImgHtml}</div>`;
+    }
+
+    function generateInvoice() {
+      const headerHtml = buildInvoiceHeaderHtml();
+      const rowsHtml = Array.from(sheetBody.children).map((tr, i) => {
+        return `<tr><td>${i+1}</td><td>${escapeHtml(tr.querySelector('.desc').textContent)}</td><td>${escapeHtml(tr.querySelector('.qty').textContent)}</td><td>${escapeHtml(tr.querySelector('.price').textContent)}</td><td>${escapeHtml(tr.querySelector('.discount').textContent)}</td><td>${escapeHtml(tr.querySelector('.amount').textContent)}</td></tr>`;
+      }).join('');
+      const table = `<table class="invoice-table"><thead><tr><th>#</th><th>Description</th><th>Qty</th><th>Price</th><th>Discount %</th><th>Amount</th></tr></thead><tbody>${rowsHtml}</tbody><tfoot><tr><td colspan="5" style="text-align:right;font-weight:700">Subtotal</td><td>${subtotalEl.textContent}</td></tr><tr><td colspan="5" style="text-align:right">Tax ${taxInput.value}%</td><td>${taxAmountEl.textContent}</td></tr><tr><td colspan="5" style="text-align:right;font-weight:800">Total</td><td>${totalEl.textContent}</td></tr></tfoot></table>`;
+      invoiceContent.innerHTML = headerHtml + table + buildInvoicePaymentHtml() + buildInvoiceSignatureHtml();
+      invoiceModal.classList.remove('hidden');
+    }
+
+    function printInvoice() {
+      const w = window.open('', '_blank');
+      const html = `<html><head><title>Invoice</title><style>body{font-family:Arial,Segoe UI,Helvetica,sans-serif;padding:20px;} .invoice-table{width:100%;border-collapse:collapse;} .invoice-table th,.invoice-table td{border:1px solid #ddd;padding:8px;text-align:left;} h2{margin-top:0;} .invoice-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;} .invoice-sign img{max-width:220px;max-height:90px;border:1px solid #eee;} .small{font-size:13px;color:#666;} @media print{ body { -webkit-print-color-adjust: exact; } }</style></head><body>${invoiceContent.innerHTML}</body></html>`;
+      w.document.write(html);
+      w.document.close();
+      w.focus();
+      w.print();
+    }
+
+    function downloadCsvInvoice() { exportCSV('invoice.csv'); }
+
+    async function downloadPdfInvoice() {
+      const node = invoiceContent;
+      const originalBg = node.style.backgroundColor;
+      node.style.backgroundColor = '#ffffff';
+      const canvas = await html2canvas(node, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#ffffff' });
+      node.style.backgroundColor = originalBg;
+      const imgData = canvas.toDataURL('image/png');
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ unit: 'pt', format: 'a4' });
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 20;
+      const imgWidth = pageWidth - margin * 2;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      if (imgHeight <= pageHeight - margin * 2) {
+        pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight);
+      } else {
+        let remainingHeight = canvas.height;
+        const pxFullWidth = canvas.width;
+        const pxPageHeight = Math.floor((canvas.width * (pageHeight - margin * 2)) / imgWidth);
+        let y = 0;
+        while (remainingHeight > 0) {
+          const tempCanvas = document.createElement('canvas');
+          tempCanvas.width = pxFullWidth;
+          tempCanvas.height = Math.min(pxPageHeight, remainingHeight);
+          const ctx = tempCanvas.getContext('2d');
+          ctx.drawImage(canvas, 0, y, tempCanvas.width, tempCanvas.height, 0, 0, tempCanvas.width, tempCanvas.height);
+          const imgChunk = tempCanvas.toDataURL('image/png');
+          const chunkHeight = (tempCanvas.height * imgWidth) / tempCanvas.width;
+          if (y > 0) pdf.addPage();
+          pdf.addImage(imgChunk, 'PNG', margin, margin, imgWidth, chunkHeight);
+          y += tempCanvas.height;
+          remainingHeight -= tempCanvas.height;
+        }
+      }
+      pdf.save(`invoice_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.pdf`);
+    }
+
+    // Events
+    addRowBtn.addEventListener('click', () => { addRow(); saveToLocal(); });
+    removeRowBtn.addEventListener('click', () => { removeLastRow(); saveToLocal(); });
+    saveBtn.addEventListener('click', () => { saveToLocal(); alert('Saved locally'); });
+    loadBtn.addEventListener('click', () => { loadFromLocal(); alert('Loaded'); });
+    clearBtn.addEventListener('click', clearAll);
+    exportCsvBtn.addEventListener('click', () => exportCSV());
+    taxInput.addEventListener('input', () => { recalc(); saveToLocal(); });
+    custNameInput.addEventListener('blur', saveToLocal);
+    custAddressInput.addEventListener('blur', saveToLocal);
+    invoiceDateInput.addEventListener('change', saveToLocal);
+    generateInvoiceBtn.addEventListener('click', generateInvoice);
+    closeInvoiceBtn.addEventListener('click', () => invoiceModal.classList.add('hidden'));
+    printInvoiceBtn.addEventListener('click', printInvoice);
+    downloadCsvInvoiceBtn.addEventListener('click', downloadCsvInvoice);
+    downloadPdfInvoiceBtn.addEventListener('click', downloadPdfInvoice);
+
+    paidInput.addEventListener('input', () => { updateRemaining(); saveToLocal(); });
+    paymentMethodSelect.addEventListener('change', () => { saveToLocal(); });
+
+    editCompanyBtn.addEventListener('click', openCompanyModal);
+    closeCompanyBtn.addEventListener('click', closeCompanyModal);
+    cancelCompanyBtn.addEventListener('click', closeCompanyModal);
+    saveCompanyBtn.addEventListener('click', saveCompany);
+
+    // Init
+    (function init() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        loadFromLocal();
+      } else {
+        for (let i = 0; i < 5; i++) addRow();
+        recalc();
+      }
+      applyCompanyPreview();
+      loadSavedSignatureToCanvas();
+      updateRemaining();
+    })();
+  </script>
+</body>
+</html>
