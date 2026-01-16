@@ -1,0 +1,3098 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Billing System - Supabase</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f5f5f5; color: #333; }
+    
+    /* Login Screen */
+    .login-screen { position: fixed; inset: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
+    .login-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); width: 100%; max-width: 350px; }
+    .login-card h1 { font-size: 24px; margin-bottom: 20px; text-align: center; color: #667eea; }
+    .login-card input { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; }
+    .login-card button { width: 100%; padding: 14px; background: #667eea; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+    .login-card button:hover { background: #764ba2; }
+    .login-card .role-select { margin-top: 10px; }
+    
+    /* Header */
+    header { background: #667eea; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); flex-wrap: wrap; }
+    header h1 { font-size: 20px; }
+    .menu-toggle { display: none; background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
+    header .user-info { display: flex; gap: 15px; align-items: center; font-size: 14px; flex-wrap: wrap; }
+    header button:not(.menu-toggle) { background: #ff4757; padding: 10px 15px; border: none; border-radius: 4px; color: white; cursor: pointer; font-size: 13px; }
+    
+    /* Main Layout */
+    .container { display: flex; height: calc(100vh - 60px); }
+    .sidebar { width: 200px; background: #2c3e50; color: white; padding: 15px; overflow-y: auto; transition: transform 0.3s ease; }
+    .sidebar button { width: 100%; padding: 14px; margin: 8px 0; background: #34495e; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; }
+    .sidebar button.active { background: #667eea; }
+    .sidebar button:hover { background: #667eea; }
+    
+    /* Main Content */
+    .main-content { flex: 1; padding: 20px; overflow-y: auto; background: #f5f5f5; }
+    
+    /* Dashboard */
+    .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; }
+    .stat-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .stat-card h3 { color: #667eea; font-size: 12px; text-transform: uppercase; margin-bottom: 10px; }
+    .stat-card .number { font-size: 28px; font-weight: bold; color: #333; }
+    
+    /* Invoice Form */
+    .form-section { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 15px; }
+    .form-section h2 { font-size: 16px; margin-bottom: 10px; color: #000; border-bottom: 3px solid #667eea; padding-bottom: 8px; font-weight: bold; text-transform: uppercase; }
+    .form-group { margin-bottom: 10px; }
+    .form-group label { display: block; font-size: 14px; margin-bottom: 4px; font-weight: bold; color: #000; text-transform: uppercase; }
+    .form-group input, .form-group select { width: 100%; padding: 12px; border: 2px solid #333; border-radius: 4px; font-size: 16px; font-weight: bold; }
+    
+    /* Table */
+    table { width: 100%; border-collapse: collapse; background: white; margin: 15px 0; font-size: 15px; font-weight: bold; }
+    thead { background: #667eea; color: white; font-weight: bold; font-size: 15px; }
+    th, td { padding: 12px; text-align: left; font-size: 15px; font-weight: bold; border-bottom: 2px solid #333; }
+    tbody tr { font-weight: bold; }
+    tbody td { font-weight: bold; font-size: 15px; }
+    tbody tr:hover { background: #f0f0f0; }
+    .delete-btn { background: #ff4757; color: white; padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+    
+    /* Controls */
+    .controls { display: flex; gap: 10px; flex-wrap: wrap; margin: 15px 0; }
+    .controls button { padding: 12px 15px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; }
+    .controls button:hover { background: #764ba2; }
+    .controls button.danger { background: #ff4757; }
+    
+    /* Modal */
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+    .modal.show { display: flex; }
+    .modal-content { background: white; padding: 20px; border-radius: 8px; width: 100%; max-width: 700px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); max-height: 95vh; overflow-y: auto; }
+    .modal-content h2 { margin-bottom: 15px; font-size: 18px; color: #333; }
+    .modal-close { position: absolute; top: 15px; right: 15px; background: #ff4757; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 20px; }
+    
+    /* Overlay for mobile menu */
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 499; }
+    .sidebar-overlay.show { display: block; }
+    
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .menu-toggle { display: block; }
+      header { gap: 10px; }
+      header h1 { font-size: 18px; }
+      header .user-info { font-size: 12px; gap: 10px; }
+      
+      .container { flex-direction: column; height: auto; }
+      .sidebar { 
+        position: fixed; 
+        left: 0; 
+        top: 60px; 
+        height: calc(100vh - 60px); 
+        width: 250px; 
+        z-index: 500;
+        transform: translateX(-100%);
+      }
+      .sidebar.show { transform: translateX(0); }
+      
+      .main-content { 
+        width: 100%; 
+        padding: 15px; 
+        margin-left: 0;
+      }
+      
+      .dashboard-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+      .stat-card { padding: 15px; }
+      .stat-card h3 { font-size: 11px; }
+      .stat-card .number { font-size: 22px; }
+      
+      .form-group input, .form-group select { padding: 12px; font-size: 16px; }
+      
+      table { font-size: 13px; }
+      th, td { padding: 10px; font-size: 13px; }
+      .delete-btn { padding: 6px 10px; font-size: 11px; }
+      
+      .controls { gap: 8px; }
+      .controls button { padding: 12px 12px; font-size: 12px; }
+      
+      .modal-content { padding: 15px; }
+      .modal-close { width: 35px; height: 35px; font-size: 18px; }
+      
+      .invoice-preview { width: 100% !important; }
+    }
+    
+    @media (max-width: 480px) {
+      header h1 { font-size: 16px; }
+      header .user-info { font-size: 11px; gap: 5px; }
+      header button:not(.menu-toggle) { padding: 8px 10px; font-size: 11px; }
+      
+      .dashboard-grid { grid-template-columns: 1fr; }
+      
+      .form-section { padding: 12px; }
+      .form-section h2 { font-size: 14px; }
+      .form-group label { font-size: 12px; }
+      .form-group input, .form-group select { padding: 12px; font-size: 16px; }
+      
+      table { font-size: 12px; }
+      th, td { padding: 8px; font-size: 12px; }
+      .delete-btn { padding: 6px 8px; }
+      
+      .controls { gap: 5px; }
+      .controls button { padding: 10px 12px; font-size: 11px; }
+      
+      .modal-content { padding: 12px; }
+      .modal-close { width: 32px; height: 32px; font-size: 16px; }
+    }
+    
+    /* Print Styles */
+    @media print {
+      body { background: white; }
+      header, .sidebar, .controls, .delete-btn, .menu-toggle { display: none; }
+      .main-content { padding: 0; width: 50mm; }
+      table { width: 100%; }
+      th, td { padding: 3px; font-size: 8px; }
+      .invoice-preview { page-break-after: always; width: 50mm; padding: 5px; }
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<!-- Login Screen -->
+<div id="login-screen" class="login-screen">
+  <div class="login-card">
+    <h1>Billing System</h1>
+    <div id="supabase-status" style="padding: 10px; margin-bottom: 10px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; text-align: center; font-size: 12px; color: #856404;">
+      ⏳ Initializing...
+    </div>
+    <input type="text" id="username-input" placeholder="Username" />
+    <input type="password" id="password-input" placeholder="Password" />
+    <div class="role-select">
+      <label style="color: #333; font-size: 13px; margin-bottom: 5px; display: block;">Role:</label>
+      <select id="role-select" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px; cursor: pointer; background: white;">
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+    <button onclick="login()">Login</button>
+  </div>
+</div>
+
+<!-- Header -->
+<header id="header" style="display: none;">
+  <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+  <h1>Billing System</h1>
+  <div class="user-info">
+    <span>User: <strong id="current-user">User</strong></span>
+    <button onclick="logout()">Logout</button>
+  </div>
+</header>
+
+<!-- Main Container -->
+<div id="main-container" class="container" style="display: none;">
+  
+  <!-- Sidebar Overlay for mobile -->
+  <div id="sidebar-overlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
+  
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <button class="nav-btn active" data-section="dashboard">📊 Dashboard</button>
+    <button class="nav-btn" data-section="products">📦 Products</button>
+    <button class="nav-btn" data-section="billing">📝 Billing</button>
+    <button class="nav-btn" data-section="invoices">📋 Invoices</button>
+    <button class="nav-btn" data-section="consumers">👥 Consumers</button>
+    <button id="admin-btn" class="nav-btn" data-section="admin" style="display: none;">⚙️ Admin Panel</button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    
+    <!-- Dashboard Section -->
+    <div id="dashboard-section" class="section">
+      <h2 style="font-size: 20px; margin-bottom: 20px; color: #333;">Dashboard</h2>
+      
+      <div class="dashboard-grid">
+        <div class="stat-card">
+          <h3>Total Revenue</h3>
+          <div class="number" id="total-revenue">0.00</div>
+        </div>
+        <div class="stat-card">
+          <h3>Total Invoices</h3>
+          <div class="number" id="total-invoices">0</div>
+        </div>
+        <div class="stat-card">
+          <h3>This Month</h3>
+          <div class="number" id="month-revenue">0.00</div>
+        </div>
+        <div class="stat-card">
+          <h3>Average Invoice</h3>
+          <div class="number" id="avg-invoice">0.00</div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Recent Transactions</h2>
+        <table id="recent-table">
+          <thead>
+            <tr><th>Date</th><th>Customer</th><th>Amount</th><th>Method</th></tr>
+          </thead>
+          <tbody id="recent-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Billing Section -->
+    <div id="billing-section" class="section" style="display: none;">
+      <h2 style="font-size: 20px; margin-bottom: 10px; color: #333;">Create Invoice</h2>
+      <div style="background: #667eea; color: white; padding: 10px 15px; border-radius: 4px; margin-bottom: 20px; font-weight: bold; font-size: 16px; text-align: center;">
+        Shop: <span id="bill-shop-name">Your Shop</span>
+      </div>
+      
+      <div class="form-section">
+        <h2>Shop Name</h2>
+        <div class="form-group">
+          <label>Update Shop Name</label>
+          <div style="display: flex; gap: 10px;">
+            <input type="text" id="billing-shop-name" placeholder="Enter your shop name" style="flex: 1;" />
+            <button onclick="updateBillingShopName()" style="padding: 12px 15px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Update</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <h2>Customer Details</h2>
+        <div class="form-group">
+          <label>Customer Name</label>
+          <input type="text" id="cust-name" placeholder="Enter name" />
+        </div>
+        <div class="form-group">
+          <label>Address</label>
+          <input type="text" id="cust-addr" placeholder="Enter address" />
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="invoice-date" />
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Items</h2>
+        <div class="form-group" style="margin-bottom: 10px;">
+          <label>Select Category</label>
+          <div style="display: flex; gap: 10px;">
+            <select id="item-category-filter" onchange="filterItemsByCategory()" style="flex: 1; padding: 12px; border: 2px solid #333; border-radius: 4px; font-weight: bold; font-size: 16px;">
+              <option value="">All Categories</option>
+            </select>
+            <input type="text" id="item-search" placeholder="Search item..." onkeyup="filterItemsBySearch()" style="flex: 1; padding: 12px; border: 2px solid #333; border-radius: 4px; font-weight: bold; font-size: 16px;" />
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>#</th><th>Product Name</th><th>Category</th><th>Qty</th><th>Price</th><th>Total</th><th></th></tr></thead>
+          <tbody id="items-body"></tbody>
+        </table>
+        <button class="controls" onclick="addItem()" style="margin-top: 10px; padding: 8px 12px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer;">+ Add Item</button>
+      </div>
+
+      <div class="form-section">
+        <h2>Summary</h2>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+          <tr style="border: 2px solid #333; background: #f0f0f0;">
+            <td style="padding: 12px; font-size: 16px; font-weight: bold;">TOTAL</td>
+            <td style="text-align: right; padding: 12px; font-size: 18px; font-weight: bold; color: #d63031;" id="final-total">0.00</td>
+          </tr>
+        </table>
+
+        <div class="form-group" style="margin-top: 15px;">
+          <label style="font-size: 15px; font-weight: bold;">Payment Method</label>
+          <select id="payment-method">
+            <option>Cash</option>
+            <option>Bank Transfer</option>
+            <option>Card</option>
+            <option>Mobile Money</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-top: 15px;">
+          <label style="font-size: 15px; font-weight: bold;">Paid Amount</label>
+          <input type="number" id="paid-amount" placeholder="0.00" min="0" step="0.01" onchange="calcPaidUnpaid()" style="font-size: 16px;" />
+        </div>
+
+        <div class="form-group" style="margin-top: 15px;">
+          <label style="font-size: 15px; font-weight: bold;">Unpaid Amount</label>
+          <input type="number" id="unpaid-amount" placeholder="0.00" min="0" step="0.01" readonly style="font-size: 16px; background: #f0f0f0;" />
+        </div>
+
+        <div style="margin-top: 10px; padding: 10px; background: #e8f5e9; border-left: 4px solid #27ae60; border-radius: 4px;">
+          <strong style="font-size: 15px; color: #27ae60;">Payment Status:</strong>
+          <div id="payment-status" style="font-size: 14px; color: #333; margin-top: 5px; font-weight: bold;">Pending</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button onclick="generateInvoice()" style="background: #27ae60;">Print Invoice</button>
+        <button onclick="saveInvoice()" style="background: #667eea;">Save & Complete</button>
+        <button onclick="clearForm()" style="background: #95a5a6;">Clear</button>
+      </div>
+    </div>
+
+    <!-- Invoices Section -->
+    <div id="invoices-section" class="section" style="display: none;">
+      <h2 style="font-size: 20px; margin-bottom: 20px; color: #333;">Invoice History</h2>
+      
+      <div class="form-section">
+        <table>
+          <thead>
+            <tr><th>Date</th><th>Customer</th><th>Amount</th><th>Method</th><th>Action</th></tr>
+          </thead>
+          <tbody id="invoices-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Consumers Section -->
+    <div id="consumers-section" class="section" style="display: none;">
+      <h2 style="font-size: 20px; margin-bottom: 20px; color: #333;">Consumer Records</h2>
+      
+      <div class="form-section">
+        <h2>Search Consumers</h2>
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+          <input type="text" id="consumer-search" placeholder="Search by customer name..." onkeyup="searchConsumers()" style="flex: 1; padding: 12px; border: 2px solid #333; border-radius: 4px; font-weight: bold; font-size: 16px;" />
+          <input type="text" id="product-id-search" placeholder="Search by product ID..." onkeyup="searchByProductId()" style="flex: 1; padding: 12px; border: 2px solid #333; border-radius: 4px; font-weight: bold; font-size: 16px;" />
+          <button onclick="clearConsumerSearch()" style="padding: 12px 15px; background: #95a5a6; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Clear</button>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Your Consumers</h2>
+        <table>
+          <thead>
+            <tr><th>Customer Name</th><th>Address</th><th>Total Purchases</th><th>Last Invoice Date</th><th>Unpaid Amount</th><th>Details</th></tr>
+          </thead>
+          <tbody id="consumers-body"></tbody>
+        </table>
+        <div id="no-consumers-message" style="padding: 15px; text-align: center; color: #666; font-weight: bold;">
+          No consumer records found.
+        </div>
+      </div>
+
+      <div id="consumer-details-modal" class="modal">
+        <div class="modal-content" style="position: relative; max-width: 900px;">
+          <button class="modal-close" onclick="closeConsumerModal()">×</button>
+          <h2 id="consumer-modal-title">Consumer Details</h2>
+          
+          <div class="form-section">
+            <h3>Customer Information</h3>
+            <table style="width: 100%; margin-bottom: 15px;">
+              <tr><td style="font-weight: bold;">Name:</td><td id="modal-customer-name">-</td></tr>
+              <tr><td style="font-weight: bold;">Address:</td><td id="modal-customer-address">-</td></tr>
+              <tr><td style="font-weight: bold;">Total Purchases:</td><td id="modal-total-purchases">0.00</td></tr>
+              <tr><td style="font-weight: bold;">Unpaid Amount:</td><td id="modal-unpaid-amount" style="color: #e74c3c; font-weight: bold;">0.00</td></tr>
+            </table>
+          </div>
+
+          <div class="form-section">
+            <h3>Purchase History</h3>
+            <table>
+              <thead>
+                <tr><th>Date</th><th>Amount</th><th>Paid</th><th>Unpaid</th><th>Method</th><th>Items</th></tr>
+              </thead>
+              <tbody id="consumer-invoices-body"></tbody>
+            </table>
+          </div>
+
+          <div class="controls" style="text-align: center;">
+            <button onclick="closeConsumerModal()" style="background: #95a5a6;">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Products Section -->
+    <div id="products-section" class="section" style="display: none;">
+      <h2 style="font-size: 20px; margin-bottom: 20px; color: #333;">Product Management</h2>
+      
+      <div class="form-section">
+        <h2>Add New Product</h2>
+        <div class="form-group">
+          <label>Product Name</label>
+          <input type="text" id="product-name" placeholder="Enter product name" />
+        </div>
+        <div class="form-group">
+          <label>Product Code</label>
+          <input type="text" id="product-code" placeholder="e.g., PROD-001" />
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" id="product-desc" placeholder="Product description" />
+        </div>
+        <div class="form-group">
+          <label>Unit Price</label>
+          <input type="number" id="product-price" placeholder="0.00" min="0" step="0.01" />
+        </div>
+        <div class="form-group">
+          <label>Stock Quantity</label>
+          <input type="number" id="product-stock" placeholder="0" min="0" />
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <input type="text" id="product-category" placeholder="Product category" />
+        </div>
+        <div class="controls">
+          <button onclick="addProduct()" style="background: #27ae60;">+ Add Product</button>
+          <button onclick="clearProductForm()" style="background: #95a5a6;">Clear</button>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Your Products</h2>
+        <table>
+          <thead>
+            <tr><th>Code</th><th>Name</th><th>Price</th><th>Stock</th><th>Category</th><th>Action</th></tr>
+          </thead>
+          <tbody id="products-body"></tbody>
+        </table>
+        <div id="no-products-message" style="padding: 15px; text-align: center; color: #666; font-weight: bold;">
+          No products yet. Add a product above.
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Low Stock Alert</h2>
+        <table>
+          <thead>
+            <tr><th>Product</th><th>Current Stock</th><th>Reorder Level</th><th>Needed</th></tr>
+          </thead>
+          <tbody id="low-stock-body"></tbody>
+        </table>
+        <div id="no-low-stock-message" style="padding: 15px; text-align: center; color: #27ae60; font-weight: bold;">
+          ✅ All products have adequate stock.
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Panel Section -->
+    <div id="admin-section" class="section" style="display: none;">
+      <h2 style="font-size: 20px; margin-bottom: 20px; color: #333;">Admin Panel</h2>
+
+      <div class="form-section">
+        <h2>Shop Settings</h2>
+        <div class="form-group">
+          <label>Shop Name</label>
+          <input type="text" id="shop-name-input" placeholder="Enter your shop name" style="font-size: 16px; padding: 10px; border: 2px solid #333;">
+          <button onclick="saveShopName()" style="margin-top: 10px; padding: 10px 15px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Save Shop Name</button>
+        </div>
+        <p style="margin-top: 10px; font-size: 14px; font-weight: bold;">Current: <span id="current-shop-name" style="color: #667eea;">Not Set</span></p>
+      </div>
+
+      <div class="form-section">
+        <h2>User Management (Supabase)</h2>
+        <div style="padding: 10px; background: #fff3cd; border: 2px solid #ffc107; border-radius: 4px; margin-bottom: 15px; color: #856404; font-weight: bold; font-size: 12px;">
+          ⚠️ Configure Supabase Project ID and Anon Key in the script section below
+        </div>
+        <div class="form-group">
+          <label>User Email</label>
+          <input type="email" id="new-user-email" placeholder="user@example.com" style="font-size: 16px; padding: 10px; border: 2px solid #333;">
+        </div>
+        <div class="form-group">
+          <label>User Password</label>
+          <input type="password" id="new-user-password" placeholder="Enter password (min 6 chars)" style="font-size: 16px; padding: 10px; border: 2px solid #333;">
+        </div>
+        <div class="form-group">
+          <label>User Role</label>
+          <select id="new-user-role" style="font-size: 16px; padding: 10px; border: 2px solid #333; width: 100%;">
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="controls">
+          <button onclick="addNewUser()" style="background: #27ae60;">+ Add User</button>
+          <button id="sync-users-btn" onclick="syncSupabaseUsers()" style="background: #3498db;">🔄 Sync Users</button>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Registered Users</h2>
+        <table id="users-table">
+          <thead>
+            <tr><th>Email</th><th>Role</th><th>Status</th><th></th>Created</th><th>Action</th></tr>
+          </thead>
+          <tbody id="users-body"></tbody>
+        </table>
+        <div id="no-users-message" style="padding: 15px; text-align: center; color: #666; font-weight: bold;">
+          No users yet. Add a user above.
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <h2>System Statistics</h2>
+        <table>
+          <tr><td><strong>Total Users</strong></td><td id="total-users">1</td></tr>
+          <tr><td><strong>Total Invoices</strong></td><td id="admin-total-invoices">0</td></tr>
+          <tr><td><strong>Total Revenue</strong></td><td id="admin-total-revenue">0.00</td></tr>
+          <tr><td><strong>Avg Per Invoice</strong></td><td id="admin-avg-invoice">0.00</td></tr>
+        </table>
+      </div>
+
+      <div class="form-section">
+        <h2>Search User Data</h2>
+        <div class="form-group">
+          <label>Search by Customer Name</label>
+          <input type="text" id="search-user-input" placeholder="Enter customer name..." style="font-size: 16px; padding: 10px; border: 2px solid #333;" oninput="searchUserData()" />
+        </div>
+        <table id="search-results-table" style="margin-top: 15px; display: none;">
+          <thead>
+            <tr><th>Date</th><th>Customer</th><th>Address</th><th>Amount</th><th>Method</th></tr>
+          </thead>
+          <tbody id="search-results-body"></tbody>
+        </table>
+        <div id="no-results-message" style="display: none; padding: 15px; background: #fff3cd; border: 2px solid #ffc107; border-radius: 4px; color: #856404; font-weight: bold; text-align: center;">
+          No results found for your search.
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Backup to Gmail</h2>
+        <p style="margin-bottom: 15px; color: #555; font-size: 14px;">
+          📧 <strong>Backup your data to Gmail.</strong> Choose how you want to backup your invoices and products.
+        </p>
+        <div class="controls">
+          <button onclick="downloadBackupJSON()" style="background: #667eea;">📥 Download JSON Backup</button>
+          <button onclick="downloadBackupCSV()" style="background: #667eea;">📥 Download CSV Backup</button>
+          <button onclick="sendBackupToGmail()" style="background: #ea4335;">📧 Send to Gmail</button>
+        </div>
+        <p style="margin-top: 15px; font-size: 12px; color: #999;">
+          💡 <strong>How to use:</strong><br>
+          • <strong>JSON/CSV:</strong> Download your backup file and save it locally or email it yourself.<br>
+          • <strong>Gmail:</strong> Click "Send to Gmail" to email your backup directly to yourself (one-time setup required).
+        </p>
+      </div>
+
+      <div class="form-section">
+        <h2>Sync to Mobile & Cloud Storage</h2>
+        <p style="margin-bottom: 15px; color: #555; font-size: 14px;">
+          📱 <strong>Access your data on mobile phone or any device.</strong> Generate a QR code or link to sync.
+        </p>
+        <div class="controls">
+          <button onclick="generateMobileSyncQR()" style="background: #27ae60;">📱 Generate Mobile Sync QR</button>
+          <button onclick="generateCloudBackupLink()" style="background: #f39c12;">☁️ Cloud Storage Link</button>
+        </div>
+        <div id="mobile-sync-display" style="margin-top: 20px; text-align: center; display: none;">
+          <div id="qr-code-container" style="margin: 15px 0;"></div>
+          <p id="sync-link-text" style="word-break: break-all; font-size: 12px; padding: 10px; background: #f0f0f0; border-radius: 4px;"></p>
+          <button onclick="copySyncLink()" style="margin-top: 10px; background: #3498db;">📋 Copy Link to Clipboard</button>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Export Data</h2>
+        <div class="controls">
+          <button onclick="exportToCSV()" style="background: #27ae60;">Export CSV</button>
+          <button onclick="exportToPDF()" style="background: #e74c3c;">Export PDF</button>
+          <button onclick="resetData()" style="background: #e74c3c;">Reset Data</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Invoice Print Modal -->
+<div id="print-modal" class="modal">
+  <div class="modal-content" style="position: relative;">
+    <button class="modal-close" onclick="closePrintModal()">×</button>
+    <div id="invoice-preview" class="invoice-preview" style="width: 50mm; margin: 0 auto; font-size: 8px; line-height: 1.1;"></div>
+    <div class="controls" style="margin-top: 15px; text-align: center;">
+      <button onclick="printInvoice()" style="background: #27ae60;">Print</button>
+      <button onclick="downloadInvoicePDF()" style="background: #3498db;">Download PDF</button>
+      <button onclick="closePrintModal()" style="background: #95a5a6;">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================
+// SUPABASE REST API CONFIGURATION
+// ============================================
+const SUPABASE_URL = 'https://uwydfbzjmlrnmtkteyss.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV3eWRmYnpqbWxybm10a3RleXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg0MjY2MzcsImV4cCI6MjA4NDAwMjYzN30.uGy2z6SINfLqVXy-N3nnSPGegyy3L0YeH94_2RtYpRk';
+
+var supabase = null;
+var supabaseUsers = [];
+
+// Simple Supabase REST API Client
+class SupabaseClient {
+  constructor(url, key) {
+    this.url = url;
+    this.key = key;
+  }
+  
+  async auth_signInWithPassword(email, password) {
+    const response = await fetch(`${this.url}/auth/v1/token?grant_type=password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': this.key
+      },
+      body: JSON.stringify({ email, password })
+    });
+    return await response.json();
+  }
+  
+  async auth_createUser(email, password, role = 'user') {
+    // Use Supabase Admin API to create user
+    const response = await fetch(`${this.url}/auth/v1/admin/users`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': this.key,
+        'Authorization': `Bearer ${this.key}`
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+        email_confirm: true,
+        user_metadata: { role: role }
+      })
+    });
+    
+    const data = await response.json();
+    if (!response.ok) {
+      return { user: null, error: data };
+    }
+    return { user: data, error: null };
+  }
+  
+  from(table) {
+    return new TableClient(this.url, this.key, table);
+  }
+}
+
+class TableClient {
+  constructor(url, key, table) {
+    this.url = url;
+    this.key = key;
+    this.table = table;
+    this.filters = [];
+    this.insertData = null;
+  }
+  
+  select(fields = '*') {
+    this.fields = fields;
+    return this;
+  }
+  
+  insert(data) {
+    this.insertData = data;
+    return this;
+  }
+  
+  eq(field, value) {
+    this.filters.push(`${field}=eq.${value}`);
+    return this;
+  }
+  
+  single() {
+    this.isSingle = true;
+    return this;
+  }
+  
+  async execute() {
+    if (this.insertData) {
+      // INSERT operation
+      let query = `${this.url}/rest/v1/${this.table}`;
+      if (this.fields) query += `?select=${this.fields}`;
+      
+      try {
+        const response = await fetch(query, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': this.key,
+            'Prefer': 'return=representation'
+          },
+          body: JSON.stringify(this.insertData)
+        });
+        
+        // Get response text first
+        const responseText = await response.text();
+        
+        // Try to parse as JSON
+        let data = [];
+        if (responseText) {
+          try {
+            data = JSON.parse(responseText);
+          } catch (e) {
+            console.error('Failed to parse response:', responseText);
+            data = [];
+          }
+        }
+        
+        if (!response.ok) {
+          return { data: null, error: data || responseText };
+        }
+        
+        return { 
+          data: Array.isArray(data) ? data : [data], 
+          error: null 
+        };
+      } catch (error) {
+        return { data: null, error: error.message };
+      }
+    } else {
+      // SELECT operation
+      let query = `${this.url}/rest/v1/${this.table}?select=${this.fields || '*'}`;
+      
+      // Build filters correctly for PostgREST API
+      if (this.filters.length) {
+        for (let i = 0; i < this.filters.length; i++) {
+          query += `&${this.filters[i]}`;
+        }
+      }
+      
+      try {
+        const response = await fetch(query, {
+          headers: { 
+            'apikey': this.key,
+            'Content-Profile': 'public'
+          }
+        });
+        
+        if (!response.ok) {
+          const error = await response.text();
+          console.error('API Error:', response.status, error);
+          return { data: null, error: error };
+        }
+        
+        const data = await response.json();
+        return { 
+          data: this.isSingle && data.length > 0 ? data[0] : data, 
+          error: null 
+        };
+      } catch (error) {
+        console.error('Fetch error:', error);
+        return { data: null, error: error.message };
+      }
+    }
+  }
+}
+
+// Initialize Supabase Client
+async function initializeSupabaseClient() {
+  try {
+    supabase = new SupabaseClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log('✅ Supabase REST client initialized');
+    
+    const statusDiv = document.getElementById('supabase-status');
+    if (statusDiv) {
+      statusDiv.style.background = '#d4edda';
+      statusDiv.style.borderColor = '#28a745';
+      statusDiv.style.color = '#155724';
+      statusDiv.textContent = '✅ Ready to login';
+    }
+    
+    return true;
+  } catch (error) {
+    console.error('❌ Failed to initialize Supabase:', error.message);
+    const statusDiv = document.getElementById('supabase-status');
+    if (statusDiv) {
+      statusDiv.style.background = '#f8d7da';
+      statusDiv.style.borderColor = '#f5c6cb';
+      statusDiv.style.color = '#721c24';
+      statusDiv.textContent = '❌ Supabase Connection Failed';
+    }
+    return false;
+  }
+}
+
+// Sync users from Supabase profiles table
+async function syncSupabaseUsers() {
+  if (!supabase) return;
+  
+  try {
+    const profileTable = supabase.from('profiles');
+    profileTable.fields = 'id, email, role, status, created_at';
+    const result = await profileTable.execute();
+    
+    if (result.error) {
+      console.warn('Could not sync users:', result.error);
+      return;
+    }
+    
+    supabaseUsers = result.data || [];
+    console.log('✅ Synced', supabaseUsers.length, 'users from Supabase');
+    updateUsersTable();
+  } catch (error) {
+    console.error('Error syncing users:', error);
+  }
+}
+
+// ============================================
+// GLOBAL STATE
+// ============================================
+var currentUser = null;
+var currentRole = 'user';
+var items = [];
+var invoices = [];
+var shopName = 'Your Shop';
+
+// ⚙️ CONFIGURATION - Set to true to use Supabase, false for localStorage only
+const USE_SUPABASE_SYNC = false;  // Disable Supabase API calls, use localStorage only
+
+const STORAGE_KEY = 'billing_system_v1';
+const USERS_KEY = 'billing_users_v1';
+const SHOP_NAME_KEY = 'shop_name_v1';
+const SESSION_KEY = 'billing_session_v1';
+
+// Initialize when document is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() {
+    initializeApp();
+  });
+} else {
+  initializeApp();
+}
+
+async function initializeApp() {
+  const dateInput = document.getElementById('invoice-date');
+  if (dateInput) {
+    dateInput.valueAsDate = new Date();
+  }
+  
+  // Check for sync/backup from URL
+  loadSyncDataFromURL();
+  
+  // Initialize Supabase
+  const initialized = await initializeSupabaseClient();
+  
+  if (!initialized) {
+    console.error('Failed to initialize Supabase. Please check your connection.');
+    return;
+  }
+  
+  // Check for existing session
+  checkExistingSession();
+}
+
+// Check if user has an existing session
+async function checkExistingSession() {
+  const session = localStorage.getItem(SESSION_KEY);
+  if (session) {
+    try {
+      const { email, role } = JSON.parse(session);
+      currentUser = email;
+      currentRole = role;
+      
+      // Load local data first (instant display)
+      loadDataFromLocalStorage();
+      
+      // Hide login screen and show app
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('header').style.display = 'flex';
+      document.getElementById('main-container').style.display = 'flex';
+      document.getElementById('current-user').textContent = email + ' (' + role.toUpperCase() + ')';
+      
+      // Then sync from Supabase in background
+      await loadData();
+      await loadProducts();
+      loadConsumers();
+      
+      if (role === 'admin') {
+        document.getElementById('admin-btn').style.display = 'block';
+        updateUsersTable();
+      } else {
+        document.getElementById('admin-btn').style.display = 'none';
+      }
+      
+      console.log('Session restored: ' + email);
+    } catch (error) {
+      console.error('Error restoring session:', error);
+      // Clear invalid session
+      localStorage.removeItem(SESSION_KEY);
+    }
+  }
+}
+
+// ============================================
+// LOCAL STORAGE PERSISTENCE
+// ============================================
+
+// Generate storage key for current user
+function getUserStorageKey(suffix) {
+  if (!currentUser) return null;
+  return `user_${currentUser}_${suffix}`;
+}
+
+// Save all data to localStorage
+function saveDataToLocalStorage() {
+  if (!currentUser) return;
+  
+  const userInvoicesKey = getUserStorageKey('invoices');
+  const userProductsKey = getUserStorageKey('products');
+  const userShopNameKey = getUserStorageKey('shopname');
+  const userDataMetaKey = getUserStorageKey('metadata');
+  
+  localStorage.setItem(userInvoicesKey, JSON.stringify(invoices));
+  localStorage.setItem(userProductsKey, JSON.stringify(products));
+  localStorage.setItem(userShopNameKey, shopName);
+  localStorage.setItem(userDataMetaKey, JSON.stringify({
+    lastSync: new Date().toISOString(),
+    version: 1,
+    itemCount: invoices.length + products.length
+  }));
+}
+
+// Load data from localStorage
+function loadDataFromLocalStorage() {
+  if (!currentUser) return;
+  
+  try {
+    const userInvoicesKey = getUserStorageKey('invoices');
+    const userProductsKey = getUserStorageKey('products');
+    const userShopNameKey = getUserStorageKey('shopname');
+    
+    const savedInvoices = localStorage.getItem(userInvoicesKey);
+    const savedProducts = localStorage.getItem(userProductsKey);
+    const savedShopName = localStorage.getItem(userShopNameKey);
+    
+    if (savedInvoices) {
+      invoices = JSON.parse(savedInvoices);
+      console.log('✅ Loaded ' + invoices.length + ' invoices from local storage');
+    }
+    
+    if (savedProducts) {
+      products = JSON.parse(savedProducts);
+      console.log('✅ Loaded ' + products.length + ' products from local storage');
+    }
+    
+    if (savedShopName) {
+      shopName = savedShopName;
+      document.getElementById('current-shop-name').textContent = shopName;
+      document.getElementById('bill-shop-name').textContent = shopName;
+    }
+    
+    updateDashboard();
+    updateProductsTable();
+    updateLowStockAlert();
+  } catch (error) {
+    console.error('Error loading from local storage:', error);
+  }
+}
+
+// Load data from Supabase
+async function loadData() {
+  // If Supabase sync is disabled, just load from localStorage
+  if (!USE_SUPABASE_SYNC) {
+    loadDataFromLocalStorage();
+    return;
+  }
+  
+  if (!supabase || !currentUser) {
+    // Fallback to localStorage if Supabase not available
+    loadDataFromLocalStorage();
+    return;
+  }
+
+  try {
+    // Load invoices from Supabase (gracefully handle missing table)
+    try {
+      const invoicesTable = supabase.from('invoices');
+      invoicesTable.filters = [`user_email=eq.${currentUser}`];
+      const invoicesResult = await invoicesTable.execute();
+
+      if (invoicesResult.data && !invoicesResult.error && invoicesResult.data.length > 0) {
+        invoices = invoicesResult.data.map(inv => ({
+          id: inv.id,
+          date: inv.invoice_date,
+          customer: inv.customer_name,
+          address: inv.customer_address,
+          method: inv.payment_method,
+          total: inv.total_amount,
+          paidAmount: inv.paid_amount || 0,
+          unpaidAmount: inv.unpaid_amount || inv.total_amount,
+          items: inv.items || [],
+          user: inv.user_email,
+          savedDate: inv.created_at
+        }));
+        console.log('✅ Loaded ' + invoices.length + ' invoices from Supabase');
+      } else {
+        // No data from Supabase, try localStorage
+        console.warn('⚠️ No invoices from Supabase, loading from localStorage...');
+        const userInvoicesKey = getUserStorageKey('invoices');
+        const saved = localStorage.getItem(userInvoicesKey);
+        if (saved) {
+          invoices = JSON.parse(saved);
+          console.log('✅ Loaded ' + invoices.length + ' invoices from localStorage');
+        } else {
+          invoices = [];
+        }
+      }
+    } catch (tableError) {
+      console.warn('⚠️ Could not load invoices table:', tableError.message);
+      // Try localStorage
+      const userInvoicesKey = getUserStorageKey('invoices');
+      const saved = localStorage.getItem(userInvoicesKey);
+      if (saved) {
+        invoices = JSON.parse(saved);
+        console.log('✅ Loaded invoices from localStorage fallback');
+      } else {
+        invoices = [];
+      }
+    }
+    
+    // Load shop settings from Supabase (gracefully handle missing table)
+    try {
+      const settingsTable = supabase.from('shop_settings');
+      settingsTable.filters = [`user_email=eq.${currentUser}`];
+      settingsTable.isSingle = true;
+      const settingsResult = await settingsTable.execute();
+
+      if (settingsResult.data && !settingsResult.error) {
+        shopName = settingsResult.data.shop_name || 'Your Shop';
+      } else {
+        shopName = 'Your Shop';
+      }
+    } catch (tableError) {
+      console.warn('⚠️ Could not load shop_settings table:', tableError.message);
+      shopName = 'Your Shop';
+    }
+
+    const shopNameInput = document.getElementById('shop-name-input');
+    if (shopNameInput) shopNameInput.value = shopName;
+    const currentShopName = document.getElementById('current-shop-name');
+    if (currentShopName) currentShopName.textContent = shopName;
+    const billShopName = document.getElementById('bill-shop-name');
+    if (billShopName) billShopName.textContent = shopName;
+    
+    updateDashboard();
+    loadConsumers();
+    
+  } catch (error) {
+    console.error('Error loading data from Supabase:', error);
+    // Fallback to localStorage
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      invoices = JSON.parse(saved);
+      updateDashboard();
+      loadConsumers();
+    }
+  }
+}
+
+// Authentication
+async function login() {
+  const email = document.getElementById('username-input').value.trim().toLowerCase();
+  const password = document.getElementById('password-input').value.trim();
+  const roleSelect = document.getElementById('role-select').value;
+
+  if (!email || !password) {
+    alert('Please enter email and password');
+    return;
+  }
+
+  if (!supabase) {
+    alert('❌ Supabase not initialized. Please refresh the page.');
+    return;
+  }
+
+  try {
+    console.log('🔐 Attempting login with Supabase...');
+    
+    // Sign in with Supabase Auth REST API
+    const authResult = await supabase.auth_signInWithPassword(email, password);
+    
+    if (authResult.error) {
+      // If login fails and user selected "User" role, offer to register
+      if (roleSelect === 'user') {
+        const registerConfirm = confirm('User not found. Would you like to register as a new user?');
+        if (registerConfirm) {
+          await registerNewUser(email, password);
+          return;
+        }
+      }
+      alert('❌ Login failed: ' + (authResult.error.message || authResult.error.msg || 'Invalid credentials'));
+      console.error('Auth error:', authResult);
+      return;
+    }
+
+    console.log('✅ Authentication successful');
+
+    // Get user profile to determine role
+    const profileTable = supabase.from('profiles');
+    profileTable.filters = [`email=eq.${email}`];
+    profileTable.isSingle = true;
+    const profileResult = await profileTable.execute();
+
+    let userRole = 'user';
+    
+    if (profileResult.data) {
+      userRole = profileResult.data.role || 'user';
+    } else {
+      // Profile doesn't exist - create one with the selected role
+      console.log('Creating profile for new user:', email);
+      const createProfileTable = supabase.from('profiles');
+      createProfileTable.insertData = [{
+        email: email,
+        role: roleSelect || 'user',
+        status: 'active',
+        created_by: 'self',
+        created_at: new Date().toISOString()
+      }];
+      
+      const createResult = await createProfileTable.execute();
+      if (createResult.error) {
+        console.warn('Could not create profile:', createResult.error);
+      }
+      userRole = roleSelect || 'user';
+    }
+
+    currentUser = email;
+    currentRole = userRole;
+    
+    // Save session
+    localStorage.setItem(SESSION_KEY, JSON.stringify({ email: email, role: userRole }));
+    
+    // Show app interface
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('header').style.display = 'flex';
+    document.getElementById('main-container').style.display = 'flex';
+    document.getElementById('current-user').textContent = email + ' (' + userRole.toUpperCase() + ')';
+    
+    // Load local data first (instant display)
+    loadDataFromLocalStorage();
+    
+    if (userRole === 'admin') {
+      document.getElementById('admin-btn').style.display = 'block';
+      await syncSupabaseUsers();
+      updateUsersTable();
+    } else {
+      document.getElementById('admin-btn').style.display = 'none';
+    }
+    
+    // Load data from Supabase
+    await loadData();
+    await loadProducts();
+    loadConsumers();
+    
+    console.log('✅ Login successful:', email, 'as', userRole);
+  } catch (error) {
+    alert('❌ Login error: ' + error.message);
+    console.error('Login error:', error);
+  }
+}
+
+// Register new user
+async function registerNewUser(email, password) {
+  if (!supabase) {
+    alert('❌ Supabase not initialized');
+    return;
+  }
+
+  try {
+    console.log('📝 Registering new user:', email);
+    
+    // Sign up with Supabase Auth REST API
+    const signUpUrl = `${supabase.url}/auth/v1/signup`;
+    const signUpResponse = await fetch(signUpUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': supabase.key
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+        email_confirm: true
+      })
+    });
+
+    const signUpData = await signUpResponse.json();
+    
+    if (!signUpResponse.ok) {
+      throw new Error(signUpData.error_description || signUpData.message || 'Registration failed');
+    }
+
+    console.log('✅ User registered successfully');
+
+    // Create profile for new user
+    const profileTable = supabase.from('profiles');
+    profileTable.insertData = [{
+      email: email,
+      role: 'user',
+      status: 'active',
+      created_by: 'self',
+      created_at: new Date().toISOString()
+    }];
+    
+    await profileTable.execute();
+    
+    alert('✅ Registration successful! You can now log in.');
+    // Optionally auto-login
+    await login();
+  } catch (error) {
+    alert('❌ Registration error: ' + error.message);
+    console.error('Registration error:', error);
+  }
+}
+
+function authenticateLocally(email, password, role) {
+  const user = supabaseUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
+  
+  if (!user) {
+    alert('User not found!');
+    return;
+  }
+
+  if (user.password !== password) {
+    alert('Invalid password!');
+    return;
+  }
+
+  if (role === 'admin' && user.role !== 'admin') {
+    alert('This account is not an admin account!');
+    return;
+  }
+
+  if (role === 'user' && user.role === 'admin') {
+    alert('Admin accounts must login as Admin!');
+    return;
+  }
+
+  currentUser = email;
+  currentRole = user.role;
+  
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('header').style.display = 'flex';
+  document.getElementById('main-container').style.display = 'flex';
+  document.getElementById('current-user').textContent = email + ' (' + user.role.toUpperCase() + ')';
+  
+  if (user.role === 'admin') {
+    document.getElementById('admin-btn').style.display = 'block';
+    updateUsersTable();
+  } else {
+    document.getElementById('admin-btn').style.display = 'none';
+  }
+  
+  loadData();
+  loadProducts();
+  loadConsumers();
+}
+
+// Sync Supabase Users
+async function syncSupabaseUsers() {
+  if (!supabase) {
+    console.warn('⚠️ Supabase not yet initialized. Retrying sync...');
+    // Wait a moment and retry
+    return setTimeout(syncSupabaseUsers, 1000);
+  }
+
+  try {
+    // Fetch from profiles table
+    const profilesTable = supabase.from('profiles');
+    const profilesResult = await profilesTable.execute();
+    
+    if (profilesResult.error) {
+      console.error('⚠️ Error fetching profiles (table may not exist):', profilesResult.error);
+      // Table might not exist yet, that's okay
+      return;
+    }
+
+    if (profilesResult.data) {
+      supabaseUsers = profilesResult.data.map(p => ({
+        id: p.id,
+        email: p.email,
+        role: p.role || 'user',
+        created: p.created_at,
+        status: p.status || 'active'
+      }));
+      
+      updateUsersTable();
+      console.log('✅ Users synced successfully from Supabase. Total:', supabaseUsers.length);
+    }
+  } catch (error) {
+    console.error('❌ Sync error:', error.message);
+  }
+}
+
+// Add New User (Admin Only) - Supabase Only
+async function addNewUser() {
+  try {
+    // Check if user is admin
+    if (currentRole !== 'admin') {
+      alert('❌ Only admins can add new users!');
+      return;
+    }
+
+    if (!supabase) {
+      alert('⏳ Supabase is still initializing. Please wait a moment and try again.');
+      console.warn('Supabase not ready');
+      return;
+    }
+
+    const email = document.getElementById('new-user-email').value.trim().toLowerCase();
+    const password = document.getElementById('new-user-password').value.trim();
+    const role = document.getElementById('new-user-role').value;
+
+    // Validation
+    if (!email || !password) {
+      alert('❌ Please fill in both email and password');
+      return;
+    }
+
+    if (password.length < 6) {
+      alert('❌ Password must be at least 6 characters');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert('❌ Please enter a valid email address');
+      return;
+    }
+
+    // Check if user already exists
+    if (supabaseUsers.find(u => u.email.toLowerCase() === email.toLowerCase())) {
+      alert('❌ User with this email already exists!');
+      return;
+    }
+
+    const addBtn = document.querySelector('button[onclick="addNewUser()"]');
+    const syncBtn = document.getElementById('sync-users-btn');
+    addBtn.disabled = true;
+    syncBtn.disabled = true;
+    addBtn.textContent = '⏳ Creating...';
+
+    try {
+      // Check database for existing email
+      const checkTable = supabase.from('profiles');
+      checkTable.filters = [`email=eq.${email}`];
+      const existingCheck = await checkTable.execute();
+
+      if (existingCheck.data && existingCheck.data.length > 0) {
+        alert('❌ User with this email already exists in the database!');
+        return;
+      }
+
+      // Save to profiles table in Supabase (let it auto-generate the ID)
+      const profilesTable = supabase.from('profiles');
+      profilesTable.insertData = [{
+        email: email,
+        role: role,
+        status: 'pending',
+        created_by: currentUser,
+        created_at: new Date().toISOString()
+      }];
+      
+      const profileResult = await profilesTable.execute();
+
+      if (profileResult.error) {
+        console.error('Profile creation error:', profileResult.error);
+        throw new Error(typeof profileResult.error === 'string' ? profileResult.error : JSON.stringify(profileResult.error));
+      }
+
+      // Add to local list
+      const newUser = profileResult.data && profileResult.data[0] ? profileResult.data[0] : {
+        id: 'temp_' + Date.now(),
+        email: email,
+        role: role,
+        created: new Date().toISOString(),
+        status: 'pending'
+      };
+
+      supabaseUsers.push(newUser);
+
+      alert(`✅ User profile created! 
+        
+Email: ${email}
+Role: ${role.toUpperCase()}
+Status: Pending
+
+⚠️ Note: Users must sign up separately using the login page with their email and password.`);
+      
+      updateUsersTable();
+
+    } catch (error) {
+      console.error('User creation error:', error);
+      alert('❌ Error creating user: ' + error.message);
+    }
+
+    // Clear form
+    document.getElementById('new-user-email').value = '';
+    document.getElementById('new-user-password').value = '';
+    document.getElementById('new-user-role').value = 'user';
+    
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    alert('❌ Unexpected error: ' + error.message);
+  } finally {
+    const addBtn = document.querySelector('button[onclick="addNewUser()"]');
+    const syncBtn = document.getElementById('sync-users-btn');
+    addBtn.disabled = false;
+    syncBtn.disabled = false;
+    addBtn.textContent = '+ Add User';
+  
+
+    addBtn.disabled = false;
+    syncBtn.disabled = false;
+    addBtn.textContent = '+ Add User';
+  }
+}
+
+// Delete User (Admin Only) - Supabase Only
+async function deleteUser(email) {
+  // Check if user is admin
+  if (currentRole !== 'admin') {
+    alert('❌ Only admins can delete users!');
+    return;
+  }
+
+  if (!supabase) {
+    alert('⏳ Supabase is still initializing. Please wait a moment and try again.');
+    console.warn('Supabase not ready');
+    return;
+  }
+
+  if (!confirm(`Are you sure you want to delete user: ${email}?\n\nThis action cannot be undone.`)) return;
+
+  try {
+    const deleteBtn = event.target;
+    deleteBtn.disabled = true;
+    deleteBtn.textContent = '⏳ Deleting...';
+
+    try {
+      // Delete from profiles table first
+      const deleteQuery = `${supabase.url}/rest/v1/profiles?email=eq.${encodeURIComponent(email)}`;
+      await fetch(deleteQuery, {
+        method: 'DELETE',
+        headers: { 'apikey': supabase.key }
+      });
+      
+      alert('✅ User deleted successfully from Supabase!');
+    } catch (error) {
+      console.error('Deletion error:', error);
+      alert('❌ Error deleting user: ' + error.message);
+      deleteBtn.disabled = false;
+      deleteBtn.textContent = 'Delete';
+      return;
+    }
+
+    supabaseUsers = supabaseUsers.filter(u => u.email.toLowerCase() !== email.toLowerCase());
+    updateUsersTable();
+    
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    alert('❌ Unexpected error: ' + error.message);
+  }
+}
+
+// Update Users Table
+function updateUsersTable() {
+  const usersBody = document.getElementById('users-body');
+  const noUsersMsg = document.getElementById('no-users-message');
+
+  if (supabaseUsers.length === 0) {
+    usersBody.innerHTML = '';
+    noUsersMsg.style.display = 'block';
+    document.getElementById('total-users').textContent = 0;
+    return;
+  }
+
+  noUsersMsg.style.display = 'none';
+  let html = '';
+  supabaseUsers.forEach(user => {
+    const created = new Date(user.created).toLocaleDateString();
+    const statusBadgeColor = user.status === 'active' ? '#27ae60' : '#95a5a6';
+    const roleBadgeColor = user.role === 'admin' ? '#e74c3c' : '#667eea';
+    
+    html += `<tr>
+      <td><strong>${user.email}</strong></td>
+      <td><span style="background: ${roleBadgeColor}; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold;">${user.role.toUpperCase()}</span></td>
+      <td><span style="background: ${statusBadgeColor}; color: white; padding: 3px 8px; border-radius: 3px; font-size: 12px;">${user.status || 'active'}</span></td>
+      <td>${created}</td>
+      <td><button class="delete-btn" onclick="deleteUser('${user.email}')" ${currentRole === 'admin' ? '' : 'disabled'}>Delete</button></td>
+    </tr>`;
+  });
+  usersBody.innerHTML = html;
+  document.getElementById('total-users').textContent = supabaseUsers.length;
+}
+
+function logout() {
+  currentUser = null;
+  currentRole = 'user';
+  items = [];
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('header').style.display = 'none';
+  document.getElementById('main-container').style.display = 'none';
+  document.getElementById('username-input').value = '';
+  document.getElementById('password-input').value = '';
+}
+
+// Save Shop Name (Admin Only)
+async function saveShopName() {
+  const shopNameInput = document.getElementById('shop-name-input').value.trim();
+  
+  if (!shopNameInput) {
+    alert('Please enter a shop name');
+    return;
+  }
+  
+  shopName = shopNameInput;
+  
+  // Save to Supabase
+  if (supabase && currentUser) {
+    try {
+      // Try to update first
+      const checkTable = supabase.from('shop_settings');
+      checkTable.filters = [`user_email=eq.${currentUser}`];
+      checkTable.isSingle = true;
+      const existing = await checkTable.execute();
+
+      if (existing.data) {
+        // Update existing - Note: TableClient doesn't support update() yet, using fetch directly
+        const updateUrl = `${supabase.url}/rest/v1/shop_settings?user_email=eq.${currentUser}`;
+        const updateResponse = await fetch(updateUrl, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': supabase.key
+          },
+          body: JSON.stringify({ shop_name: shopName })
+        });
+        
+        if (!updateResponse.ok) {
+          const error = await updateResponse.json();
+          throw error;
+        }
+      } else {
+        // Insert new
+        const insertTable = supabase.from('shop_settings');
+        insertTable.insertData = [{ user_email: currentUser, shop_name: shopName }];
+        const insertResult = await insertTable.execute();
+        
+        if (insertResult.error) throw insertResult.error;
+      }
+      console.log('Shop name saved to Supabase');
+    } catch (error) {
+      console.error('Error saving shop name to Supabase:', error);
+      // Still save to localStorage as backup
+      localStorage.setItem(SHOP_NAME_KEY, shopName);
+    }
+  } else {
+    localStorage.setItem(SHOP_NAME_KEY, shopName);
+  }
+  
+  saveDataToLocalStorage();
+  document.getElementById('current-shop-name').textContent = shopName;
+  document.getElementById('bill-shop-name').textContent = shopName;
+  alert('Shop name saved: ' + shopName);
+}
+
+// Navigation
+function setupNavigation() {
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      
+      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+      const sectionId = this.dataset.section + '-section';
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.style.display = 'block';
+      }
+      
+      // Close sidebar on mobile after navigation
+      closeSidebar();
+    });
+  });
+}
+
+// Setup navigation when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', setupNavigation);
+} else {
+  setupNavigation();
+}
+
+// Mobile Sidebar Toggle
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  sidebar.classList.toggle('show');
+  overlay.classList.toggle('show');
+}
+
+function closeSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  sidebar.classList.remove('show');
+  overlay.classList.remove('show');
+}
+
+// Items Management
+function addItem() {
+  const itemsBody = document.getElementById('items-body');
+  const rowCount = itemsBody.querySelectorAll('tr').length + 1;
+  
+  const row = document.createElement('tr');
+  let productOptions = '<option value="">Select product...</option>';
+  products.forEach(p => {
+    const disabled = p.stock === 0 ? 'disabled' : '';
+    productOptions += `<option value="${p.id}" data-price="${p.price}" data-stock="${p.stock}" data-category="${p.category || 'Uncategorized'}" data-name="${p.name}" ${disabled}>
+      ${p.name} (Stock: ${p.stock}) - ${p.category || 'Uncategorized'}
+    </option>`;
+  });
+  productOptions += '<option value="other" data-price="0" data-stock="unlimited">➕ Other (Custom Product)</option>';
+
+  row.innerHTML = `
+    <td style="font-weight: bold; font-size: 15px;">${rowCount}</td>
+    <td>
+      <select class="product-select" onchange="updateItemPrice(this)" style="width: 100%; padding: 6px; border: 2px solid #333; font-weight: bold; font-size: 14px;">
+        ${productOptions}
+      </select>
+      <input type="text" class="custom-product-name" placeholder="Enter product name" style="display: none; width: 100%; padding: 6px; border: 2px solid #333; font-weight: bold; font-size: 14px; margin-top: 4px;" />
+    </td>
+    <td style="font-size: 13px; color: #666;" class="product-category">-</td>
+    <td><input type="number" class="qty" value="1" min="1" style="width: 50px; padding: 6px; border: 2px solid #333; font-weight: bold; font-size: 14px;" onchange="calcTotal()"></td>
+    <td><input type="number" class="price" value="0" min="0" step="0.01" style="width: 70px; padding: 6px; border: 2px solid #333; font-weight: bold; font-size: 14px;" onchange="calcTotal()"></td>
+    <td style="font-weight: bold; font-size: 15px;"><span class="item-total">0.00</span></td>
+    <td><button class="delete-btn" onclick="deleteItem(this); recalculateItemNumbers();">Delete</button></td>
+  `;
+  itemsBody.appendChild(row);
+  items.push({});
+  updateCategoryFilter();
+  calcTotal();
+}
+
+function updateItemPrice(selectElement) {
+  const row = selectElement.closest('tr');
+  const priceInput = row.querySelector('.price');
+  const categoryCell = row.querySelector('.product-category');
+  const customNameInput = row.querySelector('.custom-product-name');
+  const selectedOption = selectElement.options[selectElement.selectedIndex];
+  
+  if (selectedOption.value === 'other') {
+    priceInput.value = 0;
+    priceInput.readOnly = false;
+    customNameInput.style.display = 'block';
+    categoryCell.textContent = 'Custom';
+  } else if (selectedOption.value) {
+    const price = selectedOption.getAttribute('data-price');
+    const category = selectedOption.getAttribute('data-category');
+    priceInput.value = price;
+    priceInput.readOnly = true;
+    customNameInput.style.display = 'none';
+    categoryCell.textContent = category;
+  } else {
+    priceInput.value = 0;
+    priceInput.readOnly = true;
+    customNameInput.style.display = 'none';
+    categoryCell.textContent = '-';
+  }
+  calcTotal();
+}
+
+function updateCategoryFilter() {
+  const categoryFilter = document.getElementById('item-category-filter');
+  const categories = new Set();
+  categories.add('Other');
+  products.forEach(p => {
+    if (p.category) categories.add(p.category);
+  });
+  
+  const selectedValue = categoryFilter.value;
+  categoryFilter.innerHTML = '<option value="">All Categories</option>';
+  Array.from(categories).sort().forEach(cat => {
+    const option = document.createElement('option');
+    option.value = cat;
+    option.textContent = cat;
+    categoryFilter.appendChild(option);
+  });
+  categoryFilter.value = selectedValue;
+}
+
+function filterItemsByCategory() {
+  const categoryFilter = document.getElementById('item-category-filter').value;
+  const productSelects = document.querySelectorAll('.product-select');
+  
+  productSelects.forEach(select => {
+    const options = select.querySelectorAll('option');
+    options.forEach(option => {
+      if (!categoryFilter) {
+        option.style.display = '';
+      } else {
+        const category = option.getAttribute('data-category');
+        const isOther = option.value === 'other';
+        const isAllowedCategory = category === categoryFilter || (categoryFilter === 'Other' && isOther);
+        option.style.display = isAllowedCategory ? '' : 'none';
+      }
+    });
+  });
+}
+
+function filterItemsBySearch() {
+  const searchTerm = document.getElementById('item-search').value.toLowerCase();
+  const productSelects = document.querySelectorAll('.product-select');
+  
+  productSelects.forEach(select => {
+    const options = select.querySelectorAll('option');
+    options.forEach(option => {
+      if (!searchTerm) {
+        option.style.display = '';
+      } else {
+        const text = option.text.toLowerCase();
+        option.style.display = text.includes(searchTerm) ? '' : 'none';
+      }
+    });
+  });
+}
+
+function deleteItem(button) {
+  button.closest('tr').remove();
+  recalculateItemNumbers();
+  calcTotal();
+}
+
+function recalculateItemNumbers() {
+  const rows = document.querySelectorAll('#items-body tr');
+  rows.forEach((row, index) => {
+    row.querySelector('td:first-child').textContent = index + 1;
+  });
+}
+
+function calcTotal() {
+  let subtotal = 0;
+  const rows = document.querySelectorAll('#items-body tr');
+  
+  rows.forEach(row => {
+    const qtyInput = row.querySelector('.qty');
+    const priceInput = row.querySelector('.price');
+    const totalSpan = row.querySelector('.item-total');
+    
+    const qty = parseFloat(qtyInput.value) || 0;
+    const price = parseFloat(priceInput.value) || 0;
+    const total = qty * price;
+    
+    if (totalSpan) {
+      totalSpan.textContent = total.toFixed(2);
+    }
+    subtotal += total;
+  });
+
+  const finalTotalElement = document.getElementById('final-total');
+  if (finalTotalElement) {
+    finalTotalElement.textContent = subtotal.toFixed(2);
+  }
+  
+  calcPaidUnpaid();
+}
+
+function calcPaidUnpaid() {
+  const totalAmount = parseFloat(document.getElementById('final-total').textContent) || 0;
+  const paidAmount = parseFloat(document.getElementById('paid-amount').value) || 0;
+  const unpaidAmount = Math.max(0, totalAmount - paidAmount);
+  
+  document.getElementById('unpaid-amount').value = unpaidAmount.toFixed(2);
+  
+  const statusDiv = document.getElementById('payment-status');
+  if (unpaidAmount === 0) {
+    statusDiv.textContent = '✅ PAID IN FULL';
+    statusDiv.style.color = '#27ae60';
+  } else if (paidAmount === 0) {
+    statusDiv.textContent = '⏳ NOT PAID';
+    statusDiv.style.color = '#e74c3c';
+  } else {
+    statusDiv.textContent = '⚠️ PARTIAL PAYMENT';
+    statusDiv.style.color = '#f39c12';
+  }
+}
+
+// Invoice Generation
+function generateInvoice() {
+  const custName = document.getElementById('cust-name').value || 'Customer';
+  const custAddr = document.getElementById('cust-addr').value || 'N/A';
+  const date = document.getElementById('invoice-date').value;
+  const method = document.getElementById('payment-method').value;
+  const total = parseFloat(document.getElementById('final-total').textContent);
+  const paidAmount = parseFloat(document.getElementById('paid-amount').value) || 0;
+  const unpaidAmount = parseFloat(document.getElementById('unpaid-amount').value) || 0;
+
+  let itemsHtml = '';
+  document.querySelectorAll('#items-body tr').forEach((row, idx) => {
+    const select = row.querySelector('.product-select');
+    const qty = row.querySelector('.qty').value || '0';
+    const price = row.querySelector('.price').value || '0';
+    const itemTotal = row.querySelector('.item-total').textContent || '0';
+    const customName = row.querySelector('.custom-product-name');
+    
+    // Get product name from dropdown or custom input
+    let productName = 'Unknown';
+    if (select.value === 'other') {
+      productName = customName.value || 'Custom Product';
+    } else {
+      const selectedOption = select.options[select.selectedIndex];
+      productName = selectedOption ? selectedOption.getAttribute('data-name') : 'Unknown';
+    }
+    
+    itemsHtml += `<tr><td>${idx+1}</td><td>${productName}</td><td>${qty}</td><td>${price}</td><td>${itemTotal}</td></tr>`;
+  });
+
+  const preview = `
+    <div style="width: 65mm; padding: 8px; font-family: Arial; font-size: 14px; line-height: 1.6; border: 2px solid #000;">
+      <div style="text-align: center; font-weight: bold; margin-bottom: 4px; font-size: 18px;">${shopName}</div>
+      <div style="text-align: center; font-weight: bold; margin-bottom: 4px; font-size: 16px;">INVOICE</div>
+      <div style="font-size: 13px; font-weight: bold; margin-bottom: 2px;">Date: ${date}</div>
+      <div style="font-size: 13px; font-weight: bold; margin-bottom: 2px;">Customer: ${custName}</div>
+      <div style="font-size: 13px; font-weight: bold; margin-bottom: 4px;">${custAddr}</div>
+      <hr style="margin: 4px 0; border: none; border-top: 2px solid #000;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 4px;">
+        <tr style="border-bottom: 2px solid #000;"><th style="padding: 4px; text-align: center; font-weight: bold;">#</th><th style="padding: 4px; font-weight: bold;">Product</th><th style="padding: 4px; text-align: center; font-weight: bold;">Qty</th><th style="padding: 4px; text-align: right; font-weight: bold;">Price</th><th style="padding: 4px; text-align: right; font-weight: bold;">Total</th></tr>
+        ${itemsHtml}
+      </table>
+      <hr style="margin: 4px 0; border: none; border-top: 2px solid #000;">
+      <div style="text-align: right; font-weight: bold; font-size: 15px; margin: 4px 0;">Total: ${total.toFixed(2)}</div>
+      <div style="text-align: right; font-weight: bold; font-size: 12px; margin: 2px 0;">Paid: ${paidAmount.toFixed(2)}</div>
+      <div style="text-align: right; font-weight: bold; font-size: 12px; margin: 4px 0; color: #d63031;">Unpaid: ${unpaidAmount.toFixed(2)}</div>
+      <div style="font-size: 12px; font-weight: bold; margin-top: 4px;">Method: ${method}</div>
+      <hr style="margin: 4px 0; border: none; border-top: 2px solid #000;">
+      <div style="font-size: 12px; font-weight: bold; text-align: center;">Thank You!</div>
+    </div>
+  `;
+
+  document.getElementById('invoice-preview').innerHTML = preview;
+  document.getElementById('print-modal').classList.add('show');
+}
+
+function printInvoice() {
+  // Auto-save invoice before printing
+  saveInvoice();
+  
+  const preview = document.getElementById('invoice-preview').innerHTML;
+  const w = window.open('', '_blank');
+  w.document.write(`<html><head><style>body{width:50mm;margin:0;padding:5px;font-family:Arial;}</style></head><body>${preview}</body></html>`);
+  w.document.close();
+  w.print();
+}
+
+async function downloadInvoicePDF() {
+  // Auto-save invoice before downloading
+  saveInvoice();
+  
+  const element = document.getElementById('invoice-preview');
+  const canvas = await html2canvas(element, { scale: 2, backgroundColor: '#fff' });
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ unit: 'mm', format: [50, 70] });
+  const imgData = canvas.toDataURL('image/png');
+  pdf.addImage(imgData, 'PNG', 0, 0, 50, 70);
+  pdf.save(`invoice_${new Date().getTime()}.pdf`);
+}
+
+function closePrintModal() {
+  document.getElementById('print-modal').classList.remove('show');
+}
+
+// Save Invoice
+async function saveInvoice() {
+  const custName = document.getElementById('cust-name').value;
+  const custAddr = document.getElementById('cust-addr').value;
+  const date = document.getElementById('invoice-date').value;
+  const method = document.getElementById('payment-method').value;
+  const total = parseFloat(document.getElementById('final-total').textContent);
+  const paidAmount = parseFloat(document.getElementById('paid-amount').value) || 0;
+  const unpaidAmount = parseFloat(document.getElementById('unpaid-amount').value) || 0;
+
+  if (!custName || !date || total === 0) {
+    alert('Please fill all details and add items');
+    return false;
+  }
+
+  // Reduce stock for each item
+  const invoiceItems = [];
+  const rows = Array.from(document.querySelectorAll('#items-body tr'));
+  
+  for (const tr of rows) {
+    const select = tr.querySelector('.product-select');
+    const productId = select.value;
+    const qty = parseInt(tr.querySelector('.qty').value);
+    const price = tr.querySelector('.price').value;
+    const customName = tr.querySelector('.custom-product-name');
+    
+    let productName = 'Unknown';
+    if (productId === 'other') {
+      productName = customName.value || 'Custom Product';
+    } else {
+      const selectedOption = select.options[select.selectedIndex];
+      productName = selectedOption ? selectedOption.text : 'Unknown';
+    }
+    
+    // Reduce stock only for actual products
+    if (productId && productId !== 'other') {
+      if (!await reduceStock(parseInt(productId), qty)) {
+        alert('Cannot complete sale - insufficient stock');
+        return null;
+      }
+    }
+    
+    invoiceItems.push({
+      productId: productId,
+      productName: productName,
+      qty: qty,
+      price: price
+    });
+  }
+
+  if (invoiceItems.length === 0) {
+    alert('No valid items in invoice');
+    return false;
+  }
+
+  const invoice = {
+    id: Date.now(),
+    date,
+    customer: custName,
+    address: custAddr,
+    method,
+    total,
+    paidAmount,
+    unpaidAmount,
+    items: invoiceItems,
+    user: currentUser,
+    savedDate: new Date().toISOString()
+  };
+
+  invoices.push(invoice);
+  
+  // Save invoice to Supabase
+  if (supabase && currentUser) {
+    try {
+      const invoicesTable = supabase.from('invoices');
+      invoicesTable.insertData = [{
+        invoice_date: date,
+        customer_name: custName,
+        customer_address: custAddr,
+        payment_method: method,
+        total_amount: total,
+        paid_amount: paidAmount,
+        unpaid_amount: unpaidAmount,
+        items: invoiceItems,
+        user_email: currentUser,
+        created_at: new Date().toISOString()
+      }];
+      const result = await invoicesTable.execute();
+      if (result.error) throw result.error;
+      console.log('Invoice saved to Supabase! Total: ' + total.toFixed(2));
+    } catch (error) {
+      console.error('Error saving invoice to Supabase:', error);
+      // Still save to localStorage as backup
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(invoices));
+    }
+  } else {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(invoices));
+  }
+  
+  // Save to user-specific localStorage
+  saveDataToLocalStorage();
+  
+  console.log('Invoice saved! Total: ' + total.toFixed(2));
+  clearForm();
+  updateDashboard();
+  loadConsumers();
+  return true;
+}
+
+function clearForm() {
+  const custName = document.getElementById('cust-name');
+  const custAddr = document.getElementById('cust-addr');
+  const itemsBody = document.getElementById('items-body');
+  const invoiceDate = document.getElementById('invoice-date');
+  const paidAmount = document.getElementById('paid-amount');
+  const itemSearch = document.getElementById('item-search');
+  const categoryFilter = document.getElementById('item-category-filter');
+  
+  if (custName) custName.value = '';
+  if (custAddr) custAddr.value = '';
+  if (itemsBody) itemsBody.innerHTML = '';
+  items = [];
+  if (itemsBody) addItem();
+  if (paidAmount) paidAmount.value = '';
+  if (itemSearch) itemSearch.value = '';
+  if (categoryFilter) categoryFilter.value = '';
+  calcTotal();
+  if (invoiceDate) invoiceDate.valueAsDate = new Date();
+}
+
+// Dashboard
+function updateDashboard() {
+  const total = getTotalRevenue();
+  const count = invoices.length;
+  const avg = count > 0 ? total / count : 0;
+  const thisMonth = getMonthRevenue();
+
+  const safeSetText = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  };
+
+  safeSetText('total-revenue', total.toFixed(2));
+  safeSetText('total-invoices', count);
+  safeSetText('month-revenue', thisMonth.toFixed(2));
+  safeSetText('avg-invoice', avg.toFixed(2));
+  safeSetText('admin-total-invoices', count);
+  safeSetText('admin-total-revenue', total.toFixed(2));
+  safeSetText('admin-avg-invoice', avg.toFixed(2));
+
+  // Recent transactions
+  const recent = invoices.slice(-5).reverse();
+  let html = '';
+  recent.forEach(inv => {
+    html += `<tr><td>${inv.date}</td><td>${inv.customer}</td><td>${inv.total.toFixed(2)}</td><td>${inv.method}</td></tr>`;
+  });
+  const recentBody = document.getElementById('recent-body');
+  if (recentBody) recentBody.innerHTML = html;
+
+  // Invoice history
+  html = '';
+  invoices.forEach(inv => {
+    html += `<tr><td>${inv.date}</td><td>${inv.customer}</td><td>${inv.total.toFixed(2)}</td><td>${inv.method}</td><td><button class="delete-btn" onclick="deleteInvoice(${inv.id})">Delete</button></td></tr>`;
+  });
+  const invoicesBody = document.getElementById('invoices-body');
+  if (invoicesBody) invoicesBody.innerHTML = html;
+}
+
+function getTotalRevenue() {
+  return invoices.reduce((sum, inv) => sum + inv.total, 0);
+}
+
+function getMonthRevenue() {
+  const now = new Date();
+  const month = now.getMonth();
+  const year = now.getFullYear();
+  return invoices.filter(inv => {
+    const invDate = new Date(inv.date);
+    return invDate.getMonth() === month && invDate.getFullYear() === year;
+  }).reduce((sum, inv) => sum + inv.total, 0);
+}
+
+async function deleteInvoice(id) {
+  if (confirm('Delete this invoice?')) {
+    invoices = invoices.filter(inv => inv.id !== id);
+    saveDataToLocalStorage();
+    
+    // Delete from Supabase
+    if (supabase && currentUser) {
+      try {
+        const deleteUrl = `${supabase.url}/rest/v1/invoices?id=eq.${id}`;
+        const deleteResponse = await fetch(deleteUrl, {
+          method: 'DELETE',
+          headers: {
+            'apikey': supabase.key
+          }
+        });
+        
+        if (!deleteResponse.ok) {
+          throw new Error('Failed to delete invoice');
+        }
+        console.log('Invoice deleted from Supabase');
+      } catch (error) {
+        console.error('Error deleting invoice from Supabase:', error);
+        // Still update localStorage as backup
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(invoices));
+      }
+    } else {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(invoices));
+    }
+    
+    updateDashboard();
+  }
+}
+
+// Search User Data (Admin Only)
+function searchUserData() {
+  const searchInput = document.getElementById('search-user-input').value.toLowerCase().trim();
+  const searchResultsTable = document.getElementById('search-results-table');
+  const searchResultsBody = document.getElementById('search-results-body');
+  const noResultsMessage = document.getElementById('no-results-message');
+
+  if (!searchInput) {
+    searchResultsTable.style.display = 'none';
+    noResultsMessage.style.display = 'none';
+    return;
+  }
+
+  // Filter invoices by customer name
+  const results = invoices.filter(inv => 
+    inv.customer.toLowerCase().includes(searchInput)
+  );
+
+  if (results.length === 0) {
+    searchResultsTable.style.display = 'none';
+    noResultsMessage.style.display = 'block';
+    return;
+  }
+
+  // Display results
+  let html = '';
+  results.forEach(inv => {
+    html += `<tr><td>${inv.date}</td><td>${inv.customer}</td><td>${inv.address}</td><td>${inv.total.toFixed(2)}</td><td>${inv.method}</td></tr>`;
+  });
+
+  searchResultsBody.innerHTML = html;
+  searchResultsTable.style.display = 'table';
+  noResultsMessage.style.display = 'none';
+}
+
+// ============================================
+// BACKUP FUNCTIONS
+// ============================================
+
+// Download JSON backup
+function downloadBackupJSON() {
+  const backupData = {
+    exportDate: new Date().toISOString(),
+    userEmail: currentUser,
+    shopName: shopName,
+    invoices: invoices,
+    products: products,
+    consumers: consumers
+  };
+  
+  const dataStr = JSON.stringify(backupData, null, 2);
+  const dataBlob = new Blob([dataStr], { type: 'application/json' });
+  const url = URL.createObjectURL(dataBlob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `backup_${currentUser}_${new Date().getTime()}.json`;
+  link.click();
+  URL.revokeObjectURL(url);
+  
+  alert('✅ Backup downloaded! File name: backup_' + currentUser + '_' + new Date().getTime() + '.json');
+}
+
+// Download CSV backup
+function downloadBackupCSV() {
+  let csv = 'Backup Date,User Email,Shop Name\n';
+  csv += `"${new Date().toISOString()}","${currentUser}","${shopName}"\n\n`;
+  
+  csv += '=== INVOICES ===\n';
+  csv += 'Date,Customer,Address,Total,Paid,Unpaid,Method\n';
+  invoices.forEach(inv => {
+    csv += `"${inv.date}","${inv.customer}","${inv.address}",${inv.total},${inv.paidAmount || 0},${inv.unpaidAmount || 0},"${inv.method}"\n`;
+  });
+  
+  csv += '\n=== PRODUCTS ===\n';
+  csv += 'Code,Name,Description,Price,Stock,Category\n';
+  products.forEach(p => {
+    csv += `"${p.code}","${p.name}","${p.description || ''}",${p.price},${p.stock},"${p.category || ''}"\n`;
+  });
+  
+  const dataBlob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(dataBlob);
+  link.setAttribute('href', url);
+  link.setAttribute('download', `backup_${currentUser}_${new Date().getTime()}.csv`);
+  link.click();
+  URL.revokeObjectURL(url);
+  
+  alert('✅ CSV Backup downloaded!');
+}
+
+// Send backup to Gmail
+async function sendBackupToGmail() {
+  const gmailEmail = prompt('📧 Enter your Gmail address to receive the backup:');
+  if (!gmailEmail || !gmailEmail.includes('@')) {
+    alert('❌ Please enter a valid email address');
+    return;
+  }
+  
+  // Create backup content
+  const backupData = {
+    exportDate: new Date().toISOString(),
+    userEmail: currentUser,
+    shopName: shopName,
+    invoices: invoices,
+    products: products,
+    invoiceCount: invoices.length,
+    productCount: products.length,
+    totalRevenue: invoices.reduce((sum, inv) => sum + inv.total, 0).toFixed(2)
+  };
+  
+  const emailBody = `
+Backup Report - ${new Date().toLocaleDateString()}
+
+Account: ${currentUser}
+Shop Name: ${shopName}
+Backup Date: ${backupData.exportDate}
+
+=== SUMMARY ===
+Total Invoices: ${backupData.invoiceCount}
+Total Products: ${backupData.productCount}
+Total Revenue: ${backupData.totalRevenue}
+
+=== JSON DATA ===
+${JSON.stringify(backupData, null, 2)}
+
+This is an automated backup email from your Billing System.
+Keep this email for your records.
+  `;
+  
+  try {
+    // Option 1: Using fetch to send via backend email service
+    // For now, we'll create a downloadable backup and show instructions
+    
+    const backupText = emailBody;
+    const subject = `Billing System Backup - ${currentUser} - ${new Date().toLocaleDateString()}`;
+    
+    // Gmail compose link (user opens Gmail and attaches file manually)
+    const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(gmailEmail)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent('Please see attached backup or copy-paste the data below:\n\n' + backupText)}`;
+    
+    // Show helpful dialog
+    const usePrecomposed = confirm(`
+📧 Open Gmail to send backup?
+
+Method 1: Click OK to open Gmail compose window (recommended)
+Method 2: Click Cancel to copy backup text to clipboard
+
+Either way, you can manually email the backup to yourself.
+    `);
+    
+    if (usePrecomposed) {
+      // Open Gmail
+      window.open(gmailComposeUrl, '_blank');
+      alert('✅ Gmail window opened! Compose a new email to ' + gmailEmail + ' and include your backup data.');
+    } else {
+      // Copy to clipboard
+      await navigator.clipboard.writeText(backupText);
+      alert('✅ Backup copied to clipboard!\n\nOpen Gmail and paste it into an email to ' + gmailEmail);
+    }
+    
+  } catch (error) {
+    console.error('Backup error:', error);
+    alert('❌ Error preparing backup: ' + error.message);
+  }
+}
+
+// ============================================
+// MOBILE SYNC & CLOUD BACKUP
+// ============================================
+
+// Generate mobile sync QR code
+async function generateMobileSyncQR() {
+  // Create sync data (compressed JSON)
+  const syncData = {
+    u: currentUser, // email
+    s: shopName,
+    i: invoices,
+    p: products,
+    t: new Date().getTime()
+  };
+  
+  const dataStr = JSON.stringify(syncData);
+  const encodedData = btoa(dataStr); // Base64 encode for URL safety
+  
+  // Create sync URL (could be hosted or use data URL)
+  const syncUrl = window.location.href.split('?')[0].split('#')[0] + 
+    '?sync=' + encodedData;
+  
+  // Generate QR code using qrserver.com API
+  const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + 
+    encodeURIComponent(syncUrl);
+  
+  const displayDiv = document.getElementById('mobile-sync-display');
+  const qrContainer = document.getElementById('qr-code-container');
+  const linkText = document.getElementById('sync-link-text');
+  
+  // Show QR code
+  qrContainer.innerHTML = `
+    <p style="font-weight: bold; margin-bottom: 10px;">📱 Scan with Mobile Phone:</p>
+    <img src="${qrUrl}" alt="Mobile Sync QR Code" style="max-width: 300px; border: 2px solid #667eea; border-radius: 8px;">
+  `;
+  
+  linkText.innerHTML = `
+    <strong>Sync Link:</strong><br>
+    <small>${syncUrl}</small>
+  `;
+  
+  displayDiv.style.display = 'block';
+  
+  alert('✅ QR Code generated! Scan with your mobile phone to sync data.\n\nOr copy the link below and open on mobile.');
+}
+
+// Generate cloud storage backup link
+function generateCloudBackupLink() {
+  const backupData = {
+    exportDate: new Date().toISOString(),
+    userEmail: currentUser,
+    shopName: shopName,
+    invoices: invoices,
+    products: products,
+    totalInvoices: invoices.length,
+    totalProducts: products.length,
+    totalRevenue: invoices.reduce((sum, inv) => sum + inv.total, 0).toFixed(2)
+  };
+  
+  const dataStr = JSON.stringify(backupData);
+  const encodedData = btoa(dataStr);
+  
+  const backupUrl = window.location.href.split('?')[0].split('#')[0] + 
+    '?backup=' + encodedData;
+  
+  const displayDiv = document.getElementById('mobile-sync-display');
+  const qrContainer = document.getElementById('qr-code-container');
+  const linkText = document.getElementById('sync-link-text');
+  
+  // Generate QR code for backup link
+  const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + 
+    encodeURIComponent(backupUrl);
+  
+  qrContainer.innerHTML = `
+    <p style="font-weight: bold; margin-bottom: 10px;">☁️ Backup Link QR Code:</p>
+    <img src="${qrUrl}" alt="Cloud Backup QR Code" style="max-width: 300px; border: 2px solid #f39c12; border-radius: 8px;">
+  `;
+  
+  linkText.innerHTML = `
+    <strong>Cloud Backup Link:</strong><br>
+    <small>${backupUrl}</small><br><br>
+    <em>Share this link or scan QR code to view/restore data on any device.</em>
+  `;
+  
+  displayDiv.style.display = 'block';
+  
+  alert('✅ Cloud backup link generated!\n\nShare this link or QR code to access data from any device.');
+}
+
+// Copy sync link to clipboard
+async function copySyncLink() {
+  const linkText = document.getElementById('sync-link-text').innerHTML;
+  const urlMatch = linkText.match(/href="([^"]+)"|sync=[^<]+|backup=[^<]+/);
+  
+  if (urlMatch && urlMatch[0].includes('sync') || urlMatch[0].includes('backup')) {
+    const fullUrl = window.location.href.split('?')[0].split('#')[0] + 
+      urlMatch[0].replace(/[^?=&a-zA-Z0-9]/g, '');
+    
+    try {
+      await navigator.clipboard.writeText(fullUrl);
+      alert('✅ Sync link copied to clipboard!');
+    } catch (err) {
+      alert('❌ Failed to copy: ' + err.message);
+    }
+  }
+}
+
+// Load sync data from URL parameter
+function loadSyncDataFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  
+  if (params.has('sync')) {
+    try {
+      const syncData = JSON.parse(atob(params.get('sync')));
+      invoices = syncData.i || [];
+      products = syncData.p || [];
+      shopName = syncData.s || 'Your Shop';
+      currentUser = syncData.u;
+      
+      saveDataToLocalStorage();
+      updateDashboard();
+      updateProductsTable();
+      
+      alert('✅ Data synced successfully from mobile!');
+      // Remove the sync parameter from URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } catch (error) {
+      console.error('Sync error:', error);
+    }
+  }
+  
+  if (params.has('backup')) {
+    try {
+      const backupData = JSON.parse(atob(params.get('backup')));
+      
+      let html = `
+        <div style="padding: 20px; background: white; border-radius: 8px; max-width: 600px; margin: 20px auto;">
+          <h2>📦 Cloud Backup Data</h2>
+          <p><strong>User:</strong> ${backupData.userEmail}</p>
+          <p><strong>Shop:</strong> ${backupData.shopName}</p>
+          <p><strong>Backup Date:</strong> ${new Date(backupData.exportDate).toLocaleString()}</p>
+          <p><strong>Total Invoices:</strong> ${backupData.totalInvoices}</p>
+          <p><strong>Total Products:</strong> ${backupData.totalProducts}</p>
+          <p><strong>Total Revenue:</strong> ${backupData.totalRevenue}</p>
+          <button onclick="importBackupData('${btoa(JSON.stringify(backupData))}')" style="background: #27ae60; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+            ✅ Restore This Backup
+          </button>
+        </div>
+      `;
+      
+      alert('Backup data loaded! Review below and click "Restore This Backup" to import.');
+      document.body.insertAdjacentHTML('afterbegin', html);
+    } catch (error) {
+      console.error('Backup load error:', error);
+    }
+  }
+}
+
+// Import backup data
+function importBackupData(encodedData) {
+  try {
+    const backupData = JSON.parse(atob(encodedData));
+    
+    if (confirm('⚠️ This will replace your current data with the backup.\n\nContinue?')) {
+      invoices = backupData.invoices || [];
+      products = backupData.products || [];
+      shopName = backupData.shopName || 'Your Shop';
+      currentUser = backupData.userEmail;
+      
+      saveDataToLocalStorage();
+      updateDashboard();
+      updateProductsTable();
+      
+      alert('✅ Backup restored successfully!');
+    }
+  } catch (error) {
+    alert('❌ Error restoring backup: ' + error.message);
+  }
+}
+
+// Export Functions
+function exportToCSV() {
+  let csv = 'Date,Customer,Address,Total,Method\n';
+  invoices.forEach(inv => {
+    csv += `${inv.date},"${inv.customer}","${inv.address}",${inv.total},${inv.method}\n`;
+  });
+  
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `invoices_${new Date().getTime()}.csv`;
+  a.click();
+}
+
+async function exportToPDF() {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
+  let y = 10;
+  
+  pdf.setFontSize(16);
+  pdf.text('Invoice Report', 10, y);
+  y += 15;
+  
+  pdf.setFontSize(10);
+  pdf.text(`Total Revenue: ${getTotalRevenue().toFixed(2)}`, 10, y);
+  y += 10;
+  pdf.text(`Total Invoices: ${invoices.length}`, 10, y);
+  y += 15;
+  
+  pdf.setFontSize(9);
+  pdf.text('Date | Customer | Amount | Method', 10, y);
+  y += 8;
+  
+  invoices.forEach(inv => {
+    pdf.text(`${inv.date} | ${inv.customer} | ${inv.total.toFixed(2)} | ${inv.method}`, 10, y);
+    y += 7;
+    if (y > 270) {
+      pdf.addPage();
+      y = 10;
+    }
+  });
+  
+  pdf.save(`report_${new Date().getTime()}.pdf`);
+}
+
+function resetData() {
+  if (confirm('This will delete ALL data. Are you sure?')) {
+    localStorage.removeItem(STORAGE_KEY);
+    invoices = [];
+    updateDashboard();
+    alert('Data cleared!');
+  }
+}
+
+// ============================================
+// PRODUCTS MANAGEMENT
+// ============================================
+var products = [];
+const PRODUCTS_KEY = 'billing_products_v1';
+
+// Load products from Supabase
+async function loadProducts() {
+  // If Supabase sync is disabled, just load from localStorage
+  if (!USE_SUPABASE_SYNC) {
+    const saved = localStorage.getItem(PRODUCTS_KEY);
+    if (saved) {
+      products = JSON.parse(saved);
+      updateProductsTable();
+      updateLowStockAlert();
+      updateBillingProductSelect();
+    }
+    return;
+  }
+  
+  if (!supabase || !currentUser) {
+    // Fallback to localStorage
+    const saved = localStorage.getItem(PRODUCTS_KEY);
+    if (saved) {
+      products = JSON.parse(saved);
+      updateProductsTable();
+      updateLowStockAlert();
+      updateBillingProductSelect();
+    }
+    return;
+  }
+
+  try {
+    const productsTable = supabase.from('products');
+    productsTable.filters = [`user_email=eq.${currentUser}`];
+    const productsResult = await productsTable.execute();
+
+    if (productsResult.data && !productsResult.error) {
+      products = productsResult.data.map(p => ({
+        id: p.id,
+        code: p.product_code,
+        name: p.product_name,
+        description: p.description,
+        price: p.price,
+        stock: p.stock_quantity,
+        category: p.category,
+        user: p.user_email,
+        savedDate: p.created_at
+      }));
+      updateProductsTable();
+      updateLowStockAlert();
+      updateBillingProductSelect();
+    } else if (productsResult.error) {
+      console.warn('⚠️ Products table error:', productsResult.error);
+      // Fallback to localStorage
+      const saved = localStorage.getItem(PRODUCTS_KEY);
+      if (saved) {
+        products = JSON.parse(saved);
+      } else {
+        products = [];
+      }
+    }
+  } catch (error) {
+    console.warn('⚠️ Could not load products table:', error.message);
+    // Fallback to localStorage
+    const saved = localStorage.getItem(PRODUCTS_KEY);
+    if (saved) {
+      products = JSON.parse(saved);
+    } else {
+      products = [];
+    }
+  }
+}
+
+// Add new product
+async function addProduct() {
+  const name = document.getElementById('product-name').value.trim();
+  const code = document.getElementById('product-code').value.trim();
+  const desc = document.getElementById('product-desc').value.trim();
+  const price = parseFloat(document.getElementById('product-price').value);
+  const stock = parseInt(document.getElementById('product-stock').value);
+  const category = document.getElementById('product-category').value.trim();
+
+  if (!name || !code || !price || stock < 0) {
+    alert('Please fill all required fields');
+    return;
+  }
+
+  // Check if product code already exists
+  if (products.find(p => p.code.toLowerCase() === code.toLowerCase())) {
+    alert('Product code already exists!');
+    return;
+  }
+
+  const product = {
+    id: Date.now(),
+    code: code,
+    name: name,
+    description: desc,
+    price: price,
+    stock: stock,
+    category: category,
+    user: currentUser,
+    created: new Date().toISOString()
+  };
+
+  products.push(product);
+  
+  // Save to Supabase first
+  if (supabase && currentUser) {
+    try {
+      const productsTable = supabase.from('products');
+      productsTable.insertData = [{
+        user_email: currentUser,
+        product_code: code,
+        product_name: name,
+        description: desc,
+        price: price,
+        stock_quantity: stock,
+        category: category,
+        created_at: new Date().toISOString()
+      }];
+      const result = await productsTable.execute();
+      if (result.error) throw result.error;
+      console.log('Product saved to Supabase');
+    } catch (error) {
+      console.error('Error saving product to Supabase:', error);
+      // Still save to localStorage as backup
+      localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+    }
+  } else {
+    localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+  }
+  
+  alert('✅ Product added successfully!');
+  clearProductForm();
+  updateProductsTable();
+  updateLowStockAlert();
+  updateBillingProductSelect();
+}
+
+// Delete product
+async function deleteProduct(productId) {
+  if (!confirm('Delete this product?')) return;
+  
+  products = products.filter(p => p.id !== productId);
+  
+  // Delete from Supabase
+  if (supabase && currentUser) {
+    try {
+      const deleteUrl = `${supabase.url}/rest/v1/products?id=eq.${productId}`;
+      const deleteResponse = await fetch(deleteUrl, {
+        method: 'DELETE',
+        headers: {
+          'apikey': supabase.key
+        }
+      });
+      
+      if (!deleteResponse.ok) {
+        throw new Error('Failed to delete product');
+      }
+      console.log('Product deleted from Supabase');
+    } catch (error) {
+      console.error('Error deleting product from Supabase:', error);
+      // Still save to localStorage as backup
+      localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+    }
+  } else {
+    localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+  }
+  
+  saveDataToLocalStorage();
+  updateProductsTable();
+  updateLowStockAlert();
+  updateBillingProductSelect();
+}
+
+// Update stock after sale
+async function reduceStock(productId, quantitySold) {
+  const product = products.find(p => p.id === productId);
+  if (!product) return false;
+
+  if (product.stock < quantitySold) {
+    alert('❌ Insufficient stock for ' + product.name);
+    return false;
+  }
+
+  product.stock -= quantitySold;
+  
+  // Update in Supabase
+  if (supabase && currentUser) {
+    try {
+      const updateUrl = `${supabase.url}/rest/v1/products?id=eq.${productId}`;
+      const updateResponse = await fetch(updateUrl, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': supabase.key
+        },
+        body: JSON.stringify({ stock_quantity: product.stock })
+      });
+      
+      if (!updateResponse.ok) {
+        throw new Error('Failed to update stock');
+      }
+      console.log('Stock updated in Supabase');
+    } catch (error) {
+      console.error('Error updating stock in Supabase:', error);
+      // Still save to localStorage as backup
+      localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+    }
+  } else {
+    localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+  }
+  
+  updateProductsTable();
+  updateLowStockAlert();
+  return true;
+}
+
+// Update products table
+function updateProductsTable() {
+  const productsBody = document.getElementById('products-body');
+  const noProductsMsg = document.getElementById('no-products-message');
+
+  if (products.length === 0) {
+    productsBody.innerHTML = '';
+    noProductsMsg.style.display = 'block';
+    return;
+  }
+
+  noProductsMsg.style.display = 'none';
+  let html = '';
+  products.forEach(p => {
+    const stockStatus = p.stock > 10 ? '✅' : p.stock > 0 ? '⚠️' : '❌';
+    html += `<tr>
+      <td><strong>${p.code}</strong></td>
+      <td>${p.name}</td>
+      <td>${p.price.toFixed(2)}</td>
+      <td>${stockStatus} ${p.stock}</td>
+      <td>${p.category || 'N/A'}</td>
+      <td>
+        <button class="delete-btn" onclick="deleteProduct(${p.id})">Delete</button>
+      </td>
+    </tr>`;
+  });
+  productsBody.innerHTML = html;
+}
+
+// Update low stock alert
+function updateLowStockAlert() {
+  const lowStockBody = document.getElementById('low-stock-body');
+  const noLowStockMsg = document.getElementById('no-low-stock-message');
+
+  const lowStockProducts = products.filter(p => p.stock <= 10);
+
+  if (lowStockProducts.length === 0) {
+    lowStockBody.innerHTML = '';
+    noLowStockMsg.style.display = 'block';
+    return;
+  }
+
+  noLowStockMsg.style.display = 'none';
+  let html = '';
+  lowStockProducts.forEach(p => {
+    const needed = 20 - p.stock;
+    html += `<tr style="background: #ffe0e0;">
+      <td><strong>${p.name}</strong></td>
+      <td style="color: #e74c3c; font-weight: bold;">${p.stock}</td>
+      <td>20</td>
+      <td style="color: #e74c3c; font-weight: bold;">+${needed}</td>
+    </tr>`;
+  });
+  lowStockBody.innerHTML = html;
+}
+
+// Update product select in billing section
+function updateBillingProductSelect() {
+  const productSelects = document.querySelectorAll('.product-select');
+  productSelects.forEach(select => {
+    const currentValue = select.value;
+    let html = '<option value="">Select product...</option>';
+    products.forEach(p => {
+      const disabled = p.stock === 0 ? 'disabled' : '';
+      html += `<option value="${p.id}" data-price="${p.price}" data-stock="${p.stock}" data-category="${p.category || 'Uncategorized'}" ${disabled}>
+        ${p.name} (Stock: ${p.stock}) - ${p.category || 'Uncategorized'}
+      </option>`;
+    });
+    html += '<option value="other" data-price="0" data-stock="unlimited">➕ Other (Custom Product)</option>';
+    select.innerHTML = html;
+    select.value = currentValue;
+  });
+  updateCategoryFilter();
+}
+
+// Clear product form
+function clearProductForm() {
+  document.getElementById('product-name').value = '';
+  document.getElementById('product-code').value = '';
+  document.getElementById('product-desc').value = '';
+  document.getElementById('product-price').value = '';
+  document.getElementById('product-stock').value = '';
+  document.getElementById('product-category').value = '';
+}
+
+// Update billing shop name from billing section
+function updateBillingShopName() {
+  const shopNameInput = document.getElementById('billing-shop-name').value.trim();
+  if (!shopNameInput) {
+    alert('Please enter a shop name');
+    return;
+  }
+  
+  shopName = shopNameInput;
+  
+  // Also update in admin settings
+  document.getElementById('shop-name-input').value = shopName;
+  
+  // Save to Supabase
+  if (supabase && currentUser) {
+    (async () => {
+      try {
+        const checkTable = supabase.from('shop_settings');
+        checkTable.filters = [`user_email=eq.${currentUser}`];
+        checkTable.isSingle = true;
+        const existing = await checkTable.execute();
+        
+        if (existing.data) {
+          const updateUrl = `${supabase.url}/rest/v1/shop_settings?user_email=eq.${currentUser}`;
+          await fetch(updateUrl, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': supabase.key
+            },
+            body: JSON.stringify({ shop_name: shopName })
+          });
+        } else {
+          const insertTable = supabase.from('shop_settings');
+          insertTable.insertData = [{ user_email: currentUser, shop_name: shopName }];
+          await insertTable.execute();
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    })();
+  }
+  
+  localStorage.setItem(SHOP_NAME_KEY, shopName);
+  document.getElementById('current-shop-name').textContent = shopName;
+  document.getElementById('bill-shop-name').textContent = shopName;
+  document.getElementById('billing-shop-name').value = '';
+  alert('✅ Shop name updated!');
+}
+
+// ============================================
+// CONSUMERS MANAGEMENT
+// ============================================
+var consumers = {}; // Object to store unique customers with their data
+
+// Load and build consumers list from invoices
+function loadConsumers() {
+  consumers = {};
+  
+  invoices.forEach(invoice => {
+    const custKey = invoice.customer.toLowerCase();
+    
+    if (!consumers[custKey]) {
+      consumers[custKey] = {
+        name: invoice.customer,
+        address: invoice.address,
+        invoices: [],
+        totalPurchased: 0,
+        totalUnpaid: 0,
+        lastInvoiceDate: invoice.date
+      };
+    }
+    
+    consumers[custKey].invoices.push(invoice);
+    consumers[custKey].totalPurchased += invoice.total;
+    consumers[custKey].totalUnpaid += (invoice.unpaidAmount || 0);
+    
+    // Update last invoice date if this one is newer
+    if (new Date(invoice.date) > new Date(consumers[custKey].lastInvoiceDate)) {
+      consumers[custKey].lastInvoiceDate = invoice.date;
+    }
+  });
+  
+  updateConsumersTable();
+}
+
+// Update consumers table display
+function updateConsumersTable() {
+  const consumersBody = document.getElementById('consumers-body');
+  const noConsumersMsg = document.getElementById('no-consumers-message');
+  
+  const consumersList = Object.values(consumers);
+  
+  if (consumersList.length === 0) {
+    consumersBody.innerHTML = '';
+    noConsumersMsg.style.display = 'block';
+    return;
+  }
+  
+  noConsumersMsg.style.display = 'none';
+  let html = '';
+  
+  consumersList.forEach(consumer => {
+    const unpaidStatus = consumer.totalUnpaid > 0 ? `<span style="color: #e74c3c; font-weight: bold;">${consumer.totalUnpaid.toFixed(2)}</span>` : '<span style="color: #27ae60;">✅ 0.00</span>';
+    
+    html += `<tr>
+      <td><strong>${consumer.name}</strong></td>
+      <td>${consumer.address}</td>
+      <td style="font-weight: bold; color: #667eea;">${consumer.totalPurchased.toFixed(2)}</td>
+      <td>${consumer.lastInvoiceDate}</td>
+      <td>${unpaidStatus}</td>
+      <td><button class="delete-btn" onclick="showConsumerDetails('${consumer.name}')" style="background: #3498db; color: white;">View</button></td>
+    </tr>`;
+  });
+  
+  consumersBody.innerHTML = html;
+}
+
+// Show consumer details modal
+function showConsumerDetails(customerName) {
+  const custKey = customerName.toLowerCase();
+  const consumer = consumers[custKey];
+  
+  if (!consumer) {
+    alert('Consumer not found');
+    return;
+  }
+  
+  // Update modal with consumer data
+  document.getElementById('consumer-modal-title').textContent = `Consumer Details - ${consumer.name}`;
+  document.getElementById('modal-customer-name').textContent = consumer.name;
+  document.getElementById('modal-customer-address').textContent = consumer.address;
+  document.getElementById('modal-total-purchases').textContent = consumer.totalPurchased.toFixed(2);
+  document.getElementById('modal-unpaid-amount').textContent = consumer.totalUnpaid.toFixed(2);
+  document.getElementById('modal-unpaid-amount').style.color = consumer.totalUnpaid > 0 ? '#e74c3c' : '#27ae60';
+  
+  // Update invoices table
+  let invoicesHtml = '';
+  consumer.invoices.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(invoice => {
+    const itemsText = invoice.items.map(item => `${item.productName} (${item.qty})`).join(', ');
+    invoicesHtml += `<tr>
+      <td>${invoice.date}</td>
+      <td>${invoice.total.toFixed(2)}</td>
+      <td style="color: #27ae60; font-weight: bold;">${invoice.paidAmount.toFixed(2)}</td>
+      <td style="color: ${invoice.unpaidAmount > 0 ? '#e74c3c' : '#27ae60'}; font-weight: bold;">${invoice.unpaidAmount.toFixed(2)}</td>
+      <td>${invoice.method}</td>
+      <td style="font-size: 12px;">${itemsText}</td>
+    </tr>`;
+  });
+  
+  document.getElementById('consumer-invoices-body').innerHTML = invoicesHtml;
+  document.getElementById('consumer-details-modal').classList.add('show');
+}
+
+// Close consumer details modal
+function closeConsumerModal() {
+  document.getElementById('consumer-details-modal').classList.remove('show');
+}
+
+// Search consumers by name
+function searchConsumers() {
+  const searchTerm = document.getElementById('consumer-search').value.toLowerCase().trim();
+  const consumersBody = document.getElementById('consumers-body');
+  const noConsumersMsg = document.getElementById('no-consumers-message');
+  
+  if (!searchTerm) {
+    updateConsumersTable();
+    return;
+  }
+  
+  const filtered = Object.values(consumers).filter(c => 
+    c.name.toLowerCase().includes(searchTerm) || 
+    c.address.toLowerCase().includes(searchTerm)
+  );
+  
+  if (filtered.length === 0) {
+    consumersBody.innerHTML = '';
+    noConsumersMsg.style.display = 'block';
+    noConsumersMsg.textContent = 'No consumers match your search.';
+    return;
+  }
+  
+  noConsumersMsg.style.display = 'none';
+  let html = '';
+  
+  filtered.forEach(consumer => {
+    const unpaidStatus = consumer.totalUnpaid > 0 ? `<span style="color: #e74c3c; font-weight: bold;">${consumer.totalUnpaid.toFixed(2)}</span>` : '<span style="color: #27ae60;">✅ 0.00</span>';
+    
+    html += `<tr>
+      <td><strong>${consumer.name}</strong></td>
+      <td>${consumer.address}</td>
+      <td style="font-weight: bold; color: #667eea;">${consumer.totalPurchased.toFixed(2)}</td>
+      <td>${consumer.lastInvoiceDate}</td>
+      <td>${unpaidStatus}</td>
+      <td><button class="delete-btn" onclick="showConsumerDetails('${consumer.name}')" style="background: #3498db; color: white;">View</button></td>
+    </tr>`;
+  });
+  
+  consumersBody.innerHTML = html;
+}
+
+// Search by product ID
+function searchByProductId() {
+  const productIdSearch = document.getElementById('product-id-search').value.toLowerCase().trim();
+  const consumersBody = document.getElementById('consumers-body');
+  const noConsumersMsg = document.getElementById('no-consumers-message');
+  
+  if (!productIdSearch) {
+    updateConsumersTable();
+    return;
+  }
+  
+  const filtered = Object.values(consumers).filter(consumer => 
+    consumer.invoices.some(invoice => 
+      invoice.items.some(item => {
+        const productId = String(item.productId || '').toLowerCase();
+        const productName = (item.productName || '').toLowerCase();
+        return productId.includes(productIdSearch) || productName.includes(productIdSearch);
+      })
+    )
+  );
+  
+  if (filtered.length === 0) {
+    consumersBody.innerHTML = '';
+    noConsumersMsg.style.display = 'block';
+    noConsumersMsg.textContent = 'No consumers found with this product ID.';
+    return;
+  }
+  
+  noConsumersMsg.style.display = 'none';
+  let html = '';
+  
+  filtered.forEach(consumer => {
+    const unpaidStatus = consumer.totalUnpaid > 0 ? `<span style="color: #e74c3c; font-weight: bold;">${consumer.totalUnpaid.toFixed(2)}</span>` : '<span style="color: #27ae60;">✅ 0.00</span>';
+    
+    html += `<tr>
+      <td><strong>${consumer.name}</strong></td>
+      <td>${consumer.address}</td>
+      <td style="font-weight: bold; color: #667eea;">${consumer.totalPurchased.toFixed(2)}</td>
+      <td>${consumer.lastInvoiceDate}</td>
+      <td>${unpaidStatus}</td>
+      <td><button class="delete-btn" onclick="showConsumerDetails('${consumer.name}')" style="background: #3498db; color: white;">View</button></td>
+    </tr>`;
+  });
+  
+  consumersBody.innerHTML = html;
+}
+
+// Clear consumer search
+function clearConsumerSearch() {
+  document.getElementById('consumer-search').value = '';
+  document.getElementById('product-id-search').value = '';
+  updateConsumersTable();
+}
+
+// Initialize after DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() {
+    loadData();
+    loadProducts();
+    const itemsBody = document.getElementById('items-body');
+    if (itemsBody && itemsBody.children.length === 0) {
+      clearForm();
+    }
+    updateUsersTable();
+    // Load billing shop name from current shop name
+    const billingShopNameInput = document.getElementById('billing-shop-name');
+    if (billingShopNameInput) {
+      billingShopNameInput.placeholder = 'Current: ' + shopName;
+    }
+  });
+} else {
+  loadData();
+  const itemsBody = document.getElementById('items-body');
+  if (itemsBody && itemsBody.children.length === 0) {
+    clearForm();
+  }
+  updateUsersTable();
+  // Load billing shop name from current shop name
+  const billingShopNameInput = document.getElementById('billing-shop-name');
+  if (billingShopNameInput) {
+    billingShopNameInput.placeholder = 'Current: ' + shopName;
+  }
+}
+</script>
+
+</body>
+</html>
