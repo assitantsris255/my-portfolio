@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Billing System - Supabase</title>
   <style>
+    :root { --paper-width: 58mm; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: Arial, sans-serif; background: #f5f5f5; color: #333; }
     
@@ -143,13 +144,22 @@
     
     /* Print Styles */
     @media print {
-      body { background: white; }
+      * { margin: 0; padding: 0; }
+      html, body { 
+        background: white; 
+        margin: 0; 
+        padding: 0;
+        width: var(--paper-width);
+        height: auto;
+      }
+      @page { margin: 0; padding: 0; }
       header, .sidebar, .controls, .delete-btn, .menu-toggle { display: none; }
-      .main-content { padding: 0; width: 50mm; }
+      .main-content { padding: 0; margin: 0; width: var(--paper-width); }
       table { width: 100%; }
       th, td { padding: 3px; font-size: 8px; }
-      .invoice-preview { page-break-after: always; width: 50mm; padding: 5px; }
+      .invoice-preview { page-break-after: always; width: var(--paper-width); padding: 2px; margin: 0; box-sizing: border-box; }
     }
+    
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -327,6 +337,10 @@
       </div>
 
       <div class="controls">
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <label for="paper-width" style="font-weight: bold; font-size: 14px;">Paper Width (mm):</label>
+          <input type="number" id="paper-width" min="30" max="100" value="58" step="1" style="width: 80px; padding: 8px; border: 2px solid #667eea; border-radius: 4px; font-size: 14px;" onchange="updatePaperWidth()" />
+        </div>
         <button onclick="generateInvoice()" style="background: #27ae60;">Print Invoice</button>
         <button onclick="saveInvoice()" style="background: #667eea;">Save & Complete</button>
         <button onclick="clearForm()" style="background: #95a5a6;">Clear</button>
@@ -598,7 +612,7 @@
 <div id="print-modal" class="modal">
   <div class="modal-content" style="position: relative;">
     <button class="modal-close" onclick="closePrintModal()">×</button>
-    <div id="invoice-preview" class="invoice-preview" style="width: 50mm; margin: 0 auto; font-size: 8px; line-height: 1.1;"></div>
+    <div id="invoice-preview" class="invoice-preview" style="width: var(--paper-width); margin: 0 auto; font-size: 8px; line-height: 1.1;"></div>
     <div class="controls" style="margin-top: 15px; text-align: center;">
       <button onclick="printInvoice()" style="background: #27ae60;">Print</button>
       <button onclick="downloadInvoicePDF()" style="background: #3498db;">Download PDF</button>
@@ -1813,6 +1827,7 @@ function generateInvoice() {
   const total = parseFloat(document.getElementById('final-total').textContent);
   const paidAmount = parseFloat(document.getElementById('paid-amount').value) || 0;
   const unpaidAmount = parseFloat(document.getElementById('unpaid-amount').value) || 0;
+  const paperWidth = document.getElementById('paper-width').value || '58';
 
   let itemsHtml = '';
   document.querySelectorAll('#items-body tr').forEach((row, idx) => {
@@ -1835,24 +1850,31 @@ function generateInvoice() {
   });
 
   const preview = `
-    <div style="width: 65mm; padding: 8px; font-family: Arial; font-size: 14px; line-height: 1.6; border: 2px solid #000;">
-      <div style="text-align: center; font-weight: bold; margin-bottom: 4px; font-size: 18px;">${shopName}</div>
-      <div style="text-align: center; font-weight: bold; margin-bottom: 4px; font-size: 16px;">INVOICE</div>
-      <div style="font-size: 13px; font-weight: bold; margin-bottom: 2px;">Date: ${date}</div>
-      <div style="font-size: 13px; font-weight: bold; margin-bottom: 2px;">Customer: ${custName}</div>
-      <div style="font-size: 13px; font-weight: bold; margin-bottom: 4px;">${custAddr}</div>
-      <hr style="margin: 4px 0; border: none; border-top: 2px solid #000;">
-      <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 4px;">
-        <tr style="border-bottom: 2px solid #000;"><th style="padding: 4px; text-align: center; font-weight: bold;">#</th><th style="padding: 4px; font-weight: bold;">Product</th><th style="padding: 4px; text-align: center; font-weight: bold;">Qty</th><th style="padding: 4px; text-align: right; font-weight: bold;">Price</th><th style="padding: 4px; text-align: right; font-weight: bold;">Total</th></tr>
+    <div style="width: ${paperWidth}mm; padding: 3px 2px; margin: 0; font-family: Arial; font-size: 12px; line-height: 1.4; border: 2px solid #000; overflow-x: hidden; box-sizing: border-box;">
+      <div style="text-align: center; font-weight: bold; margin-bottom: 2px; font-size: 14px; word-wrap: break-word;">${shopName}</div>
+      <div style="text-align: center; font-weight: bold; margin-bottom: 2px; font-size: 12px;">INVOICE</div>
+      <div style="font-size: 10px; font-weight: bold; margin-bottom: 1px;">Date: ${date}</div>
+      <div style="font-size: 10px; font-weight: bold; margin-bottom: 1px;">Customer: ${custName}</div>
+      <div style="font-size: 10px; font-weight: bold; margin-bottom: 2px; word-wrap: break-word;">${custAddr}</div>
+      <hr style="margin: 2px 0; border: none; border-top: 1px solid #000;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 9px; margin-bottom: 2px; table-layout: fixed;">
+        <colgroup>
+          <col style="width: 12%;">
+          <col style="width: 35%;">
+          <col style="width: 12%;">
+          <col style="width: 18%;">
+          <col style="width: 23%;">
+        </colgroup>
+        <tr style="border-bottom: 1px solid #000;"><th style="padding: 2px; text-align: center; font-weight: bold; overflow: hidden; white-space: nowrap;">#</th><th style="padding: 2px; font-weight: bold; overflow: hidden;">Prod</th><th style="padding: 2px; text-align: center; font-weight: bold; overflow: hidden; white-space: nowrap;">Qty</th><th style="padding: 2px; text-align: right; font-weight: bold; overflow: hidden; white-space: nowrap;">Price</th><th style="padding: 2px; text-align: right; font-weight: bold; overflow: hidden; white-space: nowrap;">Total</th></tr>
         ${itemsHtml}
       </table>
-      <hr style="margin: 4px 0; border: none; border-top: 2px solid #000;">
-      <div style="text-align: right; font-weight: bold; font-size: 15px; margin: 4px 0;">Total: ${total.toFixed(2)}</div>
-      <div style="text-align: right; font-weight: bold; font-size: 12px; margin: 2px 0;">Paid: ${paidAmount.toFixed(2)}</div>
-      <div style="text-align: right; font-weight: bold; font-size: 12px; margin: 4px 0; color: #d63031;">Unpaid: ${unpaidAmount.toFixed(2)}</div>
-      <div style="font-size: 12px; font-weight: bold; margin-top: 4px;">Method: ${method}</div>
-      <hr style="margin: 4px 0; border: none; border-top: 2px solid #000;">
-      <div style="font-size: 12px; font-weight: bold; text-align: center;">Thank You!</div>
+      <hr style="margin: 2px 0; border: none; border-top: 1px solid #000;">
+      <div style="text-align: right; font-weight: bold; font-size: 11px; margin: 2px 0; word-wrap: break-word;">Total: ${total.toFixed(2)}</div>
+      <div style="text-align: right; font-weight: bold; font-size: 9px; margin: 1px 0; word-wrap: break-word;">Paid: ${paidAmount.toFixed(2)}</div>
+      <div style="text-align: right; font-weight: bold; font-size: 9px; margin: 2px 0; color: #d63031; word-wrap: break-word;">Unpaid: ${unpaidAmount.toFixed(2)}</div>
+      <div style="font-size: 9px; font-weight: bold; margin-top: 2px; word-wrap: break-word;">Method: ${method}</div>
+      <hr style="margin: 2px 0; border: none; border-top: 1px solid #000;">
+      <div style="font-size: 9px; font-weight: bold; text-align: center;">Thank You!</div>
     </div>
   `;
 
@@ -1864,28 +1886,62 @@ function printInvoice() {
   // Auto-save invoice before printing
   saveInvoice();
   
+  const paperWidth = document.getElementById('paper-width').value || '58';
   const preview = document.getElementById('invoice-preview').innerHTML;
   const w = window.open('', '_blank');
-  w.document.write(`<html><head><style>body{width:50mm;margin:0;padding:5px;font-family:Arial;}</style></head><body>${preview}</body></html>`);
+  w.document.write(`
+    <html>
+      <head>
+        <style>
+          * { margin: 0; padding: 0; }
+          html, body { 
+            width: ${paperWidth}mm; 
+            height: auto; 
+            margin: 0; 
+            padding: 0; 
+            font-family: Arial, sans-serif;
+            background: white;
+          }
+          @page { 
+            margin: 0; 
+            padding: 0;
+            size: ${paperWidth}mm auto;
+          }
+          body { 
+            margin: 0 !important; 
+            padding: 0 !important; 
+          }
+        </style>
+      </head>
+      <body>${preview}</body>
+    </html>
+  `);
   w.document.close();
-  w.print();
+  setTimeout(() => w.print(), 100);
 }
 
 async function downloadInvoicePDF() {
   // Auto-save invoice before downloading
   saveInvoice();
   
+  const paperWidth = parseFloat(document.getElementById('paper-width').value) || 58;
   const element = document.getElementById('invoice-preview');
   const canvas = await html2canvas(element, { scale: 2, backgroundColor: '#fff' });
   const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF({ unit: 'mm', format: [50, 70] });
+  const pdf = new jsPDF({ unit: 'mm', format: [paperWidth, 100] });
   const imgData = canvas.toDataURL('image/png');
-  pdf.addImage(imgData, 'PNG', 0, 0, 50, 70);
+  pdf.addImage(imgData, 'PNG', 0, 0, paperWidth, 100);
   pdf.save(`invoice_${new Date().getTime()}.pdf`);
 }
 
 function closePrintModal() {
   document.getElementById('print-modal').classList.remove('show');
+}
+
+function updatePaperWidth() {
+  const width = document.getElementById('paper-width').value || '58';
+  document.documentElement.style.setProperty('--paper-width', width + 'mm');
+  document.getElementById('invoice-preview').style.width = width + 'mm';
 }
 
 // Save Invoice
