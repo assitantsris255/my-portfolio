@@ -1,532 +1,237 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>My Skills — Dipak (Responsive)</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills | Dipak Bhandari | Software innovator</title>
+    <link rel="stylesheet" href="global.css">
+    <link rel="icon" type="image/jpg" href="Photo/My.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .skills-hero { padding: 160px 0 60px; text-align: center; }
+        .skills-hero h1 { font-size: 3.5rem; }
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-48XX9CYZ0D"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-48XX9CYZ0D');
-</script>
-  <style>
-    :root{
-      --bg: #071026;
-      --panel: #0b1220;
-      --muted: #9aa4b2;
-      --text: #e6eef6;
-      --accent: #60A5FA;
-      --accent-2: #6EE7B7;
-      --glass: rgba(255,255,255,0.03);
-      --radius:12px;
-      --max:1100px;
-      --ff: "Poppins",system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-      --t:.28s;
-    }
-    :root.light{
-      --bg:#f6f8fb;
-      --panel:#ffffff;
-      --muted:#556270;
-      --text:#0b1220;
-      --accent:#0b84ff;
-      --accent-2:#06b6d4;
-      --glass: rgba(0,0,0,0.04);
-    }
-
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;padding:0}
-    body{
-      font-family:var(--ff);
-      background:
-        radial-gradient(800px 300px at 10% 8%, rgba(96,165,250,0.03), transparent 6%),
-        var(--bg);
-      color:var(--text);
-      padding:18px;
-      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-      transition:background var(--t), color var(--t);
-    }
-
-    .wrap{ max-width:var(--max); margin:0 auto; }
-
-    /* INDEX-LIKE HEADER */
-    .site-header{ margin-bottom:18px; position:sticky; top:12px; z-index:1400; }
-    .header-inner{
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      padding:12px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-      border:1px solid var(--glass); backdrop-filter: blur(6px);
-    }
-    .brand{ display:flex; gap:12px; align-items:center; }
-    .brand svg{ display:block }
-    .brand h1{ font-size:16px; margin:0; font-weight:700; color:var(--accent-2); letter-spacing:.6px; }
-
-    nav.main-nav{ display:flex; gap:12px; align-items:center; }
-    nav.main-nav a{ color:var(--muted); text-decoration:none; padding:8px 10px; border-radius:8px; font-weight:600; }
-    nav.main-nav a:hover, nav.main-nav a.active{ color:var(--text); background: rgba(255,255,255,0.02); transform:translateY(-3px); transition:transform .18s; }
-
-    .header-controls{ display:flex; gap:8px; align-items:center; }
-    .btn{ background:var(--panel); color:var(--text); border:1px solid var(--glass); padding:8px 10px; border-radius:8px; cursor:pointer; font-weight:600; }
-    .btn:active{ transform:translateY(1px) }
-
-    .menu-btn{ display:none; width:44px; height:44px; border-radius:10px; background:var(--panel); border:1px solid var(--glass); align-items:center; justify-content:center; cursor:pointer; }
-    .menu-btn .bar{ width:20px; height:2px; background:var(--muted); margin:3px 0; display:block; transition:transform .28s,opacity .28s; }
-    .menu-btn.open .bar:nth-child(1){ transform: translateY(5px) rotate(45deg); }
-    .menu-btn.open .bar:nth-child(2){ opacity:0; transform:scaleX(.3); }
-    .menu-btn.open .bar:nth-child(3){ transform: translateY(-5px) rotate(-45deg); }
-
-    .mobile-nav{
-      position:fixed; left:12px; right:12px; top:78px; max-height:0; overflow:hidden;
-      background:var(--panel); border-radius:12px; border:1px solid var(--glass);
-      box-shadow:0 18px 40px rgba(2,6,23,0.45); transition:max-height .36s, padding .2s; z-index:1300;
-    }
-    .mobile-nav.open{ max-height:420px; padding:12px; }
-    .mobile-nav a{ display:block; padding:12px; border-radius:10px; color:var(--text); text-decoration:none; margin-bottom:8px; }
-
-    .mobile-controls{ display:flex; gap:8px; margin-top:8px; }
-    .mobile-controls a, .mobile-controls button{ flex:1; padding:8px; border-radius:8px; border:1px solid var(--glass); background:transparent; color:var(--text); text-align:center; }
-
-    /* TOOLBAR */
-    .toolbar{ display:flex; gap:12px; align-items:center; margin-bottom:14px; flex-wrap:wrap; }
-    .input{ padding:10px 12px; border-radius:8px; border:1px solid var(--glass); background:var(--panel); color:var(--text); min-width:220px; }
-    .select{ padding:10px 12px; border-radius:8px; border:1px solid var(--glass); background:var(--panel); color:var(--text); }
-
-    /* GRID & CARDS */
-    main.grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:14px; }
-    .card{ background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent); padding:12px; border-radius:12px; border:1px solid var(--glass); position:relative; overflow:hidden; }
-    .actions{ position:absolute; right:10px; top:10px; display:flex; gap:6px; z-index:2; }
-    .icon-btn{ background:transparent; border:none; color:var(--muted); cursor:pointer; padding:6px; border-radius:8px; }
-    .icon-btn:hover{ color:var(--text); background:rgba(255,255,255,0.02) }
-
-    h3{ margin:6px 0 8px 0; font-size:16px }
-    .tag{ background:rgba(255,255,255,0.02); padding:4px 8px; border-radius:999px; color:var(--muted); font-weight:600; font-size:12px; margin-left:8px; }
-
-    .meta{ display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:13px; margin-bottom:8px }
-    .progress-bar{ width:100%; height:12px; background:rgba(255,255,255,0.02); border-radius:8px; overflow:hidden; border:1px solid var(--glass); }
-    .progress{ height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); width:0%; display:flex; align-items:center; justify-content:flex-end; padding-right:8px; color:#06202b; font-weight:700; transition:width .9s cubic-bezier(.2,.9,.2,1); }
-
-    .tooltip{ position:absolute; left:12px; bottom:12px; background:rgba(0,0,0,0.7); color:#fff; padding:6px 8px; border-radius:6px; font-size:12px; opacity:0; pointer-events:none; transform:translateY(6px); transition:opacity .18s, transform .18s; }
-
-    /* FOOTER */
-    footer.site{ margin-top:18px; padding:12px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid var(--glass); display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
-    .social a{ display:inline-grid; place-items:center; width:40px; height:40px; border-radius:8px; background:var(--panel); color:var(--muted); text-decoration:none; border:1px solid var(--glass); }
-
-    /* MODAL */
-    .modal-backdrop{ position:fixed; inset:0; display:none; place-items:center; background:rgba(2,6,23,0.6); z-index:1600; }
-    .modal-backdrop.open{ display:grid; }
-    .modal{ background:var(--panel); color:var(--text); padding:18px; border-radius:12px; width:min(520px, 92%); border:1px solid var(--glass); }
-
-    /* Responsive */
-    @media (max-width:880px){
-      .menu-btn{ display:inline-grid }
-      nav.main-nav{ display:none }
-    }
-
-    @media (max-width:520px){
-      .toolbar{ flex-direction:column; align-items:stretch }
-      .input, .select{ width:100% }
-      .brand h1{ font-size:14px }
-    }
-  </style>
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+        .skill-card {
+            padding: 40px 30px;
+            text-align: center;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+        }
+        .skill-card i {
+            font-size: 3rem;
+            color: var(--accent-primary);
+            margin-bottom: 20px;
+        }
+        .skill-card h3 { font-size: 1.5rem; margin-bottom: 15px; }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--border);
+            border-radius: 99px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-primary);
+            width: 0;
+            transition: width 1.5s ease-out;
+        }
+        .reveal.visible .progress-fill {
+            width: var(--percent);
+        }
+    </style>
 </head>
 <body>
-  <div class="wrap">
-    <header class="site-header reveal" id="topbar">
-      <div class="header-inner">
-        <div class="brand">
-          <button id="menuBtn" class="menu-btn" aria-label="Toggle menu" aria-expanded="false">
-            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
-          </button>
-
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden focusable="false">
-            <circle cx="12" cy="12" r="10" fill="#7c5cff"/><path d="M7 12h10" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-          <h1>Dipak — Skills</h1>
-        </div>
-
-        <nav id="mainNav" class="main-nav" aria-label="primary">
-          <a href="index.html">Home</a>
-          <a href="about.html">About</a>
-          <a href="skills.html" class="active">Skills</a>
-          <a href="blog.html">Blogs</a>
-          <a href="contact.html">Contact</a>
+    <div id="scrollProgress"></div>
+    <header class="site-header glass">
+        <a href="index.html" class="logo">DIPAK<span class="gradient-text">.</span></a>
+        <nav class="main-nav">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="skills.html" class="active">Skills</a>
+            <a href="projects.html">Projects</a>
+            <a href="blog.html">Blogs</a>
+            <a href="contact.html">Contact</a>
         </nav>
-
-        <div class="header-controls">
-          <button id="exportCsv" class="btn" title="Export CSV"><i class="fa fa-file-csv" aria-hidden="true"></i>&nbsp;Export CSV</button>
-          <button id="toggleTheme" class="btn" title="Toggle theme"><i id="themeIcon" class="fa fa-moon"></i>&nbsp;<span id="themeLabel">Dark</span></button>
+        <div class="header-actions">
+            <button id="themeToggle" class="icon-btn"><i class="fas fa-moon"></i></button>
+            <a href="Dipak_Bhandari_Professional_CV.pdf" download class="btn btn-outline" style="padding: 8px 16px;">CV</a>
+            <a href="contact.html" class="btn btn-primary" style="padding: 8px 16px;">Hire Me</a>
+            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
         </div>
-      </div>
-
-      <nav id="mobileNav" class="mobile-nav" aria-hidden="true">
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="skills.html" class="active">Skills</a>
-        <a href="blog.html">Blogs</a>
-        <a href="contact.html">Contact</a>
-
-        <div class="mobile-controls">
-          <a href="tel:+9779826414389" title="Call"><i class="fa fa-phone"></i> Call</a>
-          <a href="mailto:diwashb32@gmail.com" title="Email"><i class="fa fa-envelope"></i> Email</a>
-          <button id="mobileThemeBtn" title="Toggle theme"><i class="fa fa-moon"></i> Theme</button>
-        </div>
-      </nav>
     </header>
 
-    <div class="toolbar reveal" id="toolbar">
-      <div class="search">
-        <input id="search" class="input" placeholder="Search skill (e.g., JavaScript)" aria-label="Search skills" />
-      </div>
+    <main class="container">
+        <section class="skills-hero reveal">
+            <h1 class="gradient-text">Technical Skills</h1>
+            <p style="color: var(--text-secondary); max-width: 600px; margin: 20px auto 0;">A breakdown of my expertise in various programming languages, frameworks, and tools.</p>
+        </section>
 
-      <select id="filter" class="select" aria-label="Filter by range">
-        <option value="all">All levels</option>
-        <option value="80">80%+</option>
-        <option value="70">70%+</option>
-        <option value="60">60%+</option>
-      </select>
+        <div class="skills-grid">
+            <div class="skill-card glass glass-hover reveal" style="--percent: 95%;">
+                <i class="fab fa-html5"></i>
+                <h3>HTML/CSS</h3>
+                <p style="color: var(--text-secondary);">Expert in semantic HTML and modern CSS layouts like Flexbox and Grid.</p>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
 
-      <select id="sort" class="select" aria-label="Sort skills">
-        <option value="default">Default</option>
-        <option value="level-desc">Level: High → Low</option>
-        <option value="level-asc">Level: Low → High</option>
-        <option value="name-asc">Name A → Z</option>
-      </select>
-    </div>
+            <div class="skill-card glass glass-hover reveal" style="--percent: 85%;">
+                <i class="fab fa-js"></i>
+                <h3>JavaScript</h3>
+                <p style="color: var(--text-secondary);">Proficient in ES6+, DOM manipulation, and asynchronous programming.</p>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
 
-    <main id="grid" class="grid" aria-live="polite">
-      <!-- cards (unchanged markup from user's file) -->
-      <article class="card skill" data-name="HTML" data-level="90">
-        <div class="actions">
-          <button class="icon-btn" data-action="info" title="Details">ℹ</button>
-          <button class="icon-btn" data-action="copy" title="Copy">📋</button>
+            <div class="skill-card glass glass-hover reveal" style="--percent: 80%;">
+                <i class="fab fa-react"></i>
+                <h3>React / Next.js</h3>
+                <p style="color: var(--text-secondary);">Building scalable and performant single-page applications.</p>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
+
+            <div class="skill-card glass glass-hover reveal" style="--percent: 75%;">
+                <i class="fab fa-php"></i>
+                <h3>PHP / Laravel</h3>
+                <p style="color: var(--text-secondary);">Experience in building dynamic backends and REST APIs.</p>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
+
+            <div class="skill-card glass glass-hover reveal" style="--percent: 70%;">
+                <i class="fas fa-database"></i>
+                <h3>SQL / NoSQL</h3>
+                <p style="color: var(--text-secondary);">Designing and managing relational and document databases.</p>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
+
+            <div class="skill-card glass glass-hover reveal" style="--percent: 90%;">
+                <i class="fab fa-python"></i>
+                <h3>Python</h3>
+                <p style="color: var(--text-secondary);">Using Python for automation, data analysis, and AI projects.</p>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
+
+            <div class="skill-card glass glass-hover reveal" style="--percent: 85%;">
+                <i class="fab fa-java"></i>
+                <h3>Java</h3>
+                <p style="color: var(--text-secondary);">Building robust enterprise applications and Android apps.</p>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
+
+            <div class="skill-card glass glass-hover reveal" style="--percent: 80%;">
+                <i class="fas fa-code"></i>
+                <h3>C / C++</h3>
+                <p style="color: var(--text-secondary);">Deep understanding of memory management and system architecture.</p>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
         </div>
-        <h3>HTML <span class="tag">Markup</span></h3>
-        <div class="meta"><span>Level</span><strong>90%</strong></div>
-        <div class="progress-bar"><div class="progress" aria-valuenow="0"><span>0%</span></div></div>
-        <div class="tooltip" aria-hidden="true">Copied</div>
-      </article>
 
-      <article class="card skill" data-name="CSS" data-level="85">
-        <div class="actions">
-          <button class="icon-btn" data-action="info">ℹ</button>
-          <button class="icon-btn" data-action="copy">📋</button>
-        </div>
-        <h3>CSS <span class="tag">Styling</span></h3>
-        <div class="meta"><span>Level</span><strong>85%</strong></div>
-        <div class="progress-bar"><div class="progress" aria-valuenow="0"><span>0%</span></div></div>
-        <div class="tooltip" aria-hidden="true">Copied</div>
-      </article>
-
-      <article class="card skill" data-name="JavaScript" data-level="80">
-        <div class="actions">
-          <button class="icon-btn" data-action="info">ℹ</button>
-          <button class="icon-btn" data-action="copy">📋</button>
-        </div>
-        <h3>JavaScript <span class="tag">Frontend</span></h3>
-        <div class="meta"><span>Level</span><strong>80%</strong></div>
-        <div class="progress-bar"><div class="progress" aria-valuenow="0"><span>0%</span></div></div>
-        <div class="tooltip" aria-hidden="true">Copied</div>
-      </article>
-
-      <article class="card skill" data-name="React" data-level="75">
-        <div class="actions">
-          <button class="icon-btn" data-action="info">ℹ</button>
-          <button class="icon-btn" data-action="copy">📋</button>
-        </div>
-        <h3>React <span class="tag">Library</span></h3>
-        <div class="meta"><span>Level</span><strong>75%</strong></div>
-        <div class="progress-bar"><div class="progress" aria-valuenow="0"><span>0%</span></div></div>
-        <div class="tooltip" aria-hidden="true">Copied</div>
-      </article>
-
-      <article class="card skill" data-name="Node.js" data-level="70">
-        <div class="actions">
-          <button class="icon-btn" data-action="info">ℹ</button>
-          <button class="icon-btn" data-action="copy">📋</button>
-        </div>
-        <h3>Node.js <span class="tag">Backend</span></h3>
-        <div class="meta"><span>Level</span><strong>70%</strong></div>
-        <div class="progress-bar"><div class="progress" aria-valuenow="0"><span>0%</span></div></div>
-        <div class="tooltip" aria-hidden="true">Copied</div>
-      </article>
-
-      <article class="card skill" data-name="Mobile app development" data-level="80">
-        <div class="actions">
-          <button class="icon-btn" data-action="info">ℹ</button>
-          <button class="icon-btn" data-action="copy">📋</button>
-        </div>
-        <h3>Mobile app development <span class="tag">Flutter</span></h3>
-        <div class="meta"><span>Level</span><strong>80%</strong></div>
-        <div class="progress-bar"><div class="progress" aria-valuenow="0"><span>0%</span></div></div>
-        <div class="tooltip" aria-hidden="true">Copied</div>
-      </article>
-
-      <article class="card skill" data-name="C programming" data-level="60">
-        <div class="actions">
-          <button class="icon-btn" data-action="info">ℹ</button>
-          <button class="icon-btn" data-action="copy">📋</button>
-        </div>
-        <h3>C programming <span class="tag">Systems</span></h3>
-        <div class="meta"><span>Level</span><strong>60%</strong></div>
-        <div class="progress-bar"><div class="progress" aria-valuenow="0"><span>0%</span></div></div>
-        <div class="tooltip" aria-hidden="true">Copied</div>
-      </article>
-
-      <article class="card skill" data-name="C++" data-level="59">
-        <div class="actions">
-          <button class="icon-btn" data-action="info">ℹ</button>
-          <button class="icon-btn" data-action="copy">📋</button>
-        </div>
-        <h3>C++ <span class="tag">OOP</span></h3>
-        <div class="meta"><span>Level</span><strong>59%</strong></div>
-        <div class="progress-bar"><div class="progress" aria-valuenow="0"><span>0%</span></div></div>
-        <div class="tooltip" aria-hidden="true">Copied</div>
-      </article>
-
-      <article class="card skill" data-name="Python" data-level="55">
-        <div class="actions">
-          <button class="icon-btn" data-action="info">ℹ</button>
-          <button class="icon-btn" data-action="copy">📋</button>
-        </div>
-        <h3>Python <span class="tag">Scripting</span></h3>
-        <div class="meta"><span>Level</span><strong>55%</strong></div>
-        <div class="progress-bar"><div class="progress" aria-valuenow="0"><span>0%</span></div></div>
-        <div class="tooltip" aria-hidden="true">Copied</div>
-      </article>
+        <section class="learning-section reveal" style="padding-top: 60px; border-top: 1px solid var(--border); margin-top: 20px; margin-bottom: 80px; text-align: center;">
+            <h2 class="gradient-text" style="font-size: 2.5rem; margin-bottom: 20px;">What I'm Learning</h2>
+            <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 40px;">Continuous growth is key. Here are the technologies and concepts I am currently focusing on:</p>
+            <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 20px;">
+                <div class="tag glass glass-hover" style="padding: 15px 30px; font-size: 1.1rem; border-radius: 99px; color: var(--text-primary); border: 1px solid var(--accent-primary); display: flex; align-items: center; gap: 10px;">
+                    <i class="fab fa-react" style="color: var(--accent-secondary);"></i> React
+                </div>
+                <div class="tag glass glass-hover" style="padding: 15px 30px; font-size: 1.1rem; border-radius: 99px; color: var(--text-primary); border: 1px solid var(--accent-primary); display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-layer-group" style="color: var(--text-secondary);"></i> Next.js
+                </div>
+                <div class="tag glass glass-hover" style="padding: 15px 30px; font-size: 1.1rem; border-radius: 99px; color: var(--text-primary); border: 1px solid var(--accent-primary); display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-project-diagram" style="color: var(--accent-primary);"></i> Data Structures & Algorithms
+                </div>
+                <div class="tag glass glass-hover" style="padding: 15px 30px; font-size: 1.1rem; border-radius: 99px; color: var(--text-primary); border: 1px solid var(--accent-primary); display: flex; align-items: center; gap: 10px;">
+                    <i class="fab fa-python" style="color: #f59e0b;"></i> Python
+                </div>
+            </div>
+        </section>
     </main>
 
-    <footer class="site reveal" id="foot">
-      <div>© 2025 Dipak Bhandari</div>
-      <div class="social" aria-label="social links">
-        <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-        <a href="https://www.instagram.com/diwash.bhandari/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-        <a href="https://github.com/assitantsris255" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
-      </div>
-      <div style="margin-top:8px;color:var(--muted);font-size:13px">Connect with me on social media</div>
+    <footer class="container">
+        <div class="footer-content">
+            <div class="footer-logo-desc">
+                <a href="#" class="logo">DIPAK<span class="gradient-text">.</span></a>
+                <p style="margin-top: 20px; color: var(--text-secondary);">Computer Engineering student building modern solutions for a digital world. Passionate about web development and software architecture.</p>
+                <div class="footer-social">
+                    <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" class="icon-btn"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://github.com/assitantsris255" target="_blank" class="icon-btn"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" class="icon-btn"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <div class="link-group">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="link-group">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><span style="color: var(--text-secondary);">Email: diwashb32@gmail.com</span></li>
+                        <li><span style="color: var(--text-secondary);">Location: Gulmi, Nepal</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Dipak Bhandari. All rights reserved.</p>
+        </div>
     </footer>
-  </div>
 
-  <!-- Modal -->
-  <div class="modal-backdrop" id="modal">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <h4 id="modalTitle">Skill details</h4>
-      <p id="modalText">Details go here</p>
-      <div style="text-align:right;margin-top:12px">
-        <button id="modalClose" class="btn">Close</button>
-      </div>
-    </div>
-  </div>
+    <script>
+        // Scroll Progress
+        window.onscroll = () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("scrollProgress").style.width = scrolled + "%";
+        };
 
-  <script>
-    // Theme toggle (persist + sync mobile)
-    (function(){
-      const desktopBtn = document.getElementById('toggleTheme') || document.getElementById('toggleTheme'); // kept for compatibility
-      const themeBtn = document.getElementById('toggleTheme') || document.getElementById('toggleTheme');
-      const mobileBtn = document.getElementById('mobileThemeBtn');
-      const themeIcon = document.getElementById('themeIcon');
-      const themeLabel = document.getElementById('themeLabel');
-      const root = document.documentElement;
-
-      const stored = localStorage.getItem('site-theme');
-      const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-      let current = stored || (prefersLight ? 'light' : 'dark');
-
-      function apply(mode){
-        if(mode === 'light'){
-          root.classList.add('light');
-          themeIcon.className = 'fa fa-sun';
-          themeLabel.textContent = 'Light';
-          mobileBtn?.setAttribute('aria-pressed','true');
-        } else {
-          root.classList.remove('light');
-          themeIcon.className = 'fa fa-moon';
-          themeLabel.textContent = 'Dark';
-          mobileBtn?.setAttribute('aria-pressed','false');
-        }
-      }
-      apply(current);
-
-      function toggle(){
-        current = (current === 'light') ? 'dark' : 'light';
-        localStorage.setItem('site-theme', current);
-        apply(current);
-      }
-
-      document.getElementById('toggleTheme')?.addEventListener('click', toggle);
-      mobileBtn?.addEventListener('click', toggle);
-    })();
-
-    // Mobile menu handling
-    (function(){
-      const menuBtn = document.getElementById('menuBtn');
-      const mobileNav = document.getElementById('mobileNav');
-      const mainNav = document.getElementById('mainNav');
-
-      function update(){
-        if(window.innerWidth <= 880){
-          menuBtn.style.display = 'inline-grid';
-          mainNav.style.display = 'none';
-        } else {
-          menuBtn.style.display = 'none';
-          mainNav.style.display = '';
-          mobileNav.classList.remove('open');
-          mobileNav.setAttribute('aria-hidden','true');
-          document.body.style.overflow = '';
-        }
-      }
-      update();
-      window.addEventListener('resize', update);
-
-      menuBtn.addEventListener('click', () => {
-        const open = menuBtn.classList.toggle('open');
-        mobileNav.classList.toggle('open', open);
-        mobileNav.setAttribute('aria-hidden', String(!open));
-        document.body.style.overflow = open ? 'hidden' : '';
-      });
-
-      document.addEventListener('click', (e) => {
-        if(window.innerWidth > 880) return;
-        if(!menuBtn.classList.contains('open')) return;
-        if(e.target.closest('.header-inner') || e.target.closest('.mobile-nav')) return;
-        menuBtn.classList.remove('open');
-        mobileNav.classList.remove('open');
-        mobileNav.setAttribute('aria-hidden','true');
-        document.body.style.overflow = '';
-      });
-    })();
-
-    // Utility: animate progress bars based on data-level
-    (function(){
-      const skills = document.querySelectorAll('.card.skill');
-      function animateAll(){
-        skills.forEach(card=>{
-          const level = Number(card.dataset.level || 0);
-          const prog = card.querySelector('.progress');
-          const span = prog.querySelector('span');
-          // animate width
-          requestAnimationFrame(()=> {
-            prog.style.width = level + '%';
-            prog.setAttribute('aria-valuenow', level);
-            span.textContent = level + '%';
-          });
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const mainNav = document.querySelector('.main-nav');
+        menuToggle.addEventListener('click', () => {
+            mainNav.classList.toggle('active');
+            menuToggle.innerHTML = mainNav.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
         });
-      }
-      window.addEventListener('load', animateAll);
-    })();
 
-    // Search / filter / sort
-    (function(){
-      const input = document.getElementById('search');
-      const filter = document.getElementById('filter');
-      const sort = document.getElementById('sort');
-      const grid = document.getElementById('grid');
-
-      function listSkills(){
-        return Array.from(grid.querySelectorAll('.card.skill'));
-      }
-
-      function applyFilters(){
-        const q = (input.value || '').toLowerCase().trim();
-        const min = filter.value === 'all' ? 0 : Number(filter.value);
-        listSkills().forEach(card=>{
-          const name = (card.dataset.name||'').toLowerCase();
-          const level = Number(card.dataset.level||0);
-          const matchesQ = !q || name.includes(q);
-          const matchesLevel = level >= min;
-          card.style.display = (matchesQ && matchesLevel) ? '' : 'none';
-        });
-        applySort();
-      }
-
-      function applySort(){
-        const mode = sort.value;
-        const items = listSkills().filter(c => c.style.display !== 'none');
-        let sorted = items.slice();
-        if(mode === 'level-desc') sorted.sort((a,b)=> Number(b.dataset.level)-Number(a.dataset.level));
-        else if(mode === 'level-asc') sorted.sort((a,b)=> Number(a.dataset.level)-Number(b.dataset.level));
-        else if(mode === 'name-asc') sorted.sort((a,b)=> a.dataset.name.localeCompare(b.dataset.name));
-        // append in order
-        sorted.forEach(n => grid.appendChild(n));
-      }
-
-      input.addEventListener('input', applyFilters);
-      filter.addEventListener('change', applyFilters);
-      sort.addEventListener('change', applySort);
-    })();
-
-    // Info modal & copy to clipboard & copied tooltip
-    (function(){
-      const modal = document.getElementById('modal');
-      const modalText = document.getElementById('modalText');
-      const modalClose = document.getElementById('modalClose');
-
-      document.addEventListener('click', (e) => {
-        const btn = e.target.closest('button[data-action], button.icon-btn[data-action]');
-        if(!btn) return;
-        const action = btn.dataset.action;
-        const card = btn.closest('.card.skill');
-        if(!card) return;
-        const name = card.dataset.name;
-        const level = card.dataset.level;
-        if(action === 'info'){
-          modalText.textContent = `${name} — proficiency ${level}%. Tags: ${card.querySelector('.tag')?.textContent || '—'}.`;
-          modal.classList.add('open');
+        const reveal = () => {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const revealTop = el.getBoundingClientRect().top;
+                const revealPoint = 150;
+                if (revealTop < windowHeight - revealPoint) {
+                    el.classList.add('visible');
+                }
+            });
         }
-        if(action === 'copy'){
-          const text = `${name}: ${level}%`;
-          navigator.clipboard?.writeText(text).then(()=> {
-            const tip = card.querySelector('.tooltip');
-            tip.textContent = 'Copied';
-            tip.style.opacity = '1'; tip.style.transform = 'translateY(0)';
-            setTimeout(()=>{ tip.style.opacity = '0'; tip.style.transform = 'translateY(6px)'; }, 900);
-          }).catch(()=> {
-            alert('Copy failed — your browser may not permit clipboard access.');
-          });
-        }
-      });
+        window.addEventListener('scroll', reveal);
+        window.addEventListener('load', reveal);
 
-      modalClose.addEventListener('click', ()=> modal.classList.remove('open'));
-      modal.addEventListener('click', (e)=> { if(e.target === modal) modal.classList.remove('open'); });
-      document.addEventListener('keydown', (e)=> { if(e.key === 'Escape') modal.classList.remove('open'); });
-    })();
-
-    // Export CSV of visible skills
-    (function(){
-      const btn = document.getElementById('exportCsv');
-      btn.addEventListener('click', ()=>{
-        const rows = [['Name','Level','Tag']];
-        document.querySelectorAll('.card.skill').forEach(card=>{
-          if(card.style.display === 'none') return;
-          const name = card.dataset.name || card.querySelector('h3')?.textContent || '';
-          const level = card.dataset.level || '';
-          const tag = card.querySelector('.tag')?.textContent || '';
-          // normalize name (strip the tag from h3 if present)
-          const cleanName = name.trim();
-          rows.push([cleanName, level, tag]);
+        const themeToggle = document.getElementById('themeToggle');
+        const root = document.documentElement;
+        themeToggle.addEventListener('click', () => {
+            root.classList.toggle('light');
+            const isLight = root.classList.contains('light');
+            themeToggle.innerHTML = isLight ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
         });
-        const csv = rows.map(r=> r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
-        const blob = new Blob([csv], {type:'text/csv'});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = 'skills.csv'; document.body.appendChild(a); a.click();
-        a.remove(); URL.revokeObjectURL(url);
-      });
-    })();
 
-    // Export: animate reveal sequence
-    (function(){
-      const reveals = document.querySelectorAll('.reveal');
-      window.addEventListener('load', ()=> {
-        reveals.forEach((el,i)=> setTimeout(()=> el.classList.add('visible'), i*80 + 120));
-      });
-    })();
-  </script>
+        if (localStorage.getItem('theme') === 'light') {
+            root.classList.add('light');
+            themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        }
+    </script>
 </body>
 </html>
