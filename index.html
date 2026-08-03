@@ -5,9 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dipak Bhandari | Software innovator</title>
     <link rel="stylesheet" href="global.css">
-    <link rel="icon" type="image/jpg" href="photo/My.jpg">
+    <link rel="icon" type="image/jpg" href="Photo/My.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -3;
+            opacity: 0.4;
+            transition: opacity var(--transition);
+        }
+        :root.light #bg-video {
+            opacity: 0.15;
+        }
+        #bg-video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at center, transparent 0%, var(--bg) 100%);
+            z-index: -2;
+            pointer-events: none;
+        }
+        
         .hero {
             min-height: 100vh;
             display: flex;
@@ -132,22 +157,41 @@
     </style>
 </head>
 <body>
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="Photo/vid.mp4" type="video/mp4">
+    </video>
+    <div id="bg-video-overlay"></div>
+
     <div id="scrollProgress"></div>
-    <header class="site-header glass">
-        <a href="index.html" class="logo">DIPAK<span class="gradient-text">.</span></a>
+    <header class="site-header glass-2050" id="mainHeader">
+        <div class="header-ambient-glow"></div>
+        <a href="index.html" class="brand-logo magnetic-el">
+            <div class="logo-icon orbit-2050">
+                <span class="orbit-ring"></span>
+                <span class="orbit-ring reverse"></span>
+                <span class="orbit-core pulse"></span>
+                <div class="cyan-particles"></div>
+            </div>
+            <span class="logo-text">DIPAK<span class="ai-pulse-dot">.</span></span>
+        </a>
+        
         <nav class="main-nav">
-            <a href="index.html" class="active">Home</a>
-            <a href="about.html">About</a>
-            <a href="skills.html">Skills</a>
-            <a href="projects.html">Projects</a>
-            <a href="blog.html">Blogs</a>
-            <a href="contact.html">Contact</a>
+            <div class="nav-capsule-bg"></div>
+            <a href="index.html" class="magnetic-el active"><span class="holographic-sweep"></span>Home</a>
+            <a href="about.html" class="magnetic-el"><span class="holographic-sweep"></span>About</a>
+            <a href="skills.html" class="magnetic-el"><span class="holographic-sweep"></span>Skills</a>
+            <a href="projects.html" class="magnetic-el"><span class="holographic-sweep"></span>Projects</a>
+            <a href="blog.html" class="magnetic-el"><span class="holographic-sweep"></span>Blogs</a>
+            <a href="contact.html" class="magnetic-el"><span class="holographic-sweep"></span>Contact</a>
         </nav>
+
         <div class="header-actions">
-            <button id="themeToggle" class="icon-btn"><i class="fas fa-moon"></i></button>
-            <a href="Dipak_Bhandari_Professional_CV.pdf" download class="btn btn-outline" style="padding: 8px 16px;">CV</a>
-            <a href="contact.html" class="btn btn-primary pulse-btn" style="padding: 8px 16px;">Hire Me</a>
-            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+            <a href="Dipak_Bhandari_Professional_CV.pdf" download class="magnetic-el crystal-btn">CV</a>
+            <a href="contact.html" class="magnetic-el aurora-btn">
+                <span class="aurora-bg"></span>
+                <span class="btn-text">Hire Me</span>
+            </a>
+            <button class="menu-toggle magnetic-el" id="menuToggle"><i class="fas fa-bars"></i></button>
         </div>
     </header>
 
@@ -163,8 +207,11 @@
                 </div>
                 <p>A Computer Engineering student and Computer Overseer passionate about building robust software solutions and modern web experiences.</p>
                 <div class="header-actions" style="margin-top: 20px;">
-                    <a href="projects.html" class="btn btn-primary">View My Work</a>
-                    <a href="Dipak_Bhandari_Professional_CV.pdf" download class="btn btn-outline"><i class="fas fa-download"></i> Download CV</a>
+                    <a href="projects.html" class="magnetic-el aurora-btn">
+                        <span class="aurora-bg"></span>
+                        <span class="btn-text">View My Work</span>
+                    </a>
+                    <a href="Dipak_Bhandari_Professional_CV.pdf" download class="magnetic-el crystal-btn"><i class="fas fa-download"></i> Download CV</a>
                 </div>
             </div>
             <div class="hero-image float-animation">
@@ -318,7 +365,14 @@
     <footer class="container">
         <div class="footer-content">
             <div class="footer-logo-desc">
-                <a href="#" class="logo">DIPAK<span class="gradient-text">.</span></a>
+                <a href="#" class="brand-logo">
+                    <div class="logo-icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <span class="logo-text">DIPAK<span class="gradient-dot">.</span></span>
+                </a>
                 <p style="margin-top: 20px; color: var(--text-secondary);">Computer Engineering student building modern solutions for a digital world. Passionate about web development and software architecture.</p>
                 <div class="footer-social">
                     <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" class="icon-btn"><i class="fab fa-facebook-f"></i></a>
@@ -350,7 +404,65 @@
         </div>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
     <script>
+        // Initialize Lenis Smooth Scroll
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // https://www.desmos.com/calculator/brs54l4xou
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+            infinite: false,
+        })
+        function raf(time) {
+            lenis.raf(time)
+            requestAnimationFrame(raf)
+        }
+        requestAnimationFrame(raf)
+
+        // Magnetic Cursor Effect using GSAP
+        const magnets = document.querySelectorAll('.magnetic-el');
+        magnets.forEach((magnet) => {
+            magnet.addEventListener('mousemove', function(e) {
+                const position = magnet.getBoundingClientRect();
+                const x = e.clientX - position.left - position.width / 2;
+                const y = e.clientY - position.top - position.height / 2;
+                
+                gsap.to(magnet, {
+                    x: x * 0.3,
+                    y: y * 0.3,
+                    duration: 0.8,
+                    ease: "power3.out"
+                });
+            });
+            magnet.addEventListener('mouseleave', function() {
+                gsap.to(magnet, {
+                    x: 0,
+                    y: 0,
+                    duration: 0.8,
+                    ease: "elastic.out(1, 0.3)"
+                });
+            });
+        });
+
+        // Header Scroll Animation
+        const header = document.getElementById('mainHeader');
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.scrollY;
+            if (currentScroll > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            lastScroll = currentScroll;
+        });
+
         // Scroll Progress
         window.onscroll = () => {
             const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
@@ -380,9 +492,6 @@
         }
         window.addEventListener('scroll', reveal);
         window.addEventListener('load', reveal);
-
-        const themeToggle = document.getElementById('themeToggle');
-        const root = document.documentElement;
 
         // Counter Animation
         const counters = document.querySelectorAll('.counter');
@@ -418,18 +527,6 @@
         }, observerOptions);
 
         if (statsSection) statsObserver.observe(statsSection);
-
-        themeToggle.addEventListener('click', () => {
-            root.classList.toggle('light');
-            const isLight = root.classList.contains('light');
-            themeToggle.innerHTML = isLight ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
-            localStorage.setItem('theme', isLight ? 'light' : 'dark');
-        });
-
-        if (localStorage.getItem('theme') === 'light') {
-            root.classList.add('light');
-            themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-        }
 
         // Typing Effect logic
         const typingText = document.getElementById('typing-text');
