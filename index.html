@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dipak Bhandari | Software innovator</title>
+    <link rel="stylesheet" href="global.css">
+    <link rel="icon" type="image/jpg" href="Photo/My.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -3;
+            opacity: 0.4;
+            transition: opacity var(--transition);
+        }
+        :root.light #bg-video {
+            opacity: 0.15;
+        }
+        #bg-video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at center, transparent 0%, var(--bg) 100%);
+            z-index: -2;
+            pointer-events: none;
+        }
+        
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 100px;
+            gap: 40px;
+        }
+        .hero-text h2 {
+            font-size: 1.2rem;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+        }
+        .hero-text h1 {
+            font-size: 5rem;
+            line-height: 1.1;
+            margin-bottom: 30px;
+        }
+        .hero-text p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 550px;
+            margin-bottom: 40px;
+        }
+
+        .hero-image {
+            position: relative;
+            width: 450px;
+            height: 450px;
+        }
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: var(--radius-lg);
+            border: 2px solid var(--border);
+            position: relative;
+            z-index: 2;
+        }
+        .hero-image::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: -20px;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--accent-primary);
+            border-radius: var(--radius-lg);
+            z-index: 1;
+        }
+
+        .featured-section {
+            padding: 100px 0;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 60px;
+        }
+        .section-header h2 { font-size: 2.5rem; }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+        }
+        .featured-card {
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .featured-img {
+            height: 300px;
+            overflow: hidden;
+        }
+        .featured-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        .featured-card:hover .featured-img img { transform: scale(1.05); }
+
+        .typing-container {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            height: 1.6em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+        }
+        .typing-text {
+            color: var(--accent-primary);
+            font-family: 'Outfit', sans-serif;
+        }
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.2em;
+            background-color: var(--accent-primary);
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            from, to { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        @media (max-width: 992px) {
+            .hero { flex-direction: column; text-align: center; justify-content: center; padding-top: 150px; }
+            .hero-text h1 { font-size: 3.5rem; }
+            .hero-text p { margin: 0 auto 40px; }
+            .hero-image { width: 300px; height: 300px; }
+            .featured-grid { grid-template-columns: 1fr; }
+            .typing-container { justify-content: center; font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="Photo/vid.mp4" type="video/mp4">
+    </video>
+    <div id="bg-video-overlay"></div>
+
+    <div id="scrollProgress"></div>
+    <header class="site-header glass-2050" id="mainHeader">
+        <div class="header-ambient-glow"></div>
+        <a href="index.html" class="brand-logo magnetic-el">
+            <div class="logo-icon orbit-2050">
+                <span class="orbit-ring"></span>
+                <span class="orbit-ring reverse"></span>
+                <span class="orbit-core pulse"></span>
+                <div class="cyan-particles"></div>
+            </div>
+            <span class="logo-text">DIPAK<span class="ai-pulse-dot">.</span></span>
+        </a>
+        
+        <nav class="main-nav">
+            <div class="nav-capsule-bg"></div>
+            <a href="index.html" class="magnetic-el active"><span class="holographic-sweep"></span>Home</a>
+            <a href="about.html" class="magnetic-el"><span class="holographic-sweep"></span>About</a>
+            <a href="skills.html" class="magnetic-el"><span class="holographic-sweep"></span>Skills</a>
+            <a href="projects.html" class="magnetic-el"><span class="holographic-sweep"></span>Projects</a>
+            <a href="blog.html" class="magnetic-el"><span class="holographic-sweep"></span>Blogs</a>
+            <a href="contact.html" class="magnetic-el"><span class="holographic-sweep"></span>Contact</a>
+        </nav>
+
+        <div class="header-actions">
+            <a href="Dipak_Bhandari_Professional_CV.pdf" download class="magnetic-el crystal-btn">CV</a>
+            <a href="contact.html" class="magnetic-el aurora-btn">
+                <span class="aurora-bg"></span>
+                <span class="btn-text">Hire Me</span>
+            </a>
+            <button class="menu-toggle magnetic-el" id="menuToggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero reveal">
+            <div class="hero-text">
+                <h2>Software innovator</h2>
+                <h1>Hi, I'm <span class="gradient-text">Dipak Bhandari</span></h1>
+                <div class="typing-container">
+                    <span>I am a </span>
+                    <span class="typing-text" id="typing-text"></span>
+                    <span class="cursor"></span>
+                </div>
+                <p>A Computer Engineering student and Computer Overseer passionate about building robust software solutions and modern web experiences.</p>
+                <div class="header-actions" style="margin-top: 20px;">
+                    <a href="projects.html" class="magnetic-el aurora-btn">
+                        <span class="aurora-bg"></span>
+                        <span class="btn-text">View My Work</span>
+                    </a>
+                    <a href="Dipak_Bhandari_Professional_CV.pdf" download class="magnetic-el crystal-btn"><i class="fas fa-download"></i> Download CV</a>
+                </div>
+            </div>
+            <div class="hero-image float-animation">
+                <img src="Photo/My.jpg" alt="Dipak Bhandari">
+            </div>
+        </section>
+
+        <section class="stats-section reveal-stagger" style="padding: 60px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 60px;">
+            <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: center;">
+                <div class="stat-item">
+                    <h2 class="counter gradient-text" data-target="25" style="font-size: 3.5rem; margin-bottom: 10px;">0</h2>
+                    <p style="text-transform: uppercase; letter-spacing: 2px; font-weight: 700; font-size: 0.8rem; color: var(--text-secondary);">Projects Completed</p>
+                </div>
+                <div class="stat-item">
+                    <h2 class="counter gradient-text" data-target="15" style="font-size: 3.5rem; margin-bottom: 10px;">0</h2>
+                    <p style="text-transform: uppercase; letter-spacing: 2px; font-weight: 700; font-size: 0.8rem; color: var(--text-secondary);">Skills Mastered</p>
+                </div>
+                <div class="stat-item">
+                    <h2 class="counter gradient-text" data-target="4" style="font-size: 3.5rem; margin-bottom: 10px;">0</h2>
+                    <p style="text-transform: uppercase; letter-spacing: 2px; font-weight: 700; font-size: 0.8rem; color: var(--text-secondary);">Years Experience</p>
+                </div>
+                <div class="stat-item">
+                    <h2 class="counter gradient-text" data-target="10" style="font-size: 3.5rem; margin-bottom: 10px;">0</h2>
+                    <p style="text-transform: uppercase; letter-spacing: 2px; font-weight: 700; font-size: 0.8rem; color: var(--text-secondary);">Happy Clients</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="services-section reveal" style="padding: 100px 0;">
+            <div class="section-header" style="justify-content: center; text-align: center; margin-bottom: 60px;">
+                <div>
+                    <span class="gradient-text" style="font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">What I Offer</span>
+                    <h2 style="font-size: 2.5rem;">Services & Expertise</h2>
+                </div>
+            </div>
+            <div class="services-grid reveal-stagger" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
+                <div class="service-card glass glass-hover" style="padding: 40px; border-radius: var(--radius-md); text-align: center;">
+                    <div class="service-icon" style="font-size: 3rem; color: var(--accent-primary); margin-bottom: 20px;"><i class="fas fa-laptop-code"></i></div>
+                    <h3>Web Development</h3>
+                    <p style="color: var(--text-secondary); margin-top: 15px;">Building modern, responsive, and high-performance websites using the latest technologies.</p>
+                </div>
+                <div class="service-card glass glass-hover" style="padding: 40px; border-radius: var(--radius-md); text-align: center;">
+                    <div class="service-icon" style="font-size: 3rem; color: var(--accent-primary); margin-bottom: 20px;"><i class="fas fa-desktop"></i></div>
+                    <h3>Software Solutions</h3>
+                    <p style="color: var(--text-secondary); margin-top: 15px;">Developing custom management systems (POS, School, Restaurant) tailored to business needs.</p>
+                </div>
+                <div class="service-card glass glass-hover" style="padding: 40px; border-radius: var(--radius-md); text-align: center;">
+                    <div class="service-icon" style="font-size: 3rem; color: var(--accent-primary); margin-bottom: 20px;"><i class="fas fa-database"></i></div>
+                    <h3>Database Design</h3>
+                    <p style="color: var(--text-secondary); margin-top: 15px;">Architecting scalable and secure database structures for efficient data management.</p>
+                </div>
+                <div class="service-card glass glass-hover" style="padding: 40px; border-radius: var(--radius-md); text-align: center;">
+                    <div class="service-icon" style="font-size: 3rem; color: var(--accent-primary); margin-bottom: 20px;"><i class="fas fa-mobile-alt"></i></div>
+                    <h3>App Development</h3>
+                    <p style="color: var(--text-secondary); margin-top: 15px;">Creating cross-platform mobile applications with focus on performance and UI/UX.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="featured-section reveal">
+            <div class="section-header">
+                <div>
+                    <span class="gradient-text" style="font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">Selected Works</span>
+                    <h2>Featured Projects</h2>
+                </div>
+                <a href="projects.html" class="btn btn-outline">Explore All <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <div class="featured-grid">
+                <div class="featured-card glass glass-hover">
+                    <div class="featured-img">
+                        <img src="Photo/hunxaglobal.png" alt="Hunxa Global">
+                    </div>
+                    <div style="padding: 30px;">
+                        <h3 style="font-size: 1.5rem; margin-bottom: 10px;">Hunxa Global</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">Global consulting platform with a focus on seamless user experience and performance.</p>
+                        <a href="projects.html" class="gradient-text" style="text-decoration: none; font-weight: 700;">Read More <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="featured-card glass glass-hover">
+                    <div class="featured-img">
+                        <img src="Photo/pos_software.png" alt="POS System">
+                    </div>
+                    <div style="padding: 30px;">
+                        <h3 style="font-size: 1.5rem; margin-bottom: 10px;">Smart POS Software</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">A high-performance point of sale system designed for efficiency and ease of use.</p>
+                        <a href="projects.html" class="gradient-text" style="text-decoration: none; font-weight: 700;">Read More <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tech-stack-section reveal" style="padding: 100px 0; text-align: center;">
+            <div class="section-header" style="justify-content: center; margin-bottom: 60px;">
+                <div>
+                    <span class="gradient-text" style="font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">Core Technologies</span>
+                    <h2 style="font-size: 2.5rem;">My Tech Stack</h2>
+                </div>
+            </div>
+            <div class="tech-icons reveal-stagger" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 50px; font-size: 3.5rem; color: var(--text-secondary);">
+                <i class="fab fa-html5" title="HTML5"></i>
+                <i class="fab fa-css3-alt" title="CSS3"></i>
+                <i class="fab fa-js" title="JavaScript"></i>
+                <i class="fab fa-react" title="React"></i>
+                <i class="fab fa-node-js" title="Node.js"></i>
+                <i class="fab fa-python" title="Python"></i>
+                <i class="fab fa-php" title="PHP"></i>
+                <i class="fas fa-database" title="SQL"></i>
+                <i class="fab fa-java" title="Java"></i>
+                <i class="fas fa-code" title="C / C++"></i>
+            </div>
+        </section>
+
+        <section class="experience-section reveal" style="padding: 100px 0;">
+            <div class="section-header" style="justify-content: center; text-align: center; margin-bottom: 60px;">
+                <div>
+                    <span class="gradient-text" style="font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">Journey</span>
+                    <h2 style="font-size: 2.5rem;">Work & Education</h2>
+                </div>
+            </div>
+            <div class="timeline" style="max-width: 800px; margin: 0 auto; position: relative;">
+                <div class="timeline-item glass" style="padding: 30px; border-radius: var(--radius-md); margin-bottom: 30px; border-left: 4px solid var(--accent-primary);">
+                    <span style="color: var(--accent-primary); font-weight: 700;">2025 - Present</span>
+                    <h3 style="margin: 10px 0;">Bachelor of Computer Engineering</h3>
+                    <p style="color: var(--text-secondary);">Lumbini Engineering College (Ongoing)</p>
+                </div>
+                <div class="timeline-item glass" style="padding: 30px; border-radius: var(--radius-md); margin-bottom: 30px; border-left: 4px solid var(--accent-primary);">
+                    <span style="color: var(--accent-primary); font-weight: 700;">2024 - Present</span>
+                    <h3 style="margin: 10px 0;">Freelance Web Developer</h3>
+                    <p style="color: var(--text-secondary);">Building custom solutions for local businesses and international clients.</p>
+                </div>
+                <div class="timeline-item glass" style="padding: 30px; border-radius: var(--radius-md); border-left: 4px solid var(--accent-primary);">
+                    <span style="color: var(--accent-primary); font-weight: 700;">2020 - 2024</span>
+                    <h3 style="margin: 10px 0;">Computer Overseer Student</h3>
+                    <p style="color: var(--text-secondary);">Shree Saraswati Secondary School - Specializing in Computer Engineering.</p>
+                </div>
+            </div>
+        <section class="newsletter-section reveal" style="padding: 100px 0;">
+            <div class="glass" style="padding: 60px; border-radius: var(--radius-lg); text-align: center; max-width: 900px; margin: 0 auto; background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1)); border: 1px solid rgba(255, 255, 255, 0.1);">
+                <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Stay Updated</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 40px; max-width: 500px; margin-left: auto; margin-right: auto;">Subscribe to my newsletter to get the latest updates on my projects, tech insights, and software solutions.</p>
+                <form style="display: flex; gap: 15px; max-width: 500px; margin: 0 auto; flex-wrap: wrap;">
+                    <input type="email" placeholder="Enter your email" style="flex: 1; min-width: 250px; padding: 15px 25px; border-radius: 99px; border: 1px solid var(--border); background: var(--surface); color: var(--text-primary);">
+                    <button type="submit" class="btn btn-primary" style="border-radius: 99px; padding: 15px 35px;">Subscribe</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="container">
+        <div class="footer-content">
+            <div class="footer-logo-desc">
+                <a href="#" class="brand-logo">
+                    <div class="logo-icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <span class="logo-text">DIPAK<span class="gradient-dot">.</span></span>
+                </a>
+                <p style="margin-top: 20px; color: var(--text-secondary);">Computer Engineering student building modern solutions for a digital world. Passionate about web development and software architecture.</p>
+                <div class="footer-social">
+                    <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" class="icon-btn"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://github.com/assitantsris255" target="_blank" class="icon-btn"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" class="icon-btn"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <div class="link-group">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="link-group">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><span style="color: var(--text-secondary);">Email: diwashb32@gmail.com</span></li>
+                        <li><span style="color: var(--text-secondary);">Location: Gulmi, Nepal</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Dipak Bhandari. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <script>
+        // Initialize Lenis Smooth Scroll
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // https://www.desmos.com/calculator/brs54l4xou
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+            infinite: false,
+        })
+        function raf(time) {
+            lenis.raf(time)
+            requestAnimationFrame(raf)
+        }
+        requestAnimationFrame(raf)
+
+        // Magnetic Cursor Effect using GSAP
+        const magnets = document.querySelectorAll('.magnetic-el');
+        magnets.forEach((magnet) => {
+            magnet.addEventListener('mousemove', function(e) {
+                const position = magnet.getBoundingClientRect();
+                const x = e.clientX - position.left - position.width / 2;
+                const y = e.clientY - position.top - position.height / 2;
+                
+                gsap.to(magnet, {
+                    x: x * 0.3,
+                    y: y * 0.3,
+                    duration: 0.8,
+                    ease: "power3.out"
+                });
+            });
+            magnet.addEventListener('mouseleave', function() {
+                gsap.to(magnet, {
+                    x: 0,
+                    y: 0,
+                    duration: 0.8,
+                    ease: "elastic.out(1, 0.3)"
+                });
+            });
+        });
+
+        // Header Scroll Animation
+        const header = document.getElementById('mainHeader');
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.scrollY;
+            if (currentScroll > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            lastScroll = currentScroll;
+        });
+
+        // Scroll Progress
+        window.onscroll = () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("scrollProgress").style.width = scrolled + "%";
+        };
+
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const mainNav = document.querySelector('.main-nav');
+        menuToggle.addEventListener('click', () => {
+            mainNav.classList.toggle('active');
+            menuToggle.innerHTML = mainNav.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        const reveal = () => {
+            const reveals = document.querySelectorAll('.reveal, .reveal-stagger');
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const revealTop = el.getBoundingClientRect().top;
+                const revealPoint = 100; // Trigger earlier
+                if (revealTop < windowHeight - revealPoint) {
+                    el.classList.add('visible');
+                }
+            });
+        }
+        window.addEventListener('scroll', reveal);
+        window.addEventListener('load', reveal);
+
+        // Counter Animation
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200;
+
+        const animateCounters = () => {
+            counters.forEach(counter => {
+                const updateCount = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText;
+                    const inc = target / speed;
+
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + inc);
+                        setTimeout(updateCount, 1);
+                    } else {
+                        counter.innerText = target + "+";
+                    }
+                }
+                updateCount();
+            });
+        }
+
+        const statsSection = document.querySelector('.stats-section');
+        const observerOptions = { threshold: 0.5 };
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        if (statsSection) statsObserver.observe(statsSection);
+
+        // Typing Effect logic
+        const typingText = document.getElementById('typing-text');
+        const phrases = ["Web Developer", "Software Engineer", "Database Architect", "App Developer", "Innovator"];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typeSpeed = 150;
+
+        function type() {
+            const currentPhrase = phrases[phraseIndex];
+            
+            if (isDeleting) {
+                typingText.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+                typeSpeed = 100;
+            } else {
+                typingText.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+                typeSpeed = 200;
+            }
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                isDeleting = true;
+                typeSpeed = 2000; // Pause at end
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(type, typeSpeed);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(type, 1000);
+        });
+    </script>
+</body>
+</html>

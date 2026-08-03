@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills | Dipak Bhandari | Software innovator</title>
+    <link rel="stylesheet" href="global.css">
+    <link rel="icon" type="image/jpg" href="Photo/My.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .skills-hero { padding: 160px 0 60px; text-align: center; }
+        .skills-hero h1 { font-size: 3.5rem; }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+        .skill-card {
+            padding: 40px 30px;
+            text-align: center;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+        }
+        .skill-card i {
+            font-size: 3rem;
+            color: var(--accent-primary);
+            margin-bottom: 20px;
+        }
+        .skill-card h3 { font-size: 1.5rem; margin-bottom: 15px; }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--border);
+            border-radius: 99px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-primary);
+            width: 0;
+            transition: width 1.5s ease-out;
+        }
+        .reveal.visible .progress-fill {
+            width: var(--percent);
+        }
+    </style>
+</head>
+<body>
+    <div id="scrollProgress"></div>
+    <header class="site-header glass-2050" id="mainHeader">
+        <div class="header-ambient-glow"></div>
+        <a href="index.html" class="brand-logo magnetic-el">
+            <div class="logo-icon orbit-2050">
+                <span class="orbit-ring"></span>
+                <span class="orbit-ring reverse"></span>
+                <span class="orbit-core pulse"></span>
+                <div class="cyan-particles"></div>
+            </div>
+            <span class="logo-text">DIPAK<span class="ai-pulse-dot">.</span></span>
+        </a>
+        
+        <nav class="main-nav">
+            <div class="nav-capsule-bg"></div>
+            <a href="index.html" class="magnetic-el "><span class="holographic-sweep"></span>Home</a>
+            <a href="about.html" class="magnetic-el "><span class="holographic-sweep"></span>About</a>
+            <a href="skills.html" class="magnetic-el active"><span class="holographic-sweep"></span>Skills</a>
+            <a href="projects.html" class="magnetic-el "><span class="holographic-sweep"></span>Projects</a>
+            <a href="blog.html" class="magnetic-el "><span class="holographic-sweep"></span>Blogs</a>
+            <a href="contact.html" class="magnetic-el "><span class="holographic-sweep"></span>Contact</a>
+        </nav>
+
+        <div class="header-actions">
+            <a href="Dipak_Bhandari_Professional_CV.pdf" download class="magnetic-el crystal-btn">CV</a>
+            <a href="contact.html" class="magnetic-el aurora-btn">
+                <span class="aurora-bg"></span>
+                <span class="btn-text">Hire Me</span>
+            </a>
+            <button class="menu-toggle magnetic-el" id="menuToggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="skills-hero reveal">
+            <h1 class="gradient-text">Technical Skills</h1>
+            <p style="color: var(--text-secondary); max-width: 600px; margin: 20px auto 0;">A breakdown of my expertise in various programming languages, frameworks, and tools.</p>
+        </section>
+
+        <div class="skills-grid">
+            <div class="skill-card glass glass-hover reveal" style="--percent: 95%;">
+                <i class="fab fa-html5"></i>
+                <h3>HTML/CSS</h3>
+                <p style="color: var(--text-secondary);">Expert in semantic HTML and modern CSS layouts like Flexbox and Grid.</p>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
+
+            <div class="skill-card glass glass-hover reveal" style="--percent: 85%;">
+                <i class="fab fa-js"></i>
+                <h3>JavaScript</h3>
+                <p style="color: var(--text-secondary);">Proficient in ES6+, DOM manipulation, and asynchronous programming.</p>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
+
+            <div class="skill-card glass glass-hover reveal" style="--percent: 80%;">
+                <i class="fab fa-react"></i>
+                <h3>React / Next.js</h3>
+                <p style="color: var(--text-secondary);">Building scalable and performant single-page applications.</p>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
+
+            <div class="skill-card glass glass-hover reveal" style="--percent: 75%;">
+                <i class="fab fa-php"></i>
+                <h3>PHP / Laravel</h3>
+                <p style="color: var(--text-secondary);">Experience in building dynamic backends and REST APIs.</p>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
+
+            <div class="skill-card glass glass-hover reveal" style="--percent: 70%;">
+                <i class="fas fa-database"></i>
+                <h3>SQL / NoSQL</h3>
+                <p style="color: var(--text-secondary);">Designing and managing relational and document databases.</p>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
+
+            <div class="skill-card glass glass-hover reveal" style="--percent: 90%;">
+                <i class="fab fa-python"></i>
+                <h3>Python</h3>
+                <p style="color: var(--text-secondary);">Using Python for automation, data analysis, and AI projects.</p>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
+
+            <div class="skill-card glass glass-hover reveal" style="--percent: 85%;">
+                <i class="fab fa-java"></i>
+                <h3>Java</h3>
+                <p style="color: var(--text-secondary);">Building robust enterprise applications and Android apps.</p>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
+
+            <div class="skill-card glass glass-hover reveal" style="--percent: 80%;">
+                <i class="fas fa-code"></i>
+                <h3>C / C++</h3>
+                <p style="color: var(--text-secondary);">Deep understanding of memory management and system architecture.</p>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
+        </div>
+
+        <section class="learning-section reveal" style="padding-top: 60px; border-top: 1px solid var(--border); margin-top: 20px; margin-bottom: 80px; text-align: center;">
+            <h2 class="gradient-text" style="font-size: 2.5rem; margin-bottom: 20px;">What I'm Learning</h2>
+            <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 40px;">Continuous growth is key. Here are the technologies and concepts I am currently focusing on:</p>
+            <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 20px;">
+                <div class="tag glass glass-hover" style="padding: 15px 30px; font-size: 1.1rem; border-radius: 99px; color: var(--text-primary); border: 1px solid var(--accent-primary); display: flex; align-items: center; gap: 10px;">
+                    <i class="fab fa-react" style="color: var(--accent-secondary);"></i> React
+                </div>
+                <div class="tag glass glass-hover" style="padding: 15px 30px; font-size: 1.1rem; border-radius: 99px; color: var(--text-primary); border: 1px solid var(--accent-primary); display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-layer-group" style="color: var(--text-secondary);"></i> Next.js
+                </div>
+                <div class="tag glass glass-hover" style="padding: 15px 30px; font-size: 1.1rem; border-radius: 99px; color: var(--text-primary); border: 1px solid var(--accent-primary); display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-project-diagram" style="color: var(--accent-primary);"></i> Data Structures & Algorithms
+                </div>
+                <div class="tag glass glass-hover" style="padding: 15px 30px; font-size: 1.1rem; border-radius: 99px; color: var(--text-primary); border: 1px solid var(--accent-primary); display: flex; align-items: center; gap: 10px;">
+                    <i class="fab fa-python" style="color: #f59e0b;"></i> Python
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="container">
+        <div class="footer-content">
+            <div class="footer-logo-desc">
+                <a href="#" class="logo">DIPAK<span class="gradient-text">.</span></a>
+                <p style="margin-top: 20px; color: var(--text-secondary);">Computer Engineering student building modern solutions for a digital world. Passionate about web development and software architecture.</p>
+                <div class="footer-social">
+                    <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" class="icon-btn"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://github.com/assitantsris255" target="_blank" class="icon-btn"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" class="icon-btn"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <div class="link-group">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="link-group">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><span style="color: var(--text-secondary);">Email: diwashb32@gmail.com</span></li>
+                        <li><span style="color: var(--text-secondary);">Location: Gulmi, Nepal</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Dipak Bhandari. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <script>
+        // Initialize Lenis Smooth Scroll
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+            infinite: false,
+        })
+        function raf(time) {
+            lenis.raf(time)
+            requestAnimationFrame(raf)
+        }
+        requestAnimationFrame(raf)
+
+        // Magnetic Cursor Effect using GSAP
+        document.addEventListener('DOMContentLoaded', () => {
+            const magnets = document.querySelectorAll('.magnetic-el');
+            magnets.forEach((magnet) => {
+                magnet.addEventListener('mousemove', function(e) {
+                    const position = magnet.getBoundingClientRect();
+                    const x = e.clientX - position.left - position.width / 2;
+                    const y = e.clientY - position.top - position.height / 2;
+                    
+                    gsap.to(magnet, {
+                        x: x * 0.3,
+                        y: y * 0.3,
+                        duration: 0.8,
+                        ease: "power3.out"
+                    });
+                });
+                magnet.addEventListener('mouseleave', function() {
+                    gsap.to(magnet, {
+                        x: 0,
+                        y: 0,
+                        duration: 0.8,
+                        ease: "elastic.out(1, 0.3)"
+                    });
+                });
+            });
+            
+            // Header scroll effect
+            const mainHeader = document.getElementById('mainHeader');
+            if (mainHeader) {
+                window.addEventListener('scroll', () => {
+                    if(window.scrollY > 50) {
+                        mainHeader.classList.add('scrolled');
+                    } else {
+                        mainHeader.classList.remove('scrolled');
+                    }
+                });
+            }
+        });
+        
+        // Scroll Progress
+        window.onscroll = () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("scrollProgress").style.width = scrolled + "%";
+        };
+
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const mainNav = document.querySelector('.main-nav');
+        menuToggle.addEventListener('click', () => {
+            mainNav.classList.toggle('active');
+            menuToggle.innerHTML = mainNav.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        const reveal = () => {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const revealTop = el.getBoundingClientRect().top;
+                const revealPoint = 150;
+                if (revealTop < windowHeight - revealPoint) {
+                    el.classList.add('visible');
+                }
+            });
+        }
+        window.addEventListener('scroll', reveal);
+        window.addEventListener('load', reveal);
+
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+/* style.css */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #fff;
+  color: #333;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: purple;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
+
+.intro {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px 40px;
+}
+
+.text h1 {
+  font-size: 48px;
+  margin: 0;
+}
+
+.text h1 span {
+  color: purple;
+}
+
+.text p {
+  font-size: 20px;
+  margin: 10px 0 30px;
+}
+
+.buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.btn {
+  padding: 12px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
+
+.primary {
+  background: purple;
+  color: white;
+}
+
+.outline {
+  border: 2px solid purple;
+  color: purple;
+}
+
+.outline:hover {
+  background: purple;
+  color: white;
+}
+
+.illustration {
+  position: relative;
+  text-align: center;
+}
+
+.speech-bubble {
+  position: absolute;
+  top: -30px;
+  right: 20px;
+  background: #ffeb3b;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  color: #333;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.illustration img {
+  width: 200px;
+  height: auto;
+}
