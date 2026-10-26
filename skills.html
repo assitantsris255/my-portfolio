@@ -47,6 +47,12 @@
         .reveal.visible .progress-fill {
             width: var(--percent);
         }
+
+        @media (max-width: 768px) {
+            .skills-hero { padding: 120px 0 40px; }
+            .skills-hero h1 { font-size: clamp(2.2rem, 7vw, 3rem); }
+            .skills-grid { grid-template-columns: 1fr; gap: 20px; }
+        }
     </style>
 </head>
 <body>
@@ -173,9 +179,10 @@
                 <a href="#" class="logo">DIPAK<span class="gradient-text">.</span></a>
                 <p style="margin-top: 20px; color: var(--text-secondary);">Computer Engineering student building modern solutions for a digital world. Passionate about web development and software architecture.</p>
                 <div class="footer-social">
-                    <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" class="icon-btn"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://github.com/assitantsris255" target="_blank" class="icon-btn"><i class="fab fa-github"></i></a>
-                    <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" class="icon-btn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" class="icon-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://github.com/assitantsris255" target="_blank" class="icon-btn" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" class="icon-btn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://www.snapchat.com/add/dipakbhanda3522" target="_blank" class="icon-btn" title="Snapchat: dipakbhanda3522"><i class="fab fa-snapchat"></i></a>
                 </div>
             </div>
             <div class="footer-links">
@@ -273,17 +280,34 @@
         // Mobile Menu Toggle
         const menuToggle = document.getElementById('menuToggle');
         const mainNav = document.querySelector('.main-nav');
-        menuToggle.addEventListener('click', () => {
-            mainNav.classList.toggle('active');
-            menuToggle.innerHTML = mainNav.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
-        });
+        if (menuToggle && mainNav) {
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                mainNav.classList.toggle('active');
+                menuToggle.innerHTML = mainNav.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+            });
+
+            document.addEventListener('click', (e) => {
+                if (mainNav.classList.contains('active') && !mainNav.contains(e.target) && !menuToggle.contains(e.target)) {
+                    mainNav.classList.remove('active');
+                    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+
+            mainNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mainNav.classList.remove('active');
+                    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                });
+            });
+        }
 
         const reveal = () => {
             const reveals = document.querySelectorAll('.reveal');
             reveals.forEach(el => {
                 const windowHeight = window.innerHeight;
                 const revealTop = el.getBoundingClientRect().top;
-                const revealPoint = 150;
+                const revealPoint = 100;
                 if (revealTop < windowHeight - revealPoint) {
                     el.classList.add('visible');
                 }
@@ -291,6 +315,10 @@
         }
         window.addEventListener('scroll', reveal);
         window.addEventListener('load', reveal);
+        document.addEventListener('DOMContentLoaded', reveal);
+        lenis.on('scroll', reveal);
+        setTimeout(reveal, 100);
+        setTimeout(reveal, 500);
 
         
     </script>

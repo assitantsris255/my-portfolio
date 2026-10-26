@@ -198,6 +198,14 @@
     <main class="container">
         <section class="hero reveal">
             <div class="hero-text">
+                <div class="snapchat-hero-badge">
+                    <a href="https://www.snapchat.com/add/dipakbhanda3522" target="_blank" rel="noopener noreferrer" class="snapchat-pill" title="Add Dipak on Snapchat">
+                        <span class="snap-icon-bubble"><i class="fab fa-snapchat"></i></span>
+                        <span class="snap-id-label">Snapchat ID: <strong class="snap-username">dipakbhanda3522</strong></span>
+                        <i class="fas fa-external-link-alt snap-external-icon"></i>
+                    </a>
+                    <span class="snapchat-note">( I know you will check my portfolio so please msg me on snap )</span>
+                </div>
                 <h2>Software innovator</h2>
                 <h1>Hi, I'm <span class="gradient-text">Dipak Bhandari</span></h1>
                 <div class="typing-container">
@@ -375,9 +383,10 @@
                 </a>
                 <p style="margin-top: 20px; color: var(--text-secondary);">Computer Engineering student building modern solutions for a digital world. Passionate about web development and software architecture.</p>
                 <div class="footer-social">
-                    <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" class="icon-btn"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://github.com/assitantsris255" target="_blank" class="icon-btn"><i class="fab fa-github"></i></a>
-                    <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" class="icon-btn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://web.facebook.com/diwash.bhandari.167" target="_blank" class="icon-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://github.com/assitantsris255" target="_blank" class="icon-btn" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/dipak-bhandari-9314a1287/" target="_blank" class="icon-btn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://www.snapchat.com/add/dipakbhanda3522" target="_blank" class="icon-btn" title="Snapchat: dipakbhanda3522"><i class="fab fa-snapchat"></i></a>
                 </div>
             </div>
             <div class="footer-links">
@@ -425,30 +434,32 @@
         }
         requestAnimationFrame(raf)
 
-        // Magnetic Cursor Effect using GSAP
-        const magnets = document.querySelectorAll('.magnetic-el');
-        magnets.forEach((magnet) => {
-            magnet.addEventListener('mousemove', function(e) {
-                const position = magnet.getBoundingClientRect();
-                const x = e.clientX - position.left - position.width / 2;
-                const y = e.clientY - position.top - position.height / 2;
-                
-                gsap.to(magnet, {
-                    x: x * 0.3,
-                    y: y * 0.3,
-                    duration: 0.8,
-                    ease: "power3.out"
+        // Magnetic Cursor Effect using GSAP (Desktop only)
+        if (window.matchMedia('(pointer: fine)').matches) {
+            const magnets = document.querySelectorAll('.magnetic-el');
+            magnets.forEach((magnet) => {
+                magnet.addEventListener('mousemove', function(e) {
+                    const position = magnet.getBoundingClientRect();
+                    const x = e.clientX - position.left - position.width / 2;
+                    const y = e.clientY - position.top - position.height / 2;
+                    
+                    gsap.to(magnet, {
+                        x: x * 0.3,
+                        y: y * 0.3,
+                        duration: 0.8,
+                        ease: "power3.out"
+                    });
+                });
+                magnet.addEventListener('mouseleave', function() {
+                    gsap.to(magnet, {
+                        x: 0,
+                        y: 0,
+                        duration: 0.8,
+                        ease: "elastic.out(1, 0.3)"
+                    });
                 });
             });
-            magnet.addEventListener('mouseleave', function() {
-                gsap.to(magnet, {
-                    x: 0,
-                    y: 0,
-                    duration: 0.8,
-                    ease: "elastic.out(1, 0.3)"
-                });
-            });
-        });
+        }
 
         // Header Scroll Animation
         const header = document.getElementById('mainHeader');
@@ -471,20 +482,39 @@
             document.getElementById("scrollProgress").style.width = scrolled + "%";
         };
 
-        // Mobile Menu Toggle
+        // Mobile Menu Toggle with outside tap and link close
         const menuToggle = document.getElementById('menuToggle');
         const mainNav = document.querySelector('.main-nav');
-        menuToggle.addEventListener('click', () => {
-            mainNav.classList.toggle('active');
-            menuToggle.innerHTML = mainNav.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
-        });
+        if (menuToggle && mainNav) {
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                mainNav.classList.toggle('active');
+                menuToggle.innerHTML = mainNav.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+            });
+
+            // Close on click outside
+            document.addEventListener('click', (e) => {
+                if (mainNav.classList.contains('active') && !mainNav.contains(e.target) && !menuToggle.contains(e.target)) {
+                    mainNav.classList.remove('active');
+                    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+
+            // Close on clicking any link inside nav
+            mainNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mainNav.classList.remove('active');
+                    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                });
+            });
+        }
 
         const reveal = () => {
             const reveals = document.querySelectorAll('.reveal, .reveal-stagger');
             reveals.forEach(el => {
                 const windowHeight = window.innerHeight;
                 const revealTop = el.getBoundingClientRect().top;
-                const revealPoint = 100; // Trigger earlier
+                const revealPoint = 100;
                 if (revealTop < windowHeight - revealPoint) {
                     el.classList.add('visible');
                 }
@@ -492,6 +522,10 @@
         }
         window.addEventListener('scroll', reveal);
         window.addEventListener('load', reveal);
+        document.addEventListener('DOMContentLoaded', reveal);
+        lenis.on('scroll', reveal);
+        setTimeout(reveal, 100);
+        setTimeout(reveal, 500);
 
         // Counter Animation
         const counters = document.querySelectorAll('.counter');
